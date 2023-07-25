@@ -1,3 +1,31 @@
-resource "example_server" "my-server-name" {
-	uuid_count = "1"
+provider "haproxy" {
+  server_addr = "10.100.0.130:5555"
+  username    = "CHANGE_ME"
+  password    = "CHANGE_ME"
+  insecure    = true
+}
+
+resource "haproxy_global" "name" {
+
+}
+
+resource "haproxy_defaults" "name" {
+
+}
+
+resource "haproxy_acl" "acl-name" {
+
+}
+
+resource "haproxy_frontend" "front-name" {
+   name    = "backend-name"
+   backend = "backend-name"
+}
+
+resource "haproxy_backend" "backend-name" {
+	
+}
+
+resource "haproxy_server" "server-name" {
+
 }
