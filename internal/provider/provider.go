@@ -1,5 +1,5 @@
 // provider.go
-package main
+package provider
 
 import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"

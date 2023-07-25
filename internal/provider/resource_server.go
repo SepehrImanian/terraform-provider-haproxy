@@ -1,5 +1,5 @@
 // resource_server.go
-package main
+package provider
 
 import (
 	"log"
