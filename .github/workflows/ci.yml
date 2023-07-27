@@ -22,4 +22,4 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: true
-          tags: sepehrimanian/s3-ceph-exporter:latest
+          tags: sepehrimanian/terraform-provider-haproxy:latest
