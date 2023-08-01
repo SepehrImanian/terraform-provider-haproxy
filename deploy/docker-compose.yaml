@@ -1,0 +1,10 @@
+version: "3.9"
+services:
+    haproxy:
+        image: haproxy-dataplaneapi:latest
+        container_name: haproxy
+        volumes:
+            - ./config:/usr/local/etc/haproxy:ro
+        network_mode: host
+        user: root
+        restart: always
