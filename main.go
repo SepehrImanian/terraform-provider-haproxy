@@ -2,7 +2,7 @@
 package main
 
 import (
-	provider "terraform-provider-haproxy/internal/provider"
+	"terraform-provider-haproxy/haproxy"
 
 	"github.com/hashicorp/terraform-plugin-sdk/plugin"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
@@ -11,7 +11,7 @@ import (
 func main() {
 	plugin.Serve(&plugin.ServeOpts{
 		ProviderFunc: func() terraform.ResourceProvider {
-			return provider.Provider()
+			return haproxy.Provider()
 		},
 	})
 }
