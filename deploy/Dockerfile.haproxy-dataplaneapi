@@ -6,7 +6,7 @@ FROM haproxy:${HAPROXY_VERSION}
 USER root
 
 # Install required packages and clean up
-RUN apt-get update && apt-get install -y --no-install-recommends wget && \
+RUN apt-get update && apt-get install -y --no-install-recommends wget ca-certificates && \
     rm -rf /var/lib/apt/lists/*
 
 # Define a build argument for the dataplaneapi version
@@ -19,6 +19,3 @@ RUN wget https://github.com/haproxytech/dataplaneapi/releases/download/v${DATAPL
     rm dataplaneapi_${DATAPLANEAPI_VERSION}_linux_x86_64.tar.gz && \
     chmod +x ./dataplaneapi && \
     mv ./dataplaneapi /usr/local/bin/
-
-# Switch back to the non-root user
-USER haproxy
