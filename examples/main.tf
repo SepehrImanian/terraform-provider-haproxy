@@ -1,24 +1,22 @@
-provider "haproxy" {
-  server_addr = "10.100.0.130:5555"
-  username    = "CHANGE_ME"
-  password    = "CHANGE_ME"
-  insecure    = true
+terraform {
+  required_providers {
+    haproxy = {
+      version = "~> 1.0.0"
+      source  = "terraform-example.com/haproxy-provider/haproxy"
+    }
+  }
 }
 
-resource "haproxy_frontend" "front-name" {
-   name    = "backend-name"
-   backend = "backend-name"
+provider "haproxy" {
+  haproxy_server = "103.75.196.148:5555"
+  haproxy_user    = "admin"
+  haproxy_password    = "adminpwd"
+  haproxy_insecure    = true
 }
 
 ## Resources
-resource "haproxy_backend" "backend-name" {}
-resource "haproxy_server" "server-name" {}
-resource "haproxy_global" "name" {}
-resource "haproxy_defaults" "name" {}
-resource "haproxy_acl" "acl-name" {}
-
-## Datas
-data "haproxy_backend" "backend-name" {}
-data "haproxy_frontend" "front-name" {}
-data "haproxy_server" "server-name" {}
-data "haproxy_acl" "acl-name" {}
+resource "haproxy_backend" "test" {
+  backend_name = "test"
+  mode         = "http"
+  balance_algorithm = "roundrobin"
+}
