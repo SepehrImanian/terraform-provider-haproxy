@@ -4,4 +4,8 @@ import (
 	"testing"
 )
 
-func TestResourceHaproxyBackend(t *testing.T) {}
+func TestResourceHaproxyBackendCreate(t *testing.T) {}
+
+func TestResourceHaproxyBackendUpdate(t *testing.T) {}
+
+func TestResourceHaproxyBackendDelete(t *testing.T) {}

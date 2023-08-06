@@ -10,6 +10,7 @@ import (
 func resourceHaproxyBackend() *schema.Resource {
 	return &schema.Resource{
 		Create: resourceHaproxyBackendCreate,
+		Read:   resourceHaproxyBackendRead,
 		Update: resourceHaproxyBackendUpdate,
 		Delete: resourceHaproxyBackendDelete,
 
@@ -35,6 +36,21 @@ func resourceHaproxyBackend() *schema.Resource {
 			},
 		},
 	}
+}
+
+func resourceHaproxyBackendRead(d *schema.ResourceData, m interface{}) error {
+	backendName := d.Get("backend_name").(string)
+	config := m.(*BackendConfig)
+	resp, err := config.GetABackendConfiguration(backendName)
+	if err != nil {
+		fmt.Println("Error updating backend configuration:", err)
+		return err
+	}
+	if resp.StatusCode != 200 {
+		return fmt.Errorf("Error updating backend configuration: %s", resp.Status)
+	}
+	d.SetId(backendName)
+	return nil
 }
 
 func resourceHaproxyBackendCreate(d *schema.ResourceData, m interface{}) error {

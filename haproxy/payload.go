@@ -7,3 +7,11 @@ type BackendConfig struct {
 	Password      string
 	TransactionID string
 }
+
+// HaproxyConfig defines variable for haproxy configuration
+type HaproxyConfig struct {
+	HaproxyHostPort   string
+	HaproxyUserAccess string
+	HaproxyUserSecret string
+	HaproxySSL        bool
+}
