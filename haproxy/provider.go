@@ -1,4 +1,3 @@
-// provider.go
 package haproxy
 
 import (
