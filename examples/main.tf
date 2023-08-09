@@ -5,7 +5,6 @@ provider "haproxy" {
 }
 
 ## Resources
-
 resource "haproxy_backend" "test" {
   backend_name = "test"
   mode         = "http"

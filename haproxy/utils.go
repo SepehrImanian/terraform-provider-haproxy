@@ -2,7 +2,6 @@ package haproxy
 
 import (
 	"bytes"
-	"encoding/base64"
 	"net/http"
 )
 
@@ -18,9 +17,4 @@ func HTTPRequest(method, url string, body []byte, headers map[string]string, Use
 		req.SetBasicAuth(Username, Password)
 	}
 	return http.DefaultClient.Do(req)
-}
-
-func encodeCredentials(username, password string) string {
-	credentials := username + ":" + password
-	return base64.StdEncoding.EncodeToString([]byte(credentials))
 }

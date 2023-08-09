@@ -56,28 +56,37 @@ func Provider() *schema.Provider {
 			//"haproxy_frontend":  resourceHaproxyFrontend(),
 			"haproxy_backend": resourceHaproxyBackend(),
 		},
-		ConfigureFunc: func(data *schema.ResourceData) (interface{}, error) {
-			var (
-				username = data.Get("username").(string)
-				password = data.Get("password").(string)
-				baseurl  = data.Get("url").(string)
-			)
-
-			transactionID, err := CreateTransactionID(baseurl, username, password)
-			if err != nil {
-				fmt.Println("Error:", err)
-				return nil, err
-			}
-
-			fmt.Println("-----transactionID-----", transactionID)
-
-			config := &Config{
-				Username:      username,
-				Password:      password,
-				BaseURL:       baseurl,
-				TransactionID: transactionID,
-			}
-			return &config, nil
-		},
+		ConfigureFunc: providerConfigure,
 	}
+}
+
+func providerConfigure(data *schema.ResourceData) (interface{}, error) {
+	var (
+		username = data.Get("username").(string)
+		password = data.Get("password").(string)
+		baseurl  = data.Get("url").(string)
+	)
+
+	transactionID, err := createTransactionID(baseurl, username, password)
+	if err != nil {
+		fmt.Println("Error createTransactionID:", err)
+		return nil, err
+	}
+
+	resp, err := persistTransactionID(transactionID, baseurl, username, password)
+	if err != nil {
+		fmt.Println("Error persistTransactionID:", err)
+		return nil, err
+	}
+
+	fmt.Println("-----transactionID-----", transactionID)
+	fmt.Println("----------response---------", resp)
+
+	config := &Config{
+		Username:      username,
+		Password:      password,
+		BaseURL:       baseurl,
+		TransactionID: transactionID,
+	}
+	return &config, nil
 }
