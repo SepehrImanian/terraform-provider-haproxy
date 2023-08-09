@@ -1,8 +1,8 @@
 terraform {
-  haproxy {
-    example = {
+  required_providers {
+    haproxy = {
       version = "~> 1.0.0"
-      source  = "sepiflare.live/haproxy-provider/haproxy"
+      source  = "terraform-example.com/haproxy-provider/haproxy"
     }
   }
 }

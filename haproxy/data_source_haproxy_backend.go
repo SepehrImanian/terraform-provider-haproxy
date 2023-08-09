@@ -13,10 +13,9 @@ func GetBackendsConfiguration(baseURL string, username string, password string) 
 	URL := baseURL + "/v2/services/haproxy/configuration/backends"
 
 	headers := map[string]string{
-		"Content-Type":  "application/json",
-		"Authorization": "Basic " + encodeCredentials(username, password),
+		"Content-Type": "application/json",
 	}
-	resp, err := HTTPRequest(http.MethodGet, URL, nil, headers)
+	resp, err := HTTPRequest(http.MethodGet, URL, nil, headers, username, password)
 	if err != nil {
 		return nil, err
 	}

@@ -3,7 +3,6 @@ package haproxy
 import (
 	"fmt"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"io"
 	"net/http"
 )
 
@@ -29,25 +28,21 @@ func resourceHaproxyBackend() *schema.Resource {
 				Optional: true,
 				Default:  "roundrobin",
 			},
-			"source": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Default:  "	",
-			},
 		},
 	}
 }
 
 func resourceHaproxyBackendRead(d *schema.ResourceData, m interface{}) error {
 	backendName := d.Get("backend_name").(string)
-	config := m.(*BackendConfig)
-	resp, err := config.GetABackendConfiguration(backendName)
+
+	config := m.(**Config)
+	resp, err := (*config).GetABackendConfiguration(backendName)
 	if err != nil {
 		fmt.Println("Error updating backend configuration:", err)
 		return err
 	}
-	if resp.StatusCode != 200 {
-		return fmt.Errorf("Error updating backend configuration: %s", resp.Status)
+	if resp.StatusCode != 200 && resp.StatusCode != 202 {
+		return fmt.Errorf("error creating backend configuration: %s", resp.Status)
 	}
 	d.SetId(backendName)
 	return nil
@@ -57,26 +52,35 @@ func resourceHaproxyBackendCreate(d *schema.ResourceData, m interface{}) error {
 	backendName := d.Get("backend_name").(string)
 	mode := d.Get("mode").(string)
 	balanceAlgorithm := d.Get("balance_algorithm").(string)
-	source := d.Get("source").(string)
 
 	payload := []byte(fmt.Sprintf(`
 	{
-		"mode": "%s",
-		"balance_algorithm": "%s",
-		"source": "%s"
+	  "adv_check": "httpchk",
+	  "balance": {
+		"algorithm": "%s"
+	  },
+	  "forwardfor": {
+		"enabled": "enabled"
+	  },
+	  "httpchk_params": {
+		"method": "GET",
+		"uri": "/check",
+		"version": "HTTP/1.1"
+	  },
+	  "mode": "%s",
+	  "name": "%s"
 	}
-	`, mode, balanceAlgorithm, source))
+	`, balanceAlgorithm, mode, backendName))
 
-	config := m.(*BackendConfig)
-	resp, err := config.AddBackendConfiguration(payload)
+	config := m.(**Config)
+	resp, err := (*config).AddBackendConfiguration(payload)
 	if err != nil {
 		fmt.Println("Error creating backend configuration:", err)
 		return err
 	}
-	if resp.StatusCode != 200 {
-		return fmt.Errorf("Error creating backend configuration: %s", resp.Status)
+	if resp.StatusCode != 200 && resp.StatusCode != 202 {
+		return fmt.Errorf("error creating backend configuration: %s", resp.Status)
 	}
-
 	d.SetId(backendName)
 	return nil
 }
@@ -85,24 +89,34 @@ func resourceHaproxyBackendUpdate(d *schema.ResourceData, m interface{}) error {
 	backendName := d.Get("backend_name").(string)
 	mode := d.Get("mode").(string)
 	balanceAlgorithm := d.Get("balance_algorithm").(string)
-	source := d.Get("source").(string)
 
 	payload := []byte(fmt.Sprintf(`
 	{
-		"mode": "%s",
-		"balance_algorithm": "%s",
-		"source": "%s"
+	  "adv_check": "httpchk",
+	  "balance": {
+		"algorithm": "%s"
+	  },
+	  "forwardfor": {
+		"enabled": "enabled"
+	  },
+	  "httpchk_params": {
+		"method": "GET",
+		"uri": "/check",
+		"version": "HTTP/1.1"
+	  },
+	  "mode": "%s",
+	  "name": "%s"
 	}
-	`, mode, balanceAlgorithm, source))
+	`, balanceAlgorithm, mode, backendName))
 
-	config := m.(*BackendConfig)
-	resp, err := config.UpdateBackendConfiguration(backendName, payload)
+	config := m.(**Config)
+	resp, err := (*config).UpdateBackendConfiguration(backendName, payload)
 	if err != nil {
 		fmt.Println("Error updating backend configuration:", err)
 		return err
 	}
-	if resp.StatusCode != 200 {
-		return fmt.Errorf("Error updating backend configuration: %s", resp.Status)
+	if resp.StatusCode != 200 && resp.StatusCode != 202 {
+		return fmt.Errorf("error creating backend configuration: %s", resp)
 	}
 
 	d.SetId(backendName)
@@ -111,99 +125,76 @@ func resourceHaproxyBackendUpdate(d *schema.ResourceData, m interface{}) error {
 
 func resourceHaproxyBackendDelete(d *schema.ResourceData, m interface{}) error {
 	backendName := d.Get("backend_name").(string)
-	config := m.(*BackendConfig)
-	resp, err := config.DeleteBackendConfiguration(backendName)
+
+	config := m.(**Config)
+	resp, err := (*config).DeleteBackendConfiguration(backendName)
 	if err != nil {
 		fmt.Println("Error updating backend configuration:", err)
 		return err
 	}
-	if resp.StatusCode != 200 {
-		return fmt.Errorf("Error updating backend configuration: %s", resp.Status)
+	if resp.StatusCode != 200 && resp.StatusCode != 202 {
+		return fmt.Errorf("error creating backend configuration: %s", resp.Status)
 	}
 	d.SetId("")
 	return nil
 }
 
 // GetABackendConfiguration returns the configuration of a backend.
-func (c *BackendConfig) GetABackendConfiguration(backendName string) (*http.Response, error) {
+func (c *Config) GetABackendConfiguration(backendName string) (*http.Response, error) {
 	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/backends/%s?transaction_id=%s", c.BaseURL, backendName, c.TransactionID)
 	headers := map[string]string{
-		"Content-Type":  "application/json",
-		"Authorization": "Basic " + encodeCredentials(c.Username, c.Password),
+		"Content-Type": "application/json",
 	}
-	resp, err := HTTPRequest("GET", url, nil, headers)
+	resp, err := HTTPRequest("GET", url, nil, headers, c.Username, c.Password)
 	if err != nil {
 		fmt.Println("Error sending request:", err)
 		return nil, err
 	}
-	defer func(Body io.ReadCloser) {
-		err := Body.Close()
-		if err != nil {
-			fmt.Println("Error closing response body:", err)
-		}
-	}(resp.Body)
+	defer resp.Body.Close()
 	return resp, nil
 }
 
 // AddBackendConfiguration adds a backend configuration.
-func (c *BackendConfig) AddBackendConfiguration(payload []byte) (*http.Response, error) {
+func (c *Config) AddBackendConfiguration(payload []byte) (*http.Response, error) {
 	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/backends?transaction_id=%s", c.BaseURL, c.TransactionID)
 	headers := map[string]string{
-		"Content-Type":  "application/json",
-		"Authorization": "Basic " + encodeCredentials(c.Username, c.Password),
+		"Content-Type": "application/json",
 	}
-	resp, err := HTTPRequest("POST", url, payload, headers)
+	resp, err := HTTPRequest("POST", url, payload, headers, c.Username, c.Password)
 	if err != nil {
 		fmt.Println("Error sending request:", err)
 		return nil, err
 	}
-	defer func(Body io.ReadCloser) {
-		err := Body.Close()
-		if err != nil {
-			fmt.Println("Error closing response body:", err)
-		}
-	}(resp.Body)
+	defer resp.Body.Close()
 	return resp, nil
 }
 
 // DeleteBackendConfiguration deletes a backend configuration.
-func (c *BackendConfig) DeleteBackendConfiguration(backendName string) (*http.Response, error) {
+func (c *Config) DeleteBackendConfiguration(backendName string) (*http.Response, error) {
 	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/backends/%s?transaction_id=%s", c.BaseURL, backendName, c.TransactionID)
 	headers := map[string]string{
-		"Content-Type":  "application/json",
-		"Authorization": "Basic " + encodeCredentials(c.Username, c.Password),
+		"Content-Type": "application/json",
 	}
-	resp, err := HTTPRequest("DELETE", url, nil, headers)
+	resp, err := HTTPRequest("DELETE", url, nil, headers, c.Username, c.Password)
 	if err != nil {
 		fmt.Println("Error sending request:", err)
 		return nil, err
 	}
-	defer func(Body io.ReadCloser) {
-		err := Body.Close()
-		if err != nil {
-			fmt.Println("Error closing response body:", err)
-		}
-	}(resp.Body)
+	defer resp.Body.Close()
 	return resp, nil
 }
 
 // UpdateBackendConfiguration updates a backend configuration.
-func (c *BackendConfig) UpdateBackendConfiguration(backendName string, payload []byte) (*http.Response, error) {
+func (c *Config) UpdateBackendConfiguration(backendName string, payload []byte) (*http.Response, error) {
 	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/backends/%s?transaction_id=%s", c.BaseURL, backendName, c.TransactionID)
 	headers := map[string]string{
-		"Content-Type":  "application/json",
-		"Authorization": "Basic " + encodeCredentials(c.Username, c.Password),
+		"Content-Type": "application/json",
 	}
-	resp, err := HTTPRequest("PUT", url, payload, headers)
+	resp, err := HTTPRequest("PUT", url, payload, headers, c.Username, c.Password)
 	if err != nil {
 		fmt.Println("Error sending request:", err)
 		return nil, err
 	}
-	defer func(Body io.ReadCloser) {
-		err := Body.Close()
-		if err != nil {
-			fmt.Println("Error closing response body:", err)
-		}
-	}(resp.Body)
+	defer resp.Body.Close()
 	return resp, nil
 }

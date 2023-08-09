@@ -1,17 +1,10 @@
 package haproxy
 
-// BackendConfig is a struct that contains the configuration for the HAProxy backend.
-type BackendConfig struct {
-	BaseURL       string
+// Config defines variable for haproxy configuration
+type Config struct {
 	Username      string
 	Password      string
+	BaseURL       string
+	SSL           bool
 	TransactionID string
-}
-
-// HaproxyConfig defines variable for haproxy configuration
-type HaproxyConfig struct {
-	HaproxyHostPort   string
-	HaproxyUserAccess string
-	HaproxyUserSecret string
-	HaproxySSL        bool
 }

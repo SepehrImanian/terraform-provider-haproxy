@@ -1,13 +1,14 @@
 package haproxy
 
 import (
+	"fmt"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
 func Provider() *schema.Provider {
 	return &schema.Provider{
 		Schema: map[string]*schema.Schema{
-			"haproxy_server": {
+			"url": {
 				Type:        schema.TypeString,
 				Required:    true,
 				Description: "Haproxy Host and Port",
@@ -15,25 +16,23 @@ func Provider() *schema.Provider {
 					"HAPROXY_ENDPOINT",
 				}, nil),
 			},
-			"haproxy_user": {
+			"username": {
 				Type:        schema.TypeString,
-				Optional:    true,
+				Required:    true,
 				Description: "Haproxy User",
 				DefaultFunc: schema.MultiEnvDefaultFunc([]string{
 					"HAPROXY_USER",
 				}, nil),
-				ConflictsWith: []string{"minio_access_key"},
 			},
-			"haproxy_password": {
+			"password": {
 				Type:        schema.TypeString,
-				Optional:    true,
+				Required:    true,
 				Description: "Haproxy Password",
 				DefaultFunc: schema.MultiEnvDefaultFunc([]string{
 					"HAPROXY_PASSWORD",
 				}, nil),
-				ConflictsWith: []string{"minio_secret_key"},
 			},
-			"haproxy_insecure": {
+			"insecure": {
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Description: "Disable SSL certificate verification (default: false)",
@@ -43,19 +42,42 @@ func Provider() *schema.Provider {
 			},
 		},
 
-		DataSourcesMap: map[string]*schema.Resource{
-			"haproxy_acl":      dataSourceHaproxyAcl(),
-			"haproxy_frontend": dataSourceHaproxyFrontend(),
-			"haproxy_backend":  dataSourceHaproxyBackend(),
-		},
+		//DataSourcesMap: map[string]*schema.Resource{
+		//	"haproxy_acl":      dataSourceHaproxyAcl(),
+		//	"haproxy_frontend": dataSourceHaproxyFrontend(),
+		//	"haproxy_backend":  dataSourceHaproxyBackend(),
+		//},
 
 		ResourcesMap: map[string]*schema.Resource{
-			"haproxy_global":    resourceHaproxyGlobal(),
-			"haproxy_defaults":  resourceHaproxyDefaults(),
-			"haproxy_dashboard": resourceHaproxyDashboard(),
-			"haproxy_acl":       resourceHaproxyAcl(),
-			"haproxy_frontend":  resourceHaproxyFrontend(),
-			"haproxy_backend":   resourceHaproxyBackend(),
+			//"haproxy_global":    resourceHaproxyGlobal(),
+			//"haproxy_defaults":  resourceHaproxyDefaults(),
+			//"haproxy_dashboard": resourceHaproxyDashboard(),
+			//"haproxy_acl":       resourceHaproxyAcl(),
+			//"haproxy_frontend":  resourceHaproxyFrontend(),
+			"haproxy_backend": resourceHaproxyBackend(),
+		},
+		ConfigureFunc: func(data *schema.ResourceData) (interface{}, error) {
+			var (
+				username = data.Get("username").(string)
+				password = data.Get("password").(string)
+				baseurl  = data.Get("url").(string)
+			)
+
+			transactionID, err := CreateTransactionID(baseurl, username, password)
+			if err != nil {
+				fmt.Println("Error:", err)
+				return nil, err
+			}
+
+			fmt.Println("-----transactionID-----", transactionID)
+
+			config := &Config{
+				Username:      username,
+				Password:      password,
+				BaseURL:       baseurl,
+				TransactionID: transactionID,
+			}
+			return &config, nil
 		},
 	}
 }
