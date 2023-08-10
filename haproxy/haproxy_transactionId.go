@@ -36,16 +36,21 @@ func getCurrentConfigurationVersion(BaseURL string, Username string, Password st
 	if err != nil {
 		return 0, fmt.Errorf("error parsing version: %v", err)
 	}
+
+	_ = &Config{
+		ConfigurationVersion: version,
+	}
 	return version, nil
 }
 
 // createTransactionID for create a transaction ID
 func createTransactionID(BaseURL string, Username string, Password string) (string, error) {
 	configurationVersion, err := getCurrentConfigurationVersion(BaseURL, Username, Password)
+
 	versionStr := strconv.Itoa(configurationVersion)
 	//versionStr := configurationVersion + 1
 
-	fmt.Println("====================versionStr=================", versionStr)
+	//fmt.Println("====================versionStr=================", versionStr)
 	url := fmt.Sprintf("%s/v2/services/haproxy/transactions?version=%s", BaseURL, versionStr)
 	headers := map[string]string{
 		"Content-Type": "application/json",
