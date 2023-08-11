@@ -73,14 +73,14 @@ func providerConfigure(data *schema.ResourceData) (interface{}, error) {
 		return nil, err
 	}
 
-	resp, err := persistTransactionID(transactionID, baseurl, username, password)
+	resp, err := persistTransactionID(baseurl, username, password, transactionID)
 	if err != nil {
 		fmt.Println("Error persistTransactionID:", err)
-		return nil, err
+		return "", err
 	}
 
 	fmt.Println("-----transactionID-----", transactionID)
-	fmt.Println("----------response---------", resp)
+	fmt.Println("-------resp------------", resp)
 
 	config := &Config{
 		Username:      username,

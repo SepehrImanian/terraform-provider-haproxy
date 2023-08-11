@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"net/http"
 	"strconv"
 )
 
@@ -12,6 +11,11 @@ type TransactionResponse struct {
 	Version int    `json:"_version"`
 	ID      string `json:"id"`
 	Status  string `json:"status"`
+}
+
+type persistTransactionIDResponse struct {
+	Code    int    `json:"code"`
+	Message string `json:"message"`
 }
 
 func getCurrentConfigurationVersion(BaseURL string, Username string, Password string) (int, error) {
@@ -37,10 +41,10 @@ func getCurrentConfigurationVersion(BaseURL string, Username string, Password st
 		return 0, fmt.Errorf("error parsing version: %v", err)
 	}
 
-	_ = &Config{
+	config := &Config{
 		ConfigurationVersion: version,
 	}
-	return version, nil
+	return config.ConfigurationVersion, nil
 }
 
 // createTransactionID for create a transaction ID
@@ -76,8 +80,10 @@ func createTransactionID(BaseURL string, Username string, Password string) (stri
 }
 
 // persistTransactionID to persist a transaction ID from memory into haproxy config file
-func persistTransactionID(transactionID string, BaseURL string, Username string, Password string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/transactions/%s", BaseURL, transactionID)
+func persistTransactionID(BaseURL string, Username string, Password string, TransactionID string) (interface{}, error) {
+	url := fmt.Sprintf("%s/v2/services/haproxy/transactions/%s", BaseURL, TransactionID)
+
+	fmt.Println("----------url----------", url)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}
@@ -87,5 +93,16 @@ func persistTransactionID(transactionID string, BaseURL string, Username string,
 		return nil, err
 	}
 	defer resp.Body.Close()
-	return resp, nil
+
+	var responseData persistTransactionIDResponse
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("error reading response body: %v", err)
+	}
+
+	err = json.Unmarshal(body, &responseData)
+	if err != nil {
+		return nil, fmt.Errorf("error decoding response JSON: %v", err)
+	}
+	return responseData, nil
 }
