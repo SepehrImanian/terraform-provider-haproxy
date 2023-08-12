@@ -1,7 +1,6 @@
 package haproxy
 
 import (
-	"fmt"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
@@ -67,26 +66,11 @@ func providerConfigure(data *schema.ResourceData) (interface{}, error) {
 		baseurl  = data.Get("url").(string)
 	)
 
-	transactionID, err := createTransactionID(baseurl, username, password)
-	if err != nil {
-		fmt.Println("Error createTransactionID:", err)
-		return nil, err
-	}
-
-	resp, err := persistTransactionID(baseurl, username, password, transactionID)
-	if err != nil {
-		fmt.Println("Error persistTransactionID:", err)
-		return "", err
-	}
-
-	fmt.Println("-----transactionID-----", transactionID)
-	fmt.Println("-------resp------------", resp)
-
 	config := &Config{
-		Username:      username,
-		Password:      password,
-		BaseURL:       baseurl,
-		TransactionID: transactionID,
+		Username: username,
+		Password: password,
+		BaseURL:  baseurl,
 	}
+
 	return &config, nil
 }

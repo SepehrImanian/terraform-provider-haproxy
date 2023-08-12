@@ -5,14 +5,20 @@ provider "haproxy" {
 }
 
 ## Resources
-resource "haproxy_backend" "test" {
-  backend_name = "test"
+resource "haproxy_backend" "test_2" {
+  backend_name = "test_2"
   mode         = "http"
   balance_algorithm = "roundrobin"
 }
 
-resource "haproxy_backend" "test2" {
-  backend_name = "test2"
+resource "haproxy_backend" "test_1" {
+  backend_name = "test_1"
   mode         = "http"
-  balance_algorithm = "leastconn"
+  balance_algorithm = "roundrobin"
+}
+
+resource "haproxy_backend" "test_3" {
+  backend_name = "test_3"
+  mode         = "http"
+  balance_algorithm = "roundrobin"
 }

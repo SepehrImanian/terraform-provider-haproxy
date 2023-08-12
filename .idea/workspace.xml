@@ -6,8 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="cbc1059a-47fe-468f-8e17-042cab565069" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/main.tf" beforeDir="false" afterPath="$PROJECT_DIR$/examples/main.tf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/haproxy/haproxy_transactionId.go" beforeDir="false" afterPath="$PROJECT_DIR$/haproxy/haproxy_transactionId.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/haproxy/provider.go" beforeDir="false" afterPath="$PROJECT_DIR$/haproxy/provider.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/haproxy/resource_haproxy_backend.go" beforeDir="false" afterPath="$PROJECT_DIR$/haproxy/resource_haproxy_backend.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

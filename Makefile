@@ -1,16 +1,18 @@
-HOSTNAME=sepiflare.live
-NAMESPACE=sepiflare
+HOSTNAME=terraform-example.com
+NAMESPACE=haproxy-provider
 NAME=haproxy
 APPLICATION_NAME=terraform-provider-${NAME}
-VERSION=0.0.1
-GOARCH=$(shell go env GOARCH)
+VERSION=1.0.0
+GOARCH=darwin_arm64
 INSTALL_PATH=~/.terraform.d/plugins/${HOSTNAME}/${NAMESPACE}/${NAME}/${VERSION}/${GOARCH}
+INSTALL_PATH=/Users/sepehr/.terraform.d/plugins/${HOSTNAME}/${NAMESPACE}/${NAME}/${VERSION}/${GOARCH}/
 
 default: build
 
 build:
-	mkdir -p $(INSTALL_PATH)
-	go build -o $(INSTALL_PATH)/$(APPLICATION_NAME) main.go
+	go build -o $(APPLICATION_NAME) .
+	mv $(APPLICATION_NAME) /Users/sepehr/.terraform.d/plugins/terraform-example.com/haproxy-provider/haproxy/1.0.0/darwin_arm64/
+	rm -rf examples/.terraform* && rm -rf examples/terraform*
 
 docs:
 	go run github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs
