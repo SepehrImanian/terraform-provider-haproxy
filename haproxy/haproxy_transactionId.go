@@ -6,16 +6,7 @@ import (
 	"io"
 	"net/http"
 	"strconv"
-	"sync"
 )
-
-type TransactionResponse struct {
-	Version int    `json:"_version"`
-	ID      string `json:"id"`
-	Status  string `json:"status"`
-}
-
-var configMutex sync.Mutex
 
 // getCurrentConfigurationVersion get current haproxy configuration version
 func (c *Config) getCurrentConfigurationVersion() (int, error) {
@@ -99,7 +90,7 @@ func (c *Config) persistTransactionID(TransactionID string) error {
 	return nil
 }
 
-// Transaction  encapsulate function to ensure that it's executed within a locked context
+// Transaction encapsulate function to ensure that it's executed within a locked context
 func (c *Config) Transaction(fn func(transactionID string) (*http.Response, error)) (*http.Response, error) {
 	configMutex.Lock()
 	defer configMutex.Unlock()

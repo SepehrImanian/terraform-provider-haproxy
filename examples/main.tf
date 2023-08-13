@@ -5,20 +5,20 @@ provider "haproxy" {
 }
 
 ## Resources
-resource "haproxy_backend" "test_2" {
-  backend_name = "test_2"
-  mode         = "http"
-  balance_algorithm = "roundrobin"
+
+resource "haproxy_frontend" "front_test" {
+  name = "front_test"
+  backend = "backend_test"
+  http_connection_mode = "http-keep-alive"
+  max_connection = 3000
+  mode = "tcp"
+  depends_on = [
+    haproxy_backend.backend_test
+  ]
 }
 
-resource "haproxy_backend" "test_1" {
-  backend_name = "test_1"
-  mode         = "http"
-  balance_algorithm = "roundrobin"
-}
-
-resource "haproxy_backend" "test_3" {
-  backend_name = "test_3"
-  mode         = "http"
+resource "haproxy_backend" "backend_test" {
+  backend_name = "backend_test"
+  mode         = "tcp"
   balance_algorithm = "roundrobin"
 }
