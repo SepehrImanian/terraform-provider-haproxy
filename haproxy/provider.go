@@ -54,6 +54,7 @@ func Provider() *schema.Provider {
 			//"haproxy_acl":       resourceHaproxyAcl(),
 			"haproxy_frontend": resourceHaproxyFrontend(),
 			"haproxy_backend":  resourceHaproxyBackend(),
+			"haproxy_server":   resourceHaproxyServer(),
 		},
 		ConfigureFunc: providerConfigure,
 	}

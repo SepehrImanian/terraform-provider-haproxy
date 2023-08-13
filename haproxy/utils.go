@@ -18,3 +18,10 @@ func HTTPRequest(method, url string, body []byte, headers map[string]string, Use
 	}
 	return http.DefaultClient.Do(req)
 }
+
+func boolToStr(value bool) string {
+	if value {
+		return "enabled"
+	}
+	return "disabled"
+}
