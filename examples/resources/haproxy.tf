@@ -3,15 +3,23 @@ resource "haproxy_frontend" "front_test" {
   backend = "backend_test"
   http_connection_mode = "http-keep-alive"
   max_connection = 3000
-  mode = "tcp"
-  depends_on = [
-    haproxy_backend.backend_test
-  ]
+  mode = "http"
+  depends_on = [ haproxy_backend.backend_test ]
+}
+
+resource "haproxy_bind" "bind_test" {
+  name        = "bind_test"
+  port        = 8080
+  address     = "0.0.0.0"
+  parent_name = "front_test"
+  parent_type = "frontend"
+  maxconn = 3000
+  depends_on = [ haproxy_frontend.front_test ]
 }
 
 resource "haproxy_backend" "backend_test" {
   name = "backend_test"
-  mode         = "tcp"
+  mode         = "http"
   balance_algorithm = "roundrobin"
 }
 
@@ -26,33 +34,45 @@ resource "haproxy_server" "server_test" {
   inter       = 3
   rise        = 3
   fall        = 3
-  depends_on = [
-    haproxy_backend.backend_test
-  ]
+  depends_on = [ haproxy_backend.backend_test ]
 }
 
 data "haproxy_backend" "backend_test" {
   name = "backend_test"
-}
-
-output "haproxy_backend" {
-  value = haproxy_backend.backend_test
+  depends_on = [ haproxy_backend.backend_test ]
 }
 
 data "haproxy_frontend" "front_test" {
   name = "front_test"
-}
-
-output "haproxy_frontend" {
-  value = haproxy_frontend.front_test
+  depends_on = [ haproxy_frontend.front_test ]
 }
 
 data "haproxy_server" "server_test" {
   name = "server_test"
   parent_name = "backend_test"
   parent_type = "backend"
+  depends_on = [ haproxy_server.server_test ]
+}
+
+data "haproxy_bind" "bind_test" {
+  name = "bind_test"
+  parent_name = "front_test"
+  parent_type = "frontend"
+  depends_on = [ haproxy_bind.bind_test ]
+}
+
+output "haproxy_backend" {
+  value = haproxy_backend.backend_test
+}
+
+output "haproxy_frontend" {
+  value = haproxy_frontend.front_test
 }
 
 output "haproxy_server" {
   value = haproxy_server.server_test
+}
+
+output "haproxy_bind" {
+  value = haproxy_bind.bind_test
 }

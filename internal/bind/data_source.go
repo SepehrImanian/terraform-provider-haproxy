@@ -1,17 +1,17 @@
-package server
+package bind
 
 import (
 	"fmt"
 	"net/http"
+
 	"terraform-provider-haproxy/internal/transaction"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
-func DataSourceHaproxyServer() *schema.Resource {
+func DataSourceHaproxyBind() *schema.Resource {
 	return &schema.Resource{
-		Read: DataSourceHaproxyServerRead,
-
+		Read: dataSourceHaproxyBindRead,
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Type:     schema.TypeString,
@@ -30,27 +30,27 @@ func DataSourceHaproxyServer() *schema.Resource {
 	}
 }
 
-func DataSourceHaproxyServerRead(d *schema.ResourceData, m interface{}) error {
-	serverName := d.Get("name").(string)
+func dataSourceHaproxyBindRead(d *schema.ResourceData, m interface{}) error {
+	bindName := d.Get("name").(string)
 	parentName := d.Get("parent_name").(string)
 	parentType := d.Get("parent_type").(string)
 
 	configMap := m.(map[string]interface{})
-	serverConfig := configMap["server"].(*ConfigServer)
+	bindConfig := configMap["bind"].(*ConfigBind)
 	tranConfig := configMap["transaction"].(*transaction.ConfigTransaction)
 
 	resp, err := tranConfig.Transaction(func(transactionID string) (*http.Response, error) {
-		return serverConfig.GetAServerConfiguration(serverName, transactionID, parentName, parentType)
+		return bindConfig.GetABindConfiguration(bindName, transactionID, parentName, parentType)
 	})
 
 	if err != nil {
-		fmt.Println("Error updating Server configuration:", err)
+		fmt.Println("Error updating Bind configuration:", err)
 		return err
 	}
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
-		return fmt.Errorf("error reading Server configuration: %s", resp.Status)
+		return fmt.Errorf("error reading Bind configuration: %s", resp.Status)
 	}
 
-	d.SetId(serverName)
+	d.SetId(bindName)
 	return nil
 }

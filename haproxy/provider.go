@@ -2,6 +2,7 @@ package haproxy
 
 import (
 	backend "terraform-provider-haproxy/internal/backend"
+	bind "terraform-provider-haproxy/internal/bind"
 	frontend "terraform-provider-haproxy/internal/frontend"
 	server "terraform-provider-haproxy/internal/server"
 	transaction "terraform-provider-haproxy/internal/transaction"
@@ -52,6 +53,7 @@ func Provider() *schema.Provider {
 			"haproxy_frontend": frontend.DataSourceHaproxyFrontend(),
 			"haproxy_backend":  backend.DataSourceHaproxyBackend(),
 			"haproxy_server":   server.DataSourceHaproxyServer(),
+			"haproxy_bind":     bind.DataSourceHaproxyBind(),
 		},
 
 		ResourcesMap: map[string]*schema.Resource{
@@ -62,6 +64,7 @@ func Provider() *schema.Provider {
 			"haproxy_frontend": frontend.ResourceHaproxyFrontend(),
 			"haproxy_backend":  backend.ResourceHaproxyBackend(),
 			"haproxy_server":   server.ResourceHaproxyServer(),
+			"haproxy_bind":     bind.ResourceHaproxyBind(),
 		},
 		ConfigureFunc: providerConfigure,
 	}
@@ -74,26 +77,31 @@ func providerConfigure(data *schema.ResourceData) (interface{}, error) {
 		BaseURL:  data.Get("url").(string),
 	}
 
-	// Create backend config
+	// Create backend config for backend
 	backendConfig := &backend.ConfigBackend{}
 	utils.SetConfigValues(backendConfig, commonConfig)
 
-	// Create frontend config
+	// Create frontend config for frontend
 	frontendConfig := &frontend.ConfigFrontend{}
 	utils.SetConfigValues(frontendConfig, commonConfig)
 
-	// Create server config
+	// Create server config for server
 	serverConfig := &server.ConfigServer{}
 	utils.SetConfigValues(serverConfig, commonConfig)
 
-	// Create transaction config
+	// Create transaction config for transaction
 	transactionConfig := &transaction.ConfigTransaction{}
 	utils.SetConfigValues(transactionConfig, commonConfig)
+
+	// Create transaction config for bind
+	bindConfig := &bind.ConfigBind{}
+	utils.SetConfigValues(bindConfig, commonConfig)
 
 	return map[string]interface{}{
 		"backend":     backendConfig,
 		"frontend":    frontendConfig,
 		"server":      serverConfig,
 		"transaction": transactionConfig,
+		"bind":        bindConfig,
 	}, nil
 }

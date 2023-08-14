@@ -37,7 +37,7 @@ func dataSourceHaproxyFrontendRead(d *schema.ResourceData, m interface{}) error 
 		return err
 	}
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
-		return fmt.Errorf("error creating frontend configuration: %s", resp.Status)
+		return fmt.Errorf("error reading frontend configuration: %s", resp.Status)
 	}
 
 	d.SetId(frontendName)
