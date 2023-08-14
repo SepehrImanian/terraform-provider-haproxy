@@ -17,7 +17,7 @@ func ResourceHaproxyBackend() *schema.Resource {
 		Delete: resourceHaproxyBackendDelete,
 
 		Schema: map[string]*schema.Schema{
-			"backend_name": {
+			"name": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
@@ -36,7 +36,7 @@ func ResourceHaproxyBackend() *schema.Resource {
 }
 
 func resourceHaproxyBackendRead(d *schema.ResourceData, m interface{}) error {
-	backendName := d.Get("backend_name").(string)
+	backendName := d.Get("name").(string)
 
 	configMap := m.(map[string]interface{})
 	backendConfig := configMap["backend"].(*ConfigBackend)
@@ -59,7 +59,7 @@ func resourceHaproxyBackendRead(d *schema.ResourceData, m interface{}) error {
 }
 
 func resourceHaproxyBackendCreate(d *schema.ResourceData, m interface{}) error {
-	backendName := d.Get("backend_name").(string)
+	backendName := d.Get("name").(string)
 	mode := d.Get("mode").(string)
 	balanceAlgorithm := d.Get("balance_algorithm").(string)
 
@@ -104,7 +104,7 @@ func resourceHaproxyBackendCreate(d *schema.ResourceData, m interface{}) error {
 }
 
 func resourceHaproxyBackendUpdate(d *schema.ResourceData, m interface{}) error {
-	backendName := d.Get("backend_name").(string)
+	backendName := d.Get("name").(string)
 	mode := d.Get("mode").(string)
 	balanceAlgorithm := d.Get("balance_algorithm").(string)
 
@@ -147,7 +147,7 @@ func resourceHaproxyBackendUpdate(d *schema.ResourceData, m interface{}) error {
 }
 
 func resourceHaproxyBackendDelete(d *schema.ResourceData, m interface{}) error {
-	backendName := d.Get("backend_name").(string)
+	backendName := d.Get("name").(string)
 
 	configMap := m.(map[string]interface{})
 	backendConfig := configMap["backend"].(*ConfigBackend)

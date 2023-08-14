@@ -18,7 +18,7 @@ resource "haproxy_frontend" "front_test" {
 }
 
 resource "haproxy_backend" "backend_test" {
-  backend_name = "backend_test"
+  name = "backend_test"
   mode         = "tcp"
   balance_algorithm = "roundrobin"
 }
