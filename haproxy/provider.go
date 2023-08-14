@@ -51,6 +51,7 @@ func Provider() *schema.Provider {
 			// "haproxy_acl":      dataSourceHaproxyAcl(),
 			"haproxy_frontend": frontend.DataSourceHaproxyFrontend(),
 			"haproxy_backend":  backend.DataSourceHaproxyBackend(),
+			"haproxy_server":   server.DataSourceHaproxyServer(),
 		},
 
 		ResourcesMap: map[string]*schema.Resource{

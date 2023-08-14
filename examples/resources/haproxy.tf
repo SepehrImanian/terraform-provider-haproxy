@@ -46,3 +46,13 @@ data "haproxy_frontend" "front_test" {
 output "haproxy_frontend" {
   value = haproxy_frontend.front_test
 }
+
+data "haproxy_server" "server_test" {
+  name = "server_test"
+  parent_name = "backend_test"
+  parent_type = "backend"
+}
+
+output "haproxy_server" {
+  value = haproxy_server.server_test
+}
