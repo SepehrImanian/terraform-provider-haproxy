@@ -1,6 +1,12 @@
 package haproxy
 
 import (
+	backend "terraform-provider-haproxy/internal/backend"
+	frontend "terraform-provider-haproxy/internal/frontend"
+	server "terraform-provider-haproxy/internal/server"
+	transaction "terraform-provider-haproxy/internal/transaction"
+	"terraform-provider-haproxy/internal/utils"
+
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
@@ -52,26 +58,41 @@ func Provider() *schema.Provider {
 			//"haproxy_defaults":  resourceHaproxyDefaults(),
 			//"haproxy_dashboard": resourceHaproxyDashboard(),
 			//"haproxy_acl":       resourceHaproxyAcl(),
-			"haproxy_frontend": resourceHaproxyFrontend(),
-			"haproxy_backend":  resourceHaproxyBackend(),
-			"haproxy_server":   resourceHaproxyServer(),
+			"haproxy_frontend": frontend.ResourceHaproxyFrontend(),
+			"haproxy_backend":  backend.ResourceHaproxyBackend(),
+			"haproxy_server":   server.ResourceHaproxyServer(),
 		},
 		ConfigureFunc: providerConfigure,
 	}
 }
 
 func providerConfigure(data *schema.ResourceData) (interface{}, error) {
-	var (
-		username = data.Get("username").(string)
-		password = data.Get("password").(string)
-		baseurl  = data.Get("url").(string)
-	)
-
-	config := &Config{
-		Username: username,
-		Password: password,
-		BaseURL:  baseurl,
+	commonConfig := utils.Configuration{
+		Username: data.Get("username").(string),
+		Password: data.Get("password").(string),
+		BaseURL:  data.Get("url").(string),
 	}
 
-	return &config, nil
+	// Create backend config
+	backendConfig := &backend.ConfigBackend{}
+	utils.SetConfigValues(backendConfig, commonConfig)
+
+	// Create frontend config
+	frontendConfig := &frontend.ConfigFrontend{}
+	utils.SetConfigValues(frontendConfig, commonConfig)
+
+	// Create server config
+	serverConfig := &server.ConfigServer{}
+	utils.SetConfigValues(serverConfig, commonConfig)
+
+	// Create transaction config
+	transactionConfig := &transaction.ConfigTransaction{}
+	utils.SetConfigValues(transactionConfig, commonConfig)
+
+	return map[string]interface{}{
+		"backend":     backendConfig,
+		"frontend":    frontendConfig,
+		"server":      serverConfig,
+		"transaction": transactionConfig,
+	}, nil
 }

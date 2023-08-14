@@ -1,6 +1,6 @@
 package haproxy
 
-import "sync"
+import "github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 
 // Config defines variable for haproxy configuration
 type Config struct {
@@ -10,11 +10,5 @@ type Config struct {
 	SSL      bool
 }
 
-// TransactionResponse get response when Transaction create
-type TransactionResponse struct {
-	Version int    `json:"_version"`
-	ID      string `json:"id"`
-	Status  string `json:"status"`
-}
-
-var configMutex sync.Mutex
+var testAccProviders map[string]func() (*schema.Provider, error)
+var testAccProvider *schema.Provider
