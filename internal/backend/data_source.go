@@ -10,7 +10,7 @@ import (
 
 func DataSourceHaproxyBackend() *schema.Resource {
 	return &schema.Resource{
-		Read: dataHaproxyABackendRead,
+		Read: dataSourceHaproxyABackendRead,
 
 		Schema: map[string]*schema.Schema{
 			"name": {
@@ -21,7 +21,7 @@ func DataSourceHaproxyBackend() *schema.Resource {
 	}
 }
 
-func dataHaproxyABackendRead(d *schema.ResourceData, m interface{}) error {
+func dataSourceHaproxyABackendRead(d *schema.ResourceData, m interface{}) error {
 	backendName := d.Get("name").(string)
 
 	configMap := m.(map[string]interface{})
