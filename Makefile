@@ -12,7 +12,7 @@ default: build
 build:
 	go build -o $(APPLICATION_NAME) .
 	mv $(APPLICATION_NAME) /Users/sepehr/.terraform.d/plugins/terraform-example.com/haproxy-provider/haproxy/1.0.0/darwin_arm64/
-	rm -rf examples/.terraform* && rm -rf examples/terraform*
+	# rm -rf examples/.terraform* && rm -rf examples/terraform*
 
 docs:
 	go run github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs

@@ -6,3 +6,9 @@ terraform {
     }
   }
 }
+
+provider "haproxy" {
+  url         = var.haproxy_url
+  username    = var.haproxy_username
+  password    = var.haproxy_password
+}

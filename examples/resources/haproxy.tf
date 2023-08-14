@@ -1,11 +1,3 @@
-provider "haproxy" {
-  url         = "http://103.75.196.148:5555"
-  username    = "admin"
-  password    = "adminpwd"
-}
-
-## Resources
-
 resource "haproxy_frontend" "front_test" {
   name = "front_test"
   backend = "backend_test"
@@ -37,4 +29,12 @@ resource "haproxy_server" "server_test" {
   depends_on = [
     haproxy_backend.backend_test
   ]
+}
+
+data "haproxy_backend" "backend_test" {
+  name = "backend_test"
+}
+
+output "haproxy_backend" {
+  value = haproxy_backend.backend_test
 }

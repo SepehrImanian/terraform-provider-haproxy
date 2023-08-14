@@ -47,11 +47,11 @@ func Provider() *schema.Provider {
 			},
 		},
 
-		//DataSourcesMap: map[string]*schema.Resource{
-		//	"haproxy_acl":      dataSourceHaproxyAcl(),
-		//	"haproxy_frontend": dataSourceHaproxyFrontend(),
-		//	"haproxy_backend":  dataSourceHaproxyBackend(),
-		//},
+		DataSourcesMap: map[string]*schema.Resource{
+			// "haproxy_acl":      dataSourceHaproxyAcl(),
+			// "haproxy_frontend": dataSourceHaproxyFrontend(),
+			"haproxy_backend":     backend.DataSourceHaproxyBackend(),
+		},
 
 		ResourcesMap: map[string]*schema.Resource{
 			//"haproxy_global":    resourceHaproxyGlobal(),

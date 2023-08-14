@@ -8,6 +8,7 @@ import (
 	"terraform-provider-haproxy/internal/utils"
 )
 
+// createTransactionID creates a new transaction ID
 func (c *ConfigTransaction) createTransactionID(version int) (string, error) {
 	versionStr := strconv.Itoa(version)
 

@@ -1,26 +1,45 @@
 package backend
 
 import (
+	"fmt"
 	"net/http"
-	"terraform-provider-haproxy/internal/utils"
+	"terraform-provider-haproxy/internal/transaction"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
 func DataSourceHaproxyBackend() *schema.Resource {
-	return nil
+	return &schema.Resource{
+		Read: dataHaproxyABackendRead,
+
+		Schema: map[string]*schema.Schema{
+			"name": {
+				Type:     schema.TypeString,
+				Required: true,
+			},
+		},
+	}
 }
 
-func GetBackendsConfiguration(baseURL string, username string, password string) (*http.Response, error) {
-	URL := baseURL + "/v2/services/haproxy/configuration/backends"
+func dataHaproxyABackendRead(d *schema.ResourceData, m interface{}) error {
+	backendName := d.Get("name").(string)
 
-	headers := map[string]string{
-		"Content-Type": "application/json",
-	}
-	resp, err := utils.HTTPRequest(http.MethodGet, URL, nil, headers, username, password)
+	configMap := m.(map[string]interface{})
+	backendConfig := configMap["backend"].(*ConfigBackend)
+	tranConfig := configMap["transaction"].(*transaction.ConfigTransaction)
+
+	resp, err := tranConfig.Transaction(func(transactionID string) (*http.Response, error) {
+		return backendConfig.GetABackendConfiguration(backendName, transactionID)
+	})
+
 	if err != nil {
-		return nil, err
+		fmt.Println("Error updating backend configuration:", err)
+		return err
 	}
-	defer resp.Body.Close()
-	return resp, nil
+	if resp.StatusCode != 200 && resp.StatusCode != 202 {
+		return fmt.Errorf("error creating backend configuration: %s", resp.Status)
+	}
+
+	d.SetId(backendName)
+	return nil
 }

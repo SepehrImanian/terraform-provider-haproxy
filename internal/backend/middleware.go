@@ -7,9 +7,23 @@ import (
 	"terraform-provider-haproxy/internal/utils"
 )
 
+// GetAllBackendConfiguration returns the configuration of all backends.
+func (c *ConfigBackend) GetAllBackendConfiguration(TransactionID string) (*http.Response, error) {
+	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/backends?transaction_id=%s", c.BaseURL, TransactionID)
+	headers := map[string]string{
+		"Content-Type": "application/json",
+	}
+	resp, err := utils.HTTPRequest("GET", url, nil, headers, c.Username, c.Password)
+	if err != nil {
+		fmt.Println("Error sending request:", err)
+		return nil, err
+	}
+	defer resp.Body.Close()
+	return resp, nil
+}
+
 // GetABackendConfiguration returns the configuration of a backend.
 func (c *ConfigBackend) GetABackendConfiguration(backendName string, TransactionID string) (*http.Response, error) {
-
 	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/backends/%s?transaction_id=%s", c.BaseURL, backendName, TransactionID)
 	headers := map[string]string{
 		"Content-Type": "application/json",
