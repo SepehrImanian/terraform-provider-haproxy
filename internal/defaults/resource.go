@@ -88,25 +88,21 @@ func ResourceHaproxyDefaults() *schema.Resource {
 }
 
 func resourceHaproxyDefaultsRead(d *schema.ResourceData, m interface{}) error {
-	DefaultsName := d.Get("name").(string)
+	defaultsName := d.Get("name").(string)
 
 	configMap := m.(map[string]interface{})
 	DefaultsConfig := configMap["defaults"].(*ConfigDefaults)
 	tranConfig := configMap["transaction"].(*transaction.ConfigTransaction)
 
 	resp, err := tranConfig.Transaction(func(transactionID string) (*http.Response, error) {
-		return DefaultsConfig.GetADefaultsConfiguration(DefaultsName, transactionID)
+		return DefaultsConfig.GetADefaultsConfiguration(defaultsName, transactionID)
 	})
 
-	if err != nil {
-		fmt.Println("Error updating Defaults configuration:", err)
-		return err
-	}
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
-		return fmt.Errorf("error creating Defaults configuration: %s", resp.Status)
+		return utils.HandleError(defaultsName, "error reading Defaults configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
 
-	d.SetId(DefaultsName)
+	d.SetId(defaultsName)
 	return nil
 }
 
@@ -149,13 +145,8 @@ func resourceHaproxyDefaultsCreate(d *schema.ResourceData, m interface{}) error 
 		return DefaultsConfig.AddDefaultsConfiguration(payloadJSON, transactionID)
 	})
 
-	if err != nil {
-		fmt.Println("Error creating Defaults configuration:", err)
-		return err
-	}
-
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
-		return fmt.Errorf("error creating Defaults configuration: %s", resp.Status)
+		return utils.HandleError(defaultsName, "error creating Defaults configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
 
 	d.SetId(defaultsName)
@@ -202,13 +193,8 @@ func resourceHaproxyDefaultsUpdate(d *schema.ResourceData, m interface{}) error 
 		return DefaultsConfig.UpdateDefaultsConfiguration(defaultsName, payloadJSON, transactionID)
 	})
 
-	if err != nil {
-		fmt.Println("Error creating Defaults configuration:", err)
-		return err
-	}
-
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
-		return fmt.Errorf("error creating Defaults configuration: %s", resp.Status)
+		return utils.HandleError(defaultsName, "error updating Defaults configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
 
 	d.SetId(defaultsName)
@@ -226,13 +212,8 @@ func resourceHaproxyDefaultsDelete(d *schema.ResourceData, m interface{}) error 
 		return DefaultsConfig.DeleteDefaultsConfiguration(defaultsName, transactionID)
 	})
 
-	if err != nil {
-		fmt.Println("Error updating Defaults configuration:", err)
-		return err
-	}
-
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
-		return fmt.Errorf("error creating Defaults configuration: %s", resp.Status)
+		return utils.HandleError(defaultsName, "error deleting Defaults configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
 
 	d.SetId("")

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"terraform-provider-haproxy/internal/transaction"
+	"terraform-provider-haproxy/internal/utils"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
@@ -32,12 +33,8 @@ func dataSourceHaproxyDefaultsRead(d *schema.ResourceData, m interface{}) error 
 		return DefaultsConfig.GetADefaultsConfiguration(defaultsName, transactionID)
 	})
 
-	if err != nil {
-		fmt.Println("Error updating Defaults configuration:", err)
-		return err
-	}
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
-		return fmt.Errorf("error reading Defaults configuration: %s", resp.Status)
+		return utils.HandleError(defaultsName, "error reading Defaults configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
 
 	d.SetId(defaultsName)

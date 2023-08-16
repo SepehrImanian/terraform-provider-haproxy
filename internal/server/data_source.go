@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"terraform-provider-haproxy/internal/transaction"
+	"terraform-provider-haproxy/internal/utils"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
@@ -43,12 +44,8 @@ func DataSourceHaproxyServerRead(d *schema.ResourceData, m interface{}) error {
 		return serverConfig.GetAServerConfiguration(serverName, transactionID, parentName, parentType)
 	})
 
-	if err != nil {
-		fmt.Println("Error updating Server configuration:", err)
-		return err
-	}
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
-		return fmt.Errorf("error reading Server configuration: %s", resp.Status)
+		return utils.HandleError(serverName, "error reading Server configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
 
 	d.SetId(serverName)

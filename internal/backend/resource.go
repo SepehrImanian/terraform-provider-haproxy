@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"terraform-provider-haproxy/internal/transaction"
+	"terraform-provider-haproxy/internal/utils"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
@@ -46,12 +47,8 @@ func resourceHaproxyBackendRead(d *schema.ResourceData, m interface{}) error {
 		return backendConfig.GetABackendConfiguration(backendName, transactionID)
 	})
 
-	if err != nil {
-		fmt.Println("Error updating backend configuration:", err)
-		return err
-	}
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
-		return fmt.Errorf("error creating backend configuration: %s", resp.Status)
+		return utils.HandleError(backendName, "error reading Backend configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
 
 	d.SetId(backendName)
@@ -90,13 +87,8 @@ func resourceHaproxyBackendCreate(d *schema.ResourceData, m interface{}) error {
 		return backendConfig.AddBackendConfiguration(payload, transactionID)
 	})
 
-	if err != nil {
-		fmt.Println("Error creating backend configuration:", err)
-		return err
-	}
-
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
-		return fmt.Errorf("error creating backend configuration: %s", resp.Status)
+		return utils.HandleError(backendName, "error creating Backend configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
 
 	d.SetId(backendName)
@@ -135,13 +127,10 @@ func resourceHaproxyBackendUpdate(d *schema.ResourceData, m interface{}) error {
 		return backendConfig.UpdateBackendConfiguration(backendName, payload, transactionID)
 	})
 
-	if err != nil {
-		fmt.Println("Error updating backend configuration:", err)
-		return err
-	}
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
-		return fmt.Errorf("error creating backend configuration: %s", resp)
+		return utils.HandleError(backendName, "error updating Backend configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
+
 	d.SetId(backendName)
 	return nil
 }
@@ -157,13 +146,8 @@ func resourceHaproxyBackendDelete(d *schema.ResourceData, m interface{}) error {
 		return backendConfig.DeleteBackendConfiguration(backendName, transactionID)
 	})
 
-	if err != nil {
-		fmt.Println("Error updating backend configuration:", err)
-		return err
-	}
-
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
-		return fmt.Errorf("error creating backend configuration: %s", resp.Status)
+		return utils.HandleError(backendName, "error deleting Backend configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
 
 	d.SetId("")

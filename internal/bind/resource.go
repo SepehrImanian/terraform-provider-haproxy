@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"terraform-provider-haproxy/internal/transaction"
+	"terraform-provider-haproxy/internal/utils"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
@@ -71,12 +72,8 @@ func resourceHaproxyBindRead(d *schema.ResourceData, m interface{}) error {
 		return BindConfig.GetABindConfiguration(bindName, transactionID, parentName, parentType)
 	})
 
-	if err != nil {
-		fmt.Println("Error updating Bind configuration:", err)
-		return err
-	}
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
-		return fmt.Errorf("error creating Bind configuration: %s", resp.Status)
+		return utils.HandleError(bindName, "error reading Bind configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
 
 	d.SetId(bindName)
@@ -114,13 +111,8 @@ func resourceHaproxyBindCreate(d *schema.ResourceData, m interface{}) error {
 		return BindConfig.AddBindConfiguration(payload, transactionID, parentName, parentType)
 	})
 
-	if err != nil {
-		fmt.Println("Error creating Bind configuration:", err)
-		return err
-	}
-
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
-		return fmt.Errorf("error creating Bind configuration: %s", resp.Status)
+		return utils.HandleError(bindName, "error creating Bind configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
 
 	d.SetId(bindName)
@@ -158,13 +150,8 @@ func resourceHaproxyBindUpdate(d *schema.ResourceData, m interface{}) error {
 		return BindConfig.UpdateBindConfiguration(bindName, payload, transactionID, parentName, parentType)
 	})
 
-	if err != nil {
-		fmt.Println("Error creating Bind configuration:", err)
-		return err
-	}
-
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
-		return fmt.Errorf("error creating Bind configuration: %s", resp.Status)
+		return utils.HandleError(bindName, "error updating Bind configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
 
 	d.SetId(bindName)
@@ -184,13 +171,8 @@ func resourceHaproxyBindDelete(d *schema.ResourceData, m interface{}) error {
 		return BindConfig.DeleteBindConfiguration(bindName, transactionID, parentName, parentType)
 	})
 
-	if err != nil {
-		fmt.Println("Error updating Bind configuration:", err)
-		return err
-	}
-
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
-		return fmt.Errorf("error creating Bind configuration: %s", resp.Status)
+		return utils.HandleError(bindName, "error deleting Bind configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
 
 	d.SetId("")

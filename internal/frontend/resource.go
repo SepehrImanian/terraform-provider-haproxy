@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"terraform-provider-haproxy/internal/transaction"
+	"terraform-provider-haproxy/internal/utils"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
@@ -53,12 +54,8 @@ func resourceHaproxyFrontendRead(d *schema.ResourceData, m interface{}) error {
 		return frontendConfig.GetAFrontendConfiguration(frontendName, transactionID)
 	})
 
-	if err != nil {
-		fmt.Println("Error updating frontend configuration:", err)
-		return err
-	}
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
-		return fmt.Errorf("error creating frontend configuration: %s", resp.Status)
+		return utils.HandleError(frontendName, "error reading Frontend configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
 
 	d.SetId(frontendName)
@@ -90,13 +87,8 @@ func resourceHaproxyFrontendCreate(d *schema.ResourceData, m interface{}) error 
 		return frontendConfig.AddFrontendConfiguration(payload, transactionID)
 	})
 
-	if err != nil {
-		fmt.Println("Error creating frontend configuration:", err)
-		return err
-	}
-
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
-		return fmt.Errorf("error creating frontend configuration: %s", resp.Status)
+		return utils.HandleError(frontendName, "error creating Frontend configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
 
 	d.SetId(frontendName)
@@ -130,13 +122,8 @@ func resourceHaproxyFrontendUpdate(d *schema.ResourceData, m interface{}) error 
 		return frontendConfig.UpdateFrontendConfiguration(frontendName, payload, transactionID)
 	})
 
-	if err != nil {
-		fmt.Println("Error creating frontend configuration:", err)
-		return err
-	}
-
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
-		return fmt.Errorf("error creating frontend configuration: %s", resp.Status)
+		return utils.HandleError(frontendName, "error updating Frontend configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
 
 	d.SetId(frontendName)
@@ -154,13 +141,8 @@ func resourceHaproxyFrontendDelete(d *schema.ResourceData, m interface{}) error 
 		return frontendConfig.DeleteFrontendConfiguration(frontendName, transactionID)
 	})
 
-	if err != nil {
-		fmt.Println("Error updating frontend configuration:", err)
-		return err
-	}
-
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
-		return fmt.Errorf("error creating frontend configuration: %s", resp.Status)
+		return utils.HandleError(frontendName, "error deleting Frontend configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
 
 	d.SetId("")

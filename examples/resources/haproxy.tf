@@ -80,6 +80,11 @@ data "haproxy_bind" "bind_test" {
   depends_on = [ haproxy_bind.bind_test ]
 }
 
+data "haproxy_defaults" "default_test" {
+  name = "default_test"
+  depends_on = [ haproxy_defaults.default_test ]
+}
+
 output "haproxy_backend" {
   value = haproxy_backend.backend_test
 }
@@ -94,4 +99,8 @@ output "haproxy_server" {
 
 output "haproxy_bind" {
   value = haproxy_bind.bind_test
+}
+
+output "haproxy_defaults" {
+  value = haproxy_defaults.default_test
 }

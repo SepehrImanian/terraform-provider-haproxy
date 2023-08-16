@@ -2,32 +2,35 @@ package utils
 
 import (
 	"fmt"
-	"strings"
-
-	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 )
 
-// NewResourceError creates a new error with the given msg argument.
-func NewResourceError(msg string, resource string, err interface{}) diag.Diagnostics {
-	switch err := err.(type) {
-	case diag.Diagnostics:
-		return append(err, diag.Diagnostic{
-			Severity: diag.Error,
-			Summary:  fmt.Sprintf("[FATAL] %s (%s)", msg, resource),
-		})
-	case error:
-		return diag.Errorf("[FATAL] %s (%s): %s", msg, resource, err)
-	default:
-		return diag.Errorf("[FATAL] %s (%s): %v", msg, resource, err)
+// CustomError represents
+type CustomError struct {
+	ResourceName string
+	Message      string
+	Err          error
+}
+
+func (ce *CustomError) Error() string {
+	if ce.Err != nil {
+		return fmt.Sprintf("[%s] %s: %s", ce.ResourceName, ce.Message, ce.Err.Error())
+	}
+	return fmt.Sprintf("[%s] %s", ce.ResourceName, ce.Message)
+}
+
+// NewCustomError creates a new CustomError instance.
+func NewCustomError(resourceName, message string, err error) *CustomError {
+	return &CustomError{
+		ResourceName: resourceName,
+		Message:      message,
+		Err:          err,
 	}
 }
 
-// NewResourceErrorStr creates a new error with the given msg argument.
-func NewResourceErrorStr(msg string, resource string, err interface{}) string {
-	diags := NewResourceError(msg, resource, err)
-	strs := make([]string, len(diags))
-	for _, d := range diags {
-		strs = append(strs, d.Summary)
+// HandleError handles errors and returns a CustomError if necessary.
+func HandleError(resourceName, message string, err error) error {
+	if err != nil {
+		return NewCustomError(resourceName, message, err)
 	}
-	return strings.Join(strs, ", ")
+	return nil
 }
