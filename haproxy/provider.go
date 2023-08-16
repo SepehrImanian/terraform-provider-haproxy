@@ -3,6 +3,7 @@ package haproxy
 import (
 	backend "terraform-provider-haproxy/internal/backend"
 	bind "terraform-provider-haproxy/internal/bind"
+	defaults "terraform-provider-haproxy/internal/defaults"
 	frontend "terraform-provider-haproxy/internal/frontend"
 	server "terraform-provider-haproxy/internal/server"
 	transaction "terraform-provider-haproxy/internal/transaction"
@@ -50,6 +51,7 @@ func Provider() *schema.Provider {
 
 		DataSourcesMap: map[string]*schema.Resource{
 			// "haproxy_acl":      dataSourceHaproxyAcl(),
+			"haproxy_defaults": defaults.DataSourceHaproxyDefaults(),
 			"haproxy_frontend": frontend.DataSourceHaproxyFrontend(),
 			"haproxy_backend":  backend.DataSourceHaproxyBackend(),
 			"haproxy_server":   server.DataSourceHaproxyServer(),
@@ -58,9 +60,9 @@ func Provider() *schema.Provider {
 
 		ResourcesMap: map[string]*schema.Resource{
 			//"haproxy_global":    resourceHaproxyGlobal(),
-			//"haproxy_defaults":  resourceHaproxyDefaults(),
 			//"haproxy_dashboard": resourceHaproxyDashboard(),
 			//"haproxy_acl":       resourceHaproxyAcl(),
+			"haproxy_defaults": defaults.ResourceHaproxyDefaults(),
 			"haproxy_frontend": frontend.ResourceHaproxyFrontend(),
 			"haproxy_backend":  backend.ResourceHaproxyBackend(),
 			"haproxy_server":   server.ResourceHaproxyServer(),
@@ -97,11 +99,16 @@ func providerConfigure(data *schema.ResourceData) (interface{}, error) {
 	bindConfig := &bind.ConfigBind{}
 	utils.SetConfigValues(bindConfig, commonConfig)
 
+	// Create transaction config for defaults
+	defaultsConfig := &defaults.ConfigDefaults{}
+	utils.SetConfigValues(defaultsConfig, commonConfig)
+
 	return map[string]interface{}{
 		"backend":     backendConfig,
 		"frontend":    frontendConfig,
 		"server":      serverConfig,
 		"transaction": transactionConfig,
 		"bind":        bindConfig,
+		"defaults":    defaultsConfig,
 	}, nil
 }
