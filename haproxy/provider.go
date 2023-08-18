@@ -1,6 +1,7 @@
 package haproxy
 
 import (
+	acl "terraform-provider-haproxy/internal/acl"
 	backend "terraform-provider-haproxy/internal/backend"
 	bind "terraform-provider-haproxy/internal/bind"
 	defaults "terraform-provider-haproxy/internal/defaults"
@@ -50,7 +51,7 @@ func Provider() *schema.Provider {
 		},
 
 		DataSourcesMap: map[string]*schema.Resource{
-			// "haproxy_acl":      dataSourceHaproxyAcl(),
+			"haproxy_acl":      acl.DataSourceHaproxyAcl(),
 			"haproxy_defaults": defaults.DataSourceHaproxyDefaults(),
 			"haproxy_frontend": frontend.DataSourceHaproxyFrontend(),
 			"haproxy_backend":  backend.DataSourceHaproxyBackend(),
@@ -60,8 +61,7 @@ func Provider() *schema.Provider {
 
 		ResourcesMap: map[string]*schema.Resource{
 			//"haproxy_global":    resourceHaproxyGlobal(),
-			//"haproxy_dashboard": resourceHaproxyDashboard(),
-			//"haproxy_acl":       resourceHaproxyAcl(),
+			"haproxy_acl":      acl.ResourceHaproxyAcl(),
 			"haproxy_defaults": defaults.ResourceHaproxyDefaults(),
 			"haproxy_frontend": frontend.ResourceHaproxyFrontend(),
 			"haproxy_backend":  backend.ResourceHaproxyBackend(),
@@ -103,6 +103,10 @@ func providerConfigure(data *schema.ResourceData) (interface{}, error) {
 	defaultsConfig := &defaults.ConfigDefaults{}
 	utils.SetConfigValues(defaultsConfig, commonConfig)
 
+	// Create transaction config for acl
+	aclConfig := &acl.ConfigAcl{}
+	utils.SetConfigValues(aclConfig, commonConfig)
+
 	return map[string]interface{}{
 		"backend":     backendConfig,
 		"frontend":    frontendConfig,
@@ -110,5 +114,6 @@ func providerConfigure(data *schema.ResourceData) (interface{}, error) {
 		"transaction": transactionConfig,
 		"bind":        bindConfig,
 		"defaults":    defaultsConfig,
+		"acl":         aclConfig,
 	}, nil
 }

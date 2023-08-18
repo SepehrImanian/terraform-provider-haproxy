@@ -17,6 +17,16 @@ resource "haproxy_defaults" "default_test" {
   maxconn = 2000
 }
 
+resource "haproxy_acl" "acl_test" {
+  name        = "acl_test"
+  index       = 0
+  parent_name = "backend_test"
+  parent_type = "backend"
+  criterion   = "hdr_dom(host)"
+  value       = "example.com"
+  depends_on = [ haproxy_backend.backend_test ]
+}
+
 resource "haproxy_frontend" "front_test" {
   name = "front_test"
   backend = "backend_test"
@@ -85,6 +95,14 @@ data "haproxy_defaults" "default_test" {
   depends_on = [ haproxy_defaults.default_test ]
 }
 
+data "haproxy_acl" "acl_test" {
+  name = "acl_test"
+  index = 0
+  parent_name = "backend_test"
+  parent_type = "backend"
+  depends_on = [ haproxy_acl.acl_test ]
+}
+
 output "haproxy_backend" {
   value = haproxy_backend.backend_test
 }
@@ -103,4 +121,8 @@ output "haproxy_bind" {
 
 output "haproxy_defaults" {
   value = haproxy_defaults.default_test
+}
+
+output "haproxy_acl" {
+  value = haproxy_acl.acl_test
 }
