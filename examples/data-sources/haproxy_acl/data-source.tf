@@ -1,4 +1,3 @@
-
 data "haproxy_acl" "acl_test" {
   name = "acl_test"
   index = 0
