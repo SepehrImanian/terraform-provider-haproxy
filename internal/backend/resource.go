@@ -19,18 +19,21 @@ func ResourceHaproxyBackend() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"name": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "The name of the backend. It must be unique and cannot be changed.",
 			},
 			"mode": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Default:  "http",
+				Type:        schema.TypeString,
+				Optional:    true,
+				Default:     "http",
+				Description: "The mode of the backend. It must be one of the following: http or tcp",
 			},
 			"balance_algorithm": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Default:  "roundrobin",
+				Description: "The balance algorithm of the backend. It must be one of the following: roundrobin, static-rr, leastconn, first, source, uri, url_param, hdr, random, rdp-cookie, hash",
 			},
 		},
 	}

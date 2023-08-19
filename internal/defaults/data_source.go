@@ -17,6 +17,7 @@ func DataSourceHaproxyDefaults() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
+				Description: "The name of the defaults. It must be unique and cannot be changed.",
 			},
 		},
 	}

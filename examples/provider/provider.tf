@@ -8,7 +8,7 @@ terraform {
 }
 
 provider "haproxy" {
-  url         = var.haproxy_url
-  username    = var.haproxy_username
-  password    = var.haproxy_password
+  url         = "http://haproxy.example.com:8080"
+  username    = "username"
+  password    = "password"
 }

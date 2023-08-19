@@ -17,6 +17,7 @@ func DataSourceHaproxyBackend() *schema.Resource {
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+				Description: "The name of the backend. It must be unique and cannot be changed.",
 			},
 		},
 	}

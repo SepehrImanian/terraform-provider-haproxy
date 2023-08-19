@@ -14,9 +14,10 @@ func DataSourceHaproxyFrontend() *schema.Resource {
 		Read: dataSourceHaproxyFrontendRead,
 		Schema: map[string]*schema.Schema{
 			"name": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				ForceNew:    true,
+				Description: "The name of the frontend. It must be unique and cannot be changed.",
 			},
 		},
 	}

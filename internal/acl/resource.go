@@ -20,29 +20,35 @@ func ResourceHaproxyAcl() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"parent_name": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "The name of the parent object",
 			},
 			"parent_type": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "The type of the parent object",
 			},
 			"index": {
-				Type:     schema.TypeInt,
-				Optional: true,
+				Type:        schema.TypeInt,
+				Optional:    true,
+				Description: "The index of the acl in the parent object starting at 0",
 			},
 			"name": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				ForceNew:    true,
+				Description: "The name of the acl. It must be unique and cannot be changed.",
 			},
 			"criterion": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "The criterion of the acl",
 			},
 			"value": {
 				Type:     schema.TypeString,
 				Required: true,
+				Description: "The value of the acl.",
 			},
 		},
 	}

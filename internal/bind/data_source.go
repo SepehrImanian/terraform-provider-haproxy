@@ -15,17 +15,20 @@ func DataSourceHaproxyBind() *schema.Resource {
 		Read: dataSourceHaproxyBindRead,
 		Schema: map[string]*schema.Schema{
 			"name": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				ForceNew:    true,
+				Description: "The name of the bind. It must be unique and cannot be changed.",
 			},
 			"parent_name": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "The name of the parent object",
 			},
 			"parent_type": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "The type of the parent object",
 			},
 		},
 	}

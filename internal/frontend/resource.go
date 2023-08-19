@@ -18,26 +18,31 @@ func ResourceHaproxyFrontend() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"name": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				ForceNew:    true,
+				Description: "The name of the frontend. It must be unique and cannot be changed.",
 			},
 			"backend": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "The name of the backend.",
 			},
 			"http_connection_mode": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Default:  "http-keep-alive",
+				Type:        schema.TypeString,
+				Optional:    true,
+				Default:     "http-keep-alive",
+				Description: "The http connection mode of the frontend. It can be one of the following values: httpclose, http-server-close, http-keep-alive",
 			},
 			"max_connection": {
-				Type:     schema.TypeInt,
-				Optional: true,
+				Type:        schema.TypeInt,
+				Optional:    true,
+				Description: "The max connection of the frontend.",
 			},
 			"mode": {
 				Type:     schema.TypeString,
 				Optional: true,
+				Description: "The mode of the frontend. It can be one of the following values: http, tcp",
 			},
 		},
 	}
