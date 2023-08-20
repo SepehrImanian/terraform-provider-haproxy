@@ -30,9 +30,9 @@ func ResourceHaproxyBackend() *schema.Resource {
 				Description: "The mode of the backend. It must be one of the following: http or tcp",
 			},
 			"balance_algorithm": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Default:  "roundrobin",
+				Type:        schema.TypeString,
+				Optional:    true,
+				Default:     "roundrobin",
 				Description: "The balance algorithm of the backend. It must be one of the following: roundrobin, static-rr, leastconn, first, source, uri, url_param, hdr, random, rdp-cookie, hash",
 			},
 		},

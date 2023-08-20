@@ -18,6 +18,12 @@ func (c *ConfigBind) GetABindConfiguration(BindName string, TransactionID string
 		fmt.Println("Error sending request:", err)
 		return nil, err
 	}
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("error reading response body: %v", err)
+	}
+
+	fmt.Println("**************** 404 err bind ****************", string(body))
 	defer resp.Body.Close()
 	return resp, nil
 }

@@ -45,9 +45,9 @@ func ResourceHaproxyBind() *schema.Resource {
 				Description: "The address of the bind",
 			},
 			"mode": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Default:  "http, tcp",
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "http, tcp",
 			},
 			"maxconn": {
 				Type:        schema.TypeInt,

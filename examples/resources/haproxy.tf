@@ -1,7 +1,7 @@
 resource "haproxy_defaults" "default_test" {
   name = "default_test"
   mode = "http"
-  backlog = 10000
+  backlog = 1000
   httplog = true
   httpslog = true
   tcplog = false
@@ -14,7 +14,7 @@ resource "haproxy_defaults" "default_test" {
   queue_timeout = 10
   server_timeout = 9
   server_fin_timeout = 10
-  maxconn = 2000
+  maxconn = 1000
 }
 
 resource "haproxy_acl" "acl_test" {
@@ -31,7 +31,7 @@ resource "haproxy_frontend" "front_test" {
   name = "front_test"
   backend = "backend_test"
   http_connection_mode = "http-keep-alive"
-  max_connection = 3000
+  max_connection = 100
   mode = "http"
   depends_on = [ haproxy_backend.backend_test ]
 }
@@ -42,7 +42,7 @@ resource "haproxy_bind" "bind_test" {
   address     = "0.0.0.0"
   parent_name = "front_test"
   parent_type = "frontend"
-  maxconn = 3000
+  maxconn = 100
   depends_on = [ haproxy_frontend.front_test ]
 }
 

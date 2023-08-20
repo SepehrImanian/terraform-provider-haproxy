@@ -25,9 +25,9 @@ func ResourceHaproxyDefaults() *schema.Resource {
 				Description: "The name of the defaults. It must be unique and cannot be changed.",
 			},
 			"mode": {
-				Type:     schema.TypeString,
-				Optional: true,
-				Default:  "http, tcp",
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "http, tcp",
 			},
 			"backlog": {
 				Type:        schema.TypeInt,
