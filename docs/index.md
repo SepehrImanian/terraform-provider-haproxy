@@ -8,6 +8,8 @@ description: |-
 
 # haproxy Provider
 
+
+
 ## Example Usage
 
 ```terraform

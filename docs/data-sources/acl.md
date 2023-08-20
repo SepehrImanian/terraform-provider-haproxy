@@ -8,7 +8,7 @@ description: |-
 
 # haproxy_acl (Data Source)
 
-Retrieve information about an existing acl.
+
 
 ## Example Usage
 

@@ -8,7 +8,6 @@ description: |-
 
 # haproxy_server (Data Source)
 
-Retrieve information about an existing server.
 
 
 ## Example Usage

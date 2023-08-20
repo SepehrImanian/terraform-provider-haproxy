@@ -8,7 +8,7 @@ description: |-
 
 # haproxy_bind (Resource)
 
-Manages a bind in a frontend, log_forward, peers
+
 
 ## Example Usage
 
@@ -39,7 +39,7 @@ resource "haproxy_bind" "bind_test" {
 
 - `group` (String) The group of the bind
 - `maxconn` (Number) The max connections of the bind
-- `mode` (String)
+- `mode` (String) http, tcp
 - `user` (String) The user of the bind
 
 ### Read-Only

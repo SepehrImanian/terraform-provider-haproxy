@@ -8,7 +8,7 @@ description: |-
 
 # haproxy_backend (Data Source)
 
-Retrieve information about an existing backend.
+
 
 ## Example Usage
 

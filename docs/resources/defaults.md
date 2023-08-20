@@ -8,7 +8,7 @@ description: |-
 
 # haproxy_defaults (Resource)
 
-Manages a haproxy defaults.
+
 
 ## Example Usage
 
@@ -51,7 +51,7 @@ resource "haproxy_defaults" "default_test" {
 - `httplog` (Boolean) The httplog of the defaults, it can be true or false
 - `httpslog` (Boolean) The httpslog of the defaults, it can be true or false
 - `maxconn` (Number) The max connections of the defaults
-- `mode` (String)
+- `mode` (String) http, tcp
 - `queue_timeout` (Number) The queue timeout of the defaults
 - `retries` (Number) The retries of the defaults, it can be integer or null
 - `server_fin_timeout` (Number) The server fin timeout of the defaults

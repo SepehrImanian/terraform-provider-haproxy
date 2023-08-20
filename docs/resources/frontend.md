@@ -8,7 +8,7 @@ description: |-
 
 # haproxy_frontend (Resource)
 
-Manages a frontend in HAProxy.
+
 
 ## Example Usage
 

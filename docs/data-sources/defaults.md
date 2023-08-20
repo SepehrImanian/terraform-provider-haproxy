@@ -8,7 +8,7 @@ description: |-
 
 # haproxy_defaults (Data Source)
 
-Retrieve information about an existing defaults.
+
 
 ## Example Usage
 

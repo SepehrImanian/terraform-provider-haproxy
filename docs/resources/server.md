@@ -7,8 +7,8 @@ description: |-
 ---
 
 # haproxy_server (Resource)
- 
-Manages a server in a backend.
+
+
 
 ## Example Usage
 

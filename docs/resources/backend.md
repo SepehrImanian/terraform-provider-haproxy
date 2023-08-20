@@ -8,7 +8,6 @@ description: |-
 
 # haproxy_backend (Resource)
 
-Manages a backend in HAProxy.
 
 
 ## Example Usage

@@ -8,7 +8,7 @@ description: |-
 
 # haproxy_bind (Data Source)
 
-Retrieve information about an existing bind.
+
 
 ## Example Usage
 

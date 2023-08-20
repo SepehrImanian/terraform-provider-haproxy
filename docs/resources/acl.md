@@ -8,7 +8,7 @@ description: |-
 
 # haproxy_acl (Resource)
 
-Manages an acl in a backend or frontend.
+
 
 ## Example Usage
 
