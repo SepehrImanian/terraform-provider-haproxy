@@ -127,21 +127,36 @@
 #   value = haproxy_acl.acl_test
 # }
 
-resource "haproxy_resolvers" "resolvers_test" {
-  name = "resolvers_test"
-  accepted_payload_size = 8192
-  hold_nx = 30
-  hold_other = 30
-  hold_refused = 30
-  hold_timeout = 30
-  hold_valid = 10
-  parse_resolv_conf = true
-  resolve_retries = 3
-  timeout_resolve = 1
-  timeout_retry = 1
+# resource "haproxy_resolvers" "resolvers_test" {
+#   name = "resolvers_test"
+#   accepted_payload_size = 8192
+#   hold_nx = 30
+#   hold_other = 30
+#   hold_refused = 30
+#   hold_timeout = 30
+#   hold_valid = 10
+#   parse_resolv_conf = true
+#   resolve_retries = 3
+#   timeout_resolve = 1
+#   timeout_retry = 1
+# }
+
+# data "haproxy_resolvers" "resolvers_test" {
+#   name = "resolvers_test"
+#   depends_on = [ haproxy_resolvers.resolvers_test ]
+# }
+
+
+resource "haproxy_cache" "cash_test" {
+  name = "cash_test"
+  max_age = 3600
+  max_object_size = 100000
+  max_secondary_entries = 10000
+  process_vary  = true
+  total_max_size = 112
 }
 
-data "haproxy_resolvers" "resolvers_test" {
-  name = "resolvers_test"
-  depends_on = [ haproxy_resolvers.resolvers_test ]
+data "haproxy_cache" "cash_test" {
+  name = "cash_test"
+  depends_on = [ haproxy_cache.cash_test ]
 }
