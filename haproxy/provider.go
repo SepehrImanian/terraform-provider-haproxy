@@ -7,6 +7,7 @@ import (
 	cache "terraform-provider-haproxy/internal/cache"
 	defaults "terraform-provider-haproxy/internal/defaults"
 	frontend "terraform-provider-haproxy/internal/frontend"
+	global "terraform-provider-haproxy/internal/global"
 	resolvers "terraform-provider-haproxy/internal/resolvers"
 	server "terraform-provider-haproxy/internal/server"
 	transaction "terraform-provider-haproxy/internal/transaction"
@@ -61,10 +62,10 @@ func Provider() *schema.Provider {
 			"haproxy_bind":      bind.DataSourceHaproxyBind(),
 			"haproxy_resolvers": resolvers.DataSourceHaproxyResolvers(),
 			"haproxy_cache":     cache.DataSourceHaproxyCache(),
+			"haproxy_global":    global.DataSourceHaproxyGlobal(),
 		},
 
 		ResourcesMap: map[string]*schema.Resource{
-			//"haproxy_global":    resourceHaproxyGlobal(),
 			"haproxy_acl":       acl.ResourceHaproxyAcl(),
 			"haproxy_defaults":  defaults.ResourceHaproxyDefaults(),
 			"haproxy_frontend":  frontend.ResourceHaproxyFrontend(),
@@ -73,6 +74,7 @@ func Provider() *schema.Provider {
 			"haproxy_bind":      bind.ResourceHaproxyBind(),
 			"haproxy_resolvers": resolvers.ResourceHaproxyResolvers(),
 			"haproxy_cache":     cache.ResourceHaproxyCache(),
+			"haproxy_global":    global.ResourceHaproxyGlobal(),
 		},
 		ConfigureFunc: providerConfigure,
 	}
@@ -121,6 +123,10 @@ func providerConfigure(data *schema.ResourceData) (interface{}, error) {
 	cacheConfig := &cache.ConfigCache{}
 	utils.SetConfigValues(cacheConfig, commonConfig)
 
+	// Create transaction config for global
+	globalConfig := &global.ConfigGlobal{}
+	utils.SetConfigValues(globalConfig, commonConfig)
+
 	return map[string]interface{}{
 		"backend":     backendConfig,
 		"frontend":    frontendConfig,
@@ -131,5 +137,6 @@ func providerConfigure(data *schema.ResourceData) (interface{}, error) {
 		"acl":         aclConfig,
 		"resolvers":   resolversConfig,
 		"cache":       cacheConfig,
+		"global":      globalConfig,
 	}, nil
 }
