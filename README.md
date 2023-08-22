@@ -1,6 +1,8 @@
 # Terraform HAProxy Provider
 
-> ⚠️ **Disclaimer:** This project is under **Active Development** and is not intended for production use. Please use it only for testing or development purposes.
+> ⚠️ **Disclaimer:** This project is under **Active Development** and is not ready for production use. Please use at your own risk.
+
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/SepehrImanian/terraform-provider-haproxy?style=flat-square)
 
 
 ## About this project
