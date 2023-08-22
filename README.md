@@ -2,7 +2,9 @@
 
 > ⚠️ **Disclaimer:** This project is under **Active Development** and is not ready for production use. Please use at your own risk.
 
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/SepehrImanian/terraform-provider-haproxy?style=flat-square)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/SepehrImanian/terraform-provider-haproxy?style=flat-square) ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/SepehrImanian/terraform-provider-haproxy?style=flat-square) ![GitHub](https://img.shields.io/github/license/SepehrImanian/terraform-provider-haproxy?style=flat-square)
+
+
 
 
 ## About this project
