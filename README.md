@@ -1,17 +1,40 @@
-# Terraform HAProxy Provider
+<p align="center">
+  <a href="https://github.com/SepehrImanian/terraform-provider-haproxy">
+    <img src="./assets/haproxy.png" alt="minio-provider-terraform" width="200">
+  </a>
+  <h3 align="center" style="font-weight: bold">Terraform Provider for HAProxy</h3>
+  <p align="center">
+    <a href="https://golang.org/doc/devel/release.html">
+      <img alt="GitHub go.mod Go version" src="https://img.shields.io/github/go-mod/go-version/SepehrImanian/terraform-provider-haproxy?style=flat-square">
+    </a>
+    <a href="https://github.com/SepehrImanian/terraform-provider-haproxy/actions?query=workflow%3A%22Terraform+Provider+CI%22">
+      <img alt="GitHub Workflow Status" src="https://img.shields.io/github/v/release/SepehrImanian/terraform-provider-haproxy?style=flat-square">
+    </a>
+    <a href="https://github.com/SepehrImanian/terraform-provider-haproxy/releases">
+      <img alt="GitHub release (latest by date including pre-releases)" src="https://img.shields.io/github/license/SepehrImanian/terraform-provider-haproxy?style=flat-square">
+    </a>
+  </p>
+  <p align="center">
+    <a href="https://github.com/SepehrImanian/terraform-provider-haproxy/tree/master/docs"><strong>Explore the docs »</strong></a>
+  </p>
+</p>
 
 > ⚠️ **Disclaimer:** This project is under **Active Development** and is not ready for production use. Please use at your own risk.
 
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/SepehrImanian/terraform-provider-haproxy?style=flat-square) ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/SepehrImanian/terraform-provider-haproxy?style=flat-square) ![GitHub](https://img.shields.io/github/license/SepehrImanian/terraform-provider-haproxy?style=flat-square)
+## Table of Contents
 
+- [Table of Contents](#table-of-contents)
+  - [About this project](#about-this-project)
+  - [Usage](#usage)
+  - [Examples](#examples)
+  - [Building and Installing](#building-and-installing)
+  - [License](#license)
 
-
-
-## About this project
+### About this project
 
 A [Terraform](https://www.terraform.io) provider to manage [HAProxy](https://www.haproxy.com/).
 
-## Usage
+### Usage
 
 See our [examples](./examples/) folder.
 
@@ -32,7 +55,7 @@ provider "haproxy" {
 }
 ```
 
-## Examples
+### Examples
 
 Manage all HAProxy with a single provider:
 
@@ -121,7 +144,7 @@ resource "haproxy_server" "server_test" {
 }
 ```
 
-## Building and Installing
+### Building and Installing
 
 Prebuilt versions of this provider are available on the [releases page](https://github.com/SepehrImanian/terraform-provider-haproxy/releases/latest).
 
@@ -133,7 +156,7 @@ cd terraform-provider-haproxy
 make build
 ```
 
-## License
+### License
 
 Distributed under the Apache License. See [LICENSE](./LICENSE) for more information.
 
