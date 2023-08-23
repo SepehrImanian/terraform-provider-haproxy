@@ -2,7 +2,7 @@
   <a href="https://github.com/SepehrImanian/terraform-provider-haproxy">
     <img src="./assets/haproxy.png" alt="minio-provider-terraform" width="200">
   </a>
-  <h3 align="center" style="font-weight: bold">Terraform Provider for HAProxy</h3>
+  <h1 align="center" style="font-weight: bold">Terraform Provider for HAProxy</h1>
   <p align="center">
     <a href="https://golang.org/doc/devel/release.html">
       <img alt="GitHub go.mod Go version" src="https://img.shields.io/github/go-mod/go-version/SepehrImanian/terraform-provider-haproxy?style=flat-square">
@@ -22,7 +22,6 @@
 > ⚠️ **Disclaimer:** This project is under **Active Development** and is not ready for production use. Please use at your own risk.
 
 ## Table of Contents
-
 - [Table of Contents](#table-of-contents)
   - [About this project](#about-this-project)
   - [Usage](#usage)
