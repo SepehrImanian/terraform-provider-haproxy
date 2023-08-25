@@ -27,24 +27,24 @@
 #   depends_on = [ haproxy_backend.backend_test ]
 # }
 
-# resource "haproxy_frontend" "front_test" {
-#   name = "front_test"
-#   backend = "backend_test"
-#   http_connection_mode = "http-keep-alive"
-#   max_connection = 100
-#   mode = "http"
-#   depends_on = [ haproxy_backend.backend_test ]
-# }
+resource "haproxy_frontend" "front_test" {
+  name                 = "front_test"
+  backend              = "backend_test"
+  http_connection_mode = "http-keep-alive"
+  max_connection       = 100
+  mode                 = "http"
+  depends_on           = [haproxy_backend.backend_test]
+}
 
-# resource "haproxy_bind" "bind_test" {
-#   name        = "bind_test"
-#   port        = 8080
-#   address     = "0.0.0.0"
-#   parent_name = "front_test"
-#   parent_type = "frontend"
-#   maxconn = 100
-#   depends_on = [ haproxy_frontend.front_test ]
-# }
+resource "haproxy_bind" "bind_test" {
+  name        = "bind_test"
+  port        = 8080
+  address     = "0.0.0.0"
+  parent_name = "front_test"
+  parent_type = "frontend"
+  maxconn     = 100
+  depends_on  = [haproxy_frontend.front_test]
+}
 
 # resource "haproxy_backend" "backend_test" {
 #   name = "backend_test"
@@ -215,11 +215,11 @@ resource "haproxy_backend" "backend_test" {
   }
 }
 
-data "haproxy_backend" "backend_test" {
-  name       = "backend_test"
-  depends_on = [haproxy_backend.backend_test]
-}
+# data "haproxy_backend" "backend_test" {
+#   name       = "backend_test"
+#   depends_on = [haproxy_backend.backend_test]
+# }
 
-output "backend_test" {
-  value = data.haproxy_backend.backend_test
-}
+# output "backend_test" {
+#   value = data.haproxy_backend.backend_test
+# }

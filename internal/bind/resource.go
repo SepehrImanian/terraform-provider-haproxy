@@ -1,6 +1,7 @@
 package bind
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -91,33 +92,30 @@ func resourceHaproxyBindRead(d *schema.ResourceData, m interface{}) error {
 
 func resourceHaproxyBindCreate(d *schema.ResourceData, m interface{}) error {
 	bindName := d.Get("name").(string)
-	port := d.Get("port").(int)
-	address := d.Get("address").(string)
 	parentName := d.Get("parent_name").(string)
 	parentType := d.Get("parent_type").(string)
-	maxconn := d.Get("maxconn").(int)
-	user := d.Get("user").(string)
-	group := d.Get("group").(string)
-	mode := d.Get("mode").(string)
 
-	payload := []byte(fmt.Sprintf(`
-	{
-		"name": "%s",
-		"address": "%s",
-		"port": %d,
-		"maxconn": %d,
-		"user": "%s",
-		"group": "%s",
-		"mode": "%s"
+	payload := BindPayload{
+		Name:    bindName,
+		Address: d.Get("address").(string),
+		Port:    d.Get("port").(int),
+		Maxconn: d.Get("maxconn").(int),
+		User:    d.Get("user").(string),
+		Group:   d.Get("group").(string),
+		Mode:    d.Get("mode").(string),
 	}
-	`, bindName, address, port, maxconn, user, group, mode))
+
+	payloadJSON, err := json.Marshal(payload)
+	if err != nil {
+		return err
+	}
 
 	configMap := m.(map[string]interface{})
 	BindConfig := configMap["bind"].(*ConfigBind)
 	tranConfig := configMap["transaction"].(*transaction.ConfigTransaction)
 
 	resp, err := tranConfig.Transaction(func(transactionID string) (*http.Response, error) {
-		return BindConfig.AddBindConfiguration(payload, transactionID, parentName, parentType)
+		return BindConfig.AddBindConfiguration(payloadJSON, transactionID, parentName, parentType)
 	})
 
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
@@ -130,33 +128,30 @@ func resourceHaproxyBindCreate(d *schema.ResourceData, m interface{}) error {
 
 func resourceHaproxyBindUpdate(d *schema.ResourceData, m interface{}) error {
 	bindName := d.Get("name").(string)
-	port := d.Get("port").(int)
-	address := d.Get("address").(string)
 	parentName := d.Get("parent_name").(string)
 	parentType := d.Get("parent_type").(string)
-	maxconn := d.Get("maxconn").(int)
-	user := d.Get("user").(string)
-	group := d.Get("group").(string)
-	mode := d.Get("mode").(string)
 
-	payload := []byte(fmt.Sprintf(`
-	{
-		"name": "%s",
-		"address": "%s",
-		"port": %d,
-		"maxconn": %d,
-		"user": "%s",
-		"group": "%s",
-		"mode": "%s"
+	payload := BindPayload{
+		Name:    bindName,
+		Address: d.Get("address").(string),
+		Port:    d.Get("port").(int),
+		Maxconn: d.Get("maxconn").(int),
+		User:    d.Get("user").(string),
+		Group:   d.Get("group").(string),
+		Mode:    d.Get("mode").(string),
 	}
-	`, bindName, address, port, maxconn, user, group, mode))
+
+	payloadJSON, err := json.Marshal(payload)
+	if err != nil {
+		return err
+	}
 
 	configMap := m.(map[string]interface{})
 	BindConfig := configMap["bind"].(*ConfigBind)
 	tranConfig := configMap["transaction"].(*transaction.ConfigTransaction)
 
 	resp, err := tranConfig.Transaction(func(transactionID string) (*http.Response, error) {
-		return BindConfig.UpdateBindConfiguration(bindName, payload, transactionID, parentName, parentType)
+		return BindConfig.UpdateBindConfiguration(bindName, payloadJSON, transactionID, parentName, parentType)
 	})
 
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
