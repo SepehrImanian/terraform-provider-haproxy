@@ -4,6 +4,6 @@ resource "haproxy_bind" "bind_test" {
   address     = "0.0.0.0"
   parent_name = "front_test"
   parent_type = "frontend"
-  maxconn = 3000
-  depends_on = [ haproxy_frontend.front_test ]
+  maxconn     = 3000
+  depends_on  = [haproxy_frontend.front_test]
 }

@@ -41,16 +41,16 @@ See our [examples](./examples/) folder.
 terraform {
   required_providers {
     haproxy = {
-      source = "SepehrImanian/haproxy"
+      source  = "SepehrImanian/haproxy"
       version = "0.0.3"
     }
   }
 }
 
 provider "haproxy" {
-  url         = "http://haproxy.example.com:8080"
-  username    = "username"
-  password    = "password"
+  url      = "http://haproxy.example.com:8080"
+  username = "username"
+  password = "password"
 }
 ```
 
@@ -60,37 +60,37 @@ Manage all HAProxy with a single provider:
 
 ```hcl
 resource "haproxy_global" "global" {
-    user = "haproxy"
-    group = "haproxy"
-    chroot = "/var/lib/haproxy"
-    daemon = true
-    master_worker = true
-    maxconn = 2000
-    pidfile = "/var/run/haproxy.pid"
-    ulimit_n = 2000
-    crt_base = "/etc/ssl/certs"
-    ca_base = "/etc/ssl/private"
-    stats_maxconn = 100
-    stats_timeout = 60
+  user          = "haproxy"
+  group         = "haproxy"
+  chroot        = "/var/lib/haproxy"
+  daemon        = true
+  master_worker = true
+  maxconn       = 2000
+  pidfile       = "/var/run/haproxy.pid"
+  ulimit_n      = 2000
+  crt_base      = "/etc/ssl/certs"
+  ca_base       = "/etc/ssl/private"
+  stats_maxconn = 100
+  stats_timeout = 60
 }
 
 resource "haproxy_defaults" "default_test" {
-  name = "default_test"
-  mode = "http"
-  backlog = 10000
-  httplog = true
-  httpslog = true
-  tcplog = false
-  retries = 3
-  check_timeout = 10
-  client_timeout = 10
-  connect_timeout = 10
+  name                    = "default_test"
+  mode                    = "http"
+  backlog                 = 10000
+  httplog                 = true
+  httpslog                = true
+  tcplog                  = false
+  retries                 = 3
+  check_timeout           = 10
+  client_timeout          = 10
+  connect_timeout         = 10
   http_keep_alive_timeout = 10
-  http_request_timeout = 10
-  queue_timeout = 10
-  server_timeout = 9
-  server_fin_timeout = 10
-  maxconn = 2000
+  http_request_timeout    = 10
+  queue_timeout           = 10
+  server_timeout          = 9
+  server_fin_timeout      = 10
+  maxconn                 = 2000
 }
 
 resource "haproxy_acl" "acl_test" {
@@ -100,16 +100,16 @@ resource "haproxy_acl" "acl_test" {
   parent_type = "backend"
   criterion   = "hdr_dom(host)"
   value       = "example.com"
-  depends_on = [ haproxy_backend.backend_test ]
+  depends_on  = [haproxy_backend.backend_test]
 }
 
 resource "haproxy_frontend" "front_test" {
-  name = "front_test"
-  backend = "backend_test"
+  name                 = "front_test"
+  backend              = "backend_test"
   http_connection_mode = "http-keep-alive"
-  max_connection = 3000
-  mode = "http"
-  depends_on = [ haproxy_backend.backend_test ]
+  max_connection       = 3000
+  mode                 = "http"
+  depends_on           = [haproxy_backend.backend_test]
 }
 
 resource "haproxy_bind" "bind_test" {
@@ -118,14 +118,33 @@ resource "haproxy_bind" "bind_test" {
   address     = "0.0.0.0"
   parent_name = "front_test"
   parent_type = "frontend"
-  maxconn = 3000
-  depends_on = [ haproxy_frontend.front_test ]
+  maxconn     = 3000
+  depends_on  = [haproxy_frontend.front_test]
 }
 
 resource "haproxy_backend" "backend_test" {
-  name = "backend_test"
-  mode         = "http"
-  balance_algorithm = "roundrobin"
+  name                 = "backend_test"
+  mode                 = "http"
+  http_connection_mode = "http-keep-alive"
+  server_timeout       = 9
+  check_timeout        = 10
+  connect_timeout      = 10
+  queue_timeout        = 10
+  check_cache          = true
+
+  balance {
+    algorithm = "roundrobin"
+  }
+
+  httpchk_params {
+    uri     = "/health"
+    version = "HTTP/1.1"
+    method  = "GET"
+  }
+
+  forwardfor {
+    enabled = true
+  }
 }
 
 resource "haproxy_server" "server_test" {
@@ -139,7 +158,7 @@ resource "haproxy_server" "server_test" {
   inter       = 3
   rise        = 3
   fall        = 3
-  depends_on = [ haproxy_backend.backend_test ]
+  depends_on  = [haproxy_backend.backend_test]
 }
 ```
 
