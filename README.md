@@ -32,7 +32,7 @@
 
 ### About This Project
 
-A [Terraform](https://www.terraform.io) provider to manage [HAProxy](https://www.haproxy.com/). It use [HAProxy Data Plane API](https://www.haproxy.com/documentation/hapee/latest/api/data-plane-api.html) to manage HAProxy.
+A [Terraform](https://www.terraform.io) provider to manage [HAProxy](https://www.haproxy.com/). It use [HAProxy Data Plane API](https://github.com/haproxytech/dataplaneapi) to manage HAProxy.
 
 ### Data Plane API Installation
 
