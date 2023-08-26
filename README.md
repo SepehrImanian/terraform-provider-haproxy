@@ -21,28 +21,34 @@
 
 > ⚠️ **Disclaimer:** This project is under **Active Development** and is not ready for production use. Please use at your own risk.
 
-## Table of Contents
-- [Table of Contents](#table-of-contents)
-  - [About this project](#about-this-project)
+## Table Of Contents
+- [Table Of Contents](#table-of-contents)
+  - [About This Project](#about-this-project)
+  - [Data Plane API Installation](#data-plane-api-installation)
   - [Usage](#usage)
   - [Examples](#examples)
   - [Building and Installing](#building-and-installing)
   - [License](#license)
 
-### About this project
+### About This Project
 
-A [Terraform](https://www.terraform.io) provider to manage [HAProxy](https://www.haproxy.com/).
+A [Terraform](https://www.terraform.io) provider to manage [HAProxy](https://www.haproxy.com/). It use [HAProxy Data Plane API](https://www.haproxy.com/documentation/hapee/latest/api/data-plane-api.html) to manage HAProxy.
+
+### Data Plane API Installation
+
+To use this provider, you need to install [HAProxy Data Plane API](https://www.haproxy.com/documentation/hapee/2-0r1/api/data-plane-api/installation/haproxy-community/) on your HAProxy server. or use entrprise version of HAProxy.
+
 
 ### Usage
 
-See our [examples](./examples/) folder.
+See our [examples](./examples/) folder. For more information, see the [documentation](./docs/).
 
 ```hcl
 terraform {
   required_providers {
     haproxy = {
       source  = "SepehrImanian/haproxy"
-      version = "0.0.3"
+      version = "0.0.4"
     }
   }
 }
@@ -126,7 +132,6 @@ resource "haproxy_frontend" "front_test" {
 
   forwardfor {
     enabled = true
-    # except  = ".example2.com"
     header = "X-Forwarded-For"
     ifnone = true
   }
