@@ -20,7 +20,7 @@ resource "haproxy_acl" "acl_test" {
   parent_type = "backend"
   criterion   = "hdr_dom(host)"
   value       = "example.com"
-  depends_on = [ haproxy_backend.backend_test ]
+  depends_on  = [haproxy_backend.backend_test]
 }
 ```
 

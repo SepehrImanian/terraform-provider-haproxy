@@ -24,7 +24,7 @@ resource "haproxy_server" "server_test" {
   inter       = 3
   rise        = 3
   fall        = 3
-  depends_on = [ haproxy_backend.backend_test ]
+  depends_on  = [haproxy_backend.backend_test]
 }
 ```
 

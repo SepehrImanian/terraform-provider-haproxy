@@ -14,9 +14,30 @@ description: |-
 
 ```terraform
 resource "haproxy_backend" "backend_test" {
-  name = "backend_test"
-  mode         = "http"
-  balance_algorithm = "roundrobin"
+  name                 = "backend_test"
+  mode                 = "http"
+  http_connection_mode = "http-keep-alive"
+  server_timeout       = 9
+  check_timeout        = 20
+  connect_timeout      = 20
+  queue_timeout        = 20
+  tarpit_timeout       = 20
+  tunnel_timeout       = 20
+  check_cache          = true
+
+  balance {
+    algorithm = "roundrobin"
+  }
+
+  httpchk_params {
+    uri     = "/health"
+    version = "HTTP/1.1"
+    method  = "GET"
+  }
+
+  forwardfor {
+    enabled = true
+  }
 }
 ```
 
@@ -29,9 +50,45 @@ resource "haproxy_backend" "backend_test" {
 
 ### Optional
 
-- `balance_algorithm` (String) The balance algorithm of the backend. It must be one of the following: roundrobin, static-rr, leastconn, first, source, uri, url_param, hdr, random, rdp-cookie, hash
+- `adv_check` (String) The adv_check of the backend. It must be one of the following: ssl-hello-chk, smtpchk, ldap-check, mysql-check, pgsql-check, tcp-check, redis-check, httpchk
+- `balance` (Block Set) The balance of the backend. (see [below for nested schema](#nestedblock--balance))
+- `check_cache` (Boolean) The check_cache of the backend.
+- `check_timeout` (Number) The check_timeout of the backend.
+- `connect_timeout` (Number) The connect_timeout of the backend.
+- `forwardfor` (Block Set) The forwardfor of the backend. (see [below for nested schema](#nestedblock--forwardfor))
+- `http_connection_mode` (String) The http_connection_mode of the backend. It must be one of the following: http-keep-alive, httpclose, http-server-close
+- `httpchk_params` (Block Set) The httpchk_params of the backend. (see [below for nested schema](#nestedblock--httpchk_params))
 - `mode` (String) The mode of the backend. It must be one of the following: http or tcp
+- `queue_timeout` (Number) The queue_timeout of the backend.
+- `server_timeout` (Number) The server_timeout of the backend.
+- `tarpit_timeout` (Number) The tarpit_timeout of the backend.
+- `tunnel_timeout` (Number) The tunnel_timeout of the backend.
 
 ### Read-Only
 
 - `id` (String) The ID of this resource.
+
+<a id="nestedblock--balance"></a>
+### Nested Schema for `balance`
+
+Optional:
+
+- `algorithm` (String) The algorithm of the balance.
+
+
+<a id="nestedblock--forwardfor"></a>
+### Nested Schema for `forwardfor`
+
+Optional:
+
+- `enabled` (Boolean) The enabled of the forwardfor.
+
+
+<a id="nestedblock--httpchk_params"></a>
+### Nested Schema for `httpchk_params`
+
+Optional:
+
+- `method` (String) The method of the httpchk_params.
+- `uri` (String) The uri of the httpchk_params.
+- `version` (String) The version of the httpchk_params.

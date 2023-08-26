@@ -14,12 +14,33 @@ description: |-
 
 ```terraform
 resource "haproxy_frontend" "front_test" {
-  name = "front_test"
-  backend = "backend_test"
-  http_connection_mode = "http-keep-alive"
-  max_connection = 3000
-  mode = "http"
-  depends_on = [ haproxy_backend.backend_test ]
+  name                        = "front_test"
+  backend                     = "backend_test"
+  http_connection_mode        = "http-keep-alive"
+  accept_invalid_http_request = true
+  maxconn                     = 100
+  mode                        = "http"
+  backlog                     = 1000
+  http_keep_alive_timeout     = 10
+  http_request_timeout        = 10
+  http_use_proxy_header       = true
+  httplog                     = true
+  httpslog                    = true
+  tcplog                      = false
+
+  compression {
+    algorithms = ["gzip", "identity"]
+    offload    = true
+    types      = ["text/html", "text/plain", "text/css", "application/javascript"]
+  }
+
+  forwardfor {
+    enabled = true
+    header  = "X-Forwarded-For"
+    ifnone  = true
+  }
+
+  depends_on = [haproxy_backend.backend_test]
 }
 ```
 
@@ -33,10 +54,44 @@ resource "haproxy_frontend" "front_test" {
 
 ### Optional
 
+- `accept_invalid_http_request` (Boolean) The accept invalid http request of the frontend.
+- `backlog` (Number) The backlog of the frontend.
+- `compression` (Block Set) The compression of the frontend. (see [below for nested schema](#nestedblock--compression))
+- `error_log_format` (String) The error log format of the frontend.
+- `forwardfor` (Block Set) The forwardfor of the frontend. (see [below for nested schema](#nestedblock--forwardfor))
 - `http_connection_mode` (String) The http connection mode of the frontend. It can be one of the following values: httpclose, http-server-close, http-keep-alive
-- `max_connection` (Number) The max connection of the frontend.
+- `http_keep_alive_timeout` (Number) The http keep alive timeout of the frontend.
+- `http_request_timeout` (Number) The http request timeout of the frontend.
+- `http_use_proxy_header` (Boolean) The http use proxy header of the frontend.
+- `httplog` (Boolean) The http log of the frontend.
+- `httpslog` (Boolean) The https log of the frontend.
+- `log_format` (String) The log format of the frontend.
+- `log_format_sd` (String) The log format sd of the frontend.
+- `maxconn` (Number) The max connection of the frontend.
 - `mode` (String) The mode of the frontend. It can be one of the following values: http, tcp
+- `monitor_uri` (String) The monitor uri of the frontend.
+- `tcplog` (Boolean) The tcp log of the frontend.
 
 ### Read-Only
 
 - `id` (String) The ID of this resource.
+
+<a id="nestedblock--compression"></a>
+### Nested Schema for `compression`
+
+Optional:
+
+- `algorithms` (List of String) The algorithms of the compression.
+- `offload` (Boolean) The offload of the compression.
+- `types` (List of String) The types of the compression.
+
+
+<a id="nestedblock--forwardfor"></a>
+### Nested Schema for `forwardfor`
+
+Optional:
+
+- `enabled` (Boolean) The enabled of the forwardfor.
+- `except` (String) The except of the forwardfor.
+- `header` (String) The header of the forwardfor.
+- `ifnone` (Boolean) The ifnone of the forwardfor.
