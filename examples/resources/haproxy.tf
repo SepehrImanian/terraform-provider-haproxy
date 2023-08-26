@@ -215,33 +215,61 @@ resource "haproxy_backend" "backend_test" {
   }
 }
 
-resource "haproxy_frontend" "front_test" {
-  name                        = "front_test"
-  backend                     = "backend_test"
-  http_connection_mode        = "http-keep-alive"
-  accept_invalid_http_request = true
-  maxconn                     = 100
-  mode                        = "http"
-  backlog                     = 1000
-  http_keep_alive_timeout     = 10
-  http_request_timeout        = 10
-  http_use_proxy_header       = true
-  httplog                     = true
-  httpslog                    = true
-  tcplog                      = false
-
-  compression {
-    algorithms = ["gzip", "identity"]
-    offload    = true
-    types      = ["text/html", "text/plain", "text/css", "application/javascript"]
-  }
-
-  forwardfor {
-    enabled = true
-    # except  = ".example2.com"
-    header = "X-Forwarded-For"
-    ifnone = true
-  }
-
-  depends_on = [haproxy_backend.backend_test]
+resource "haproxy_server" "server_test_1" {
+  name        = "server_test_1"
+  port        = 8080
+  address     = "172.16.13.15"
+  parent_name = "backend_test"
+  parent_type = "backend"
+  send_proxy  = true
+  check       = true
+  inter       = 3
+  rise        = 3
+  fall        = 3
+  depends_on  = [haproxy_backend.backend_test]
 }
+
+resource "haproxy_server" "server_test_2" {
+  name        = "server_test_2"
+  port        = 8080
+  address     = "172.16.13.14"
+  parent_name = "backend_test"
+  parent_type = "backend"
+  send_proxy  = true
+  check       = true
+  inter       = 3
+  rise        = 3
+  fall        = 3
+  depends_on  = [haproxy_backend.backend_test]
+}
+
+# resource "haproxy_frontend" "front_test" {
+#   name                        = "front_test"
+#   backend                     = "backend_test"
+#   http_connection_mode        = "http-keep-alive"
+#   accept_invalid_http_request = true
+#   maxconn                     = 100
+#   mode                        = "http"
+#   backlog                     = 1000
+#   http_keep_alive_timeout     = 10
+#   http_request_timeout        = 10
+#   http_use_proxy_header       = true
+#   httplog                     = true
+#   httpslog                    = true
+#   tcplog                      = false
+
+#   compression {
+#     algorithms = ["gzip", "identity"]
+#     offload    = true
+#     types      = ["text/html", "text/plain", "text/css", "application/javascript"]
+#   }
+
+#   forwardfor {
+#     enabled = true
+#     # except  = ".example2.com"
+#     header = "X-Forwarded-For"
+#     ifnone = true
+#   }
+
+#   depends_on = [haproxy_backend.backend_test]
+# }

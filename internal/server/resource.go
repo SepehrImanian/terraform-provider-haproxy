@@ -1,6 +1,7 @@
 package server
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -96,39 +97,33 @@ func resourceHaproxyServerRead(d *schema.ResourceData, m interface{}) error {
 
 func resourceHaproxyServerCreate(d *schema.ResourceData, m interface{}) error {
 	serverName := d.Get("name").(string)
-	port := d.Get("port").(int)
-	address := d.Get("address").(string)
 	sendProxy := d.Get("send_proxy").(bool)
 	check := d.Get("check").(bool)
-	inter := d.Get("inter").(int)
-	rise := d.Get("rise").(int)
-	fall := d.Get("fall").(int)
 	parentName := d.Get("parent_name").(string)
 	parentType := d.Get("parent_type").(string)
 
-	// change bool to enabled/disabled
-	sendProxyStr := utils.BoolToStr(sendProxy)
-	checkStr := utils.BoolToStr(check)
-
-	payload := []byte(fmt.Sprintf(`
-	{
-		"name": "%s",
-		"address": "%s",
-		"port": %d,
-		"send-proxy": "%s",
-		"check": "%s",
-		"inter": %d,
-		"rise": %d,
-		"fall": %d
+	payload := ServerPayload{
+		Name:      serverName,
+		Address:   d.Get("address").(string),
+		Port:      d.Get("port").(int),
+		SendProxy: utils.BoolToStr(sendProxy),
+		Check:     utils.BoolToStr(check),
+		Inter:     d.Get("inter").(int),
+		Rise:      d.Get("rise").(int),
+		Fall:      d.Get("fall").(int),
 	}
-	`, serverName, address, port, sendProxyStr, checkStr, inter, rise, fall))
+
+	payloadJSON, err := json.Marshal(payload)
+	if err != nil {
+		return err
+	}
 
 	configMap := m.(map[string]interface{})
 	serverConfig := configMap["server"].(*ConfigServer)
 	tranConfig := configMap["transaction"].(*transaction.ConfigTransaction)
 
 	resp, err := tranConfig.Transaction(func(transactionID string) (*http.Response, error) {
-		return serverConfig.AddServerConfiguration(payload, transactionID, parentName, parentType)
+		return serverConfig.AddServerConfiguration(payloadJSON, transactionID, parentName, parentType)
 	})
 
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
@@ -141,39 +136,33 @@ func resourceHaproxyServerCreate(d *schema.ResourceData, m interface{}) error {
 
 func resourceHaproxyServerUpdate(d *schema.ResourceData, m interface{}) error {
 	serverName := d.Get("name").(string)
-	port := d.Get("port").(int)
-	address := d.Get("address").(string)
 	sendProxy := d.Get("send_proxy").(bool)
 	check := d.Get("check").(bool)
-	inter := d.Get("inter").(int)
-	rise := d.Get("rise").(int)
-	fall := d.Get("fall").(int)
 	parentName := d.Get("parent_name").(string)
 	parentType := d.Get("parent_type").(string)
 
-	// change bool to enabled/disabled
-	sendProxyStr := utils.BoolToStr(sendProxy)
-	checkStr := utils.BoolToStr(check)
-
-	payload := []byte(fmt.Sprintf(`
-	{
-		"name": "%s",
-		"address": "%s",
-		"port": %d,
-		"send-proxy": "%s",
-		"check": "%s",
-		"inter": %d,
-		"rise": %d,
-		"fall": %d
+	payload := ServerPayload{
+		Name:      serverName,
+		Address:   d.Get("address").(string),
+		Port:      d.Get("port").(int),
+		SendProxy: utils.BoolToStr(sendProxy),
+		Check:     utils.BoolToStr(check),
+		Inter:     d.Get("inter").(int),
+		Rise:      d.Get("rise").(int),
+		Fall:      d.Get("fall").(int),
 	}
-	`, serverName, address, port, sendProxyStr, checkStr, inter, rise, fall))
+
+	payloadJSON, err := json.Marshal(payload)
+	if err != nil {
+		return err
+	}
 
 	configMap := m.(map[string]interface{})
 	serverConfig := configMap["server"].(*ConfigServer)
 	tranConfig := configMap["transaction"].(*transaction.ConfigTransaction)
 
 	resp, err := tranConfig.Transaction(func(transactionID string) (*http.Response, error) {
-		return serverConfig.UpdateServerConfiguration(serverName, payload, transactionID, parentName, parentType)
+		return serverConfig.UpdateServerConfiguration(serverName, payloadJSON, transactionID, parentName, parentType)
 	})
 
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
