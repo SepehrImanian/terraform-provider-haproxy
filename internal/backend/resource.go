@@ -155,19 +155,38 @@ func resourceHaproxyBackendCreate(d *schema.ResourceData, m interface{}) error {
 	backendName := d.Get("name").(string)
 	checkCache := d.Get("check_cache").(bool)
 
+	var (
+		algorithm  string
+		version    string
+		uri        string
+		method     string
+		enabled    bool
+		enabledStr string = "enabled"
+	)
+
 	// Read values for balance
-	balance := d.Get("balance").(*schema.Set).List()
-	algorithm := balance[0].(map[string]interface{})["algorithm"].(string)
+	balanceItem := utils.GetFirstItemValue(d.Get, "balance")
+	if balanceItem != nil {
+		balance := d.Get("balance").(*schema.Set).List()
+		algorithm = balance[0].(map[string]interface{})["algorithm"].(string)
+	}
 
 	// Read values for httpchk_params
-	httpchk_params := d.Get("httpchk_params").(*schema.Set).List()
-	version := httpchk_params[0].(map[string]interface{})["version"].(string)
-	uri := httpchk_params[0].(map[string]interface{})["uri"].(string)
-	method := httpchk_params[0].(map[string]interface{})["method"].(string)
+	httpchkItem := utils.GetFirstItemValue(d.Get, "httpchk_params")
+	if httpchkItem != nil {
+		httpchk_params := d.Get("httpchk_params").(*schema.Set).List()
+		version = httpchk_params[0].(map[string]interface{})["version"].(string)
+		uri = httpchk_params[0].(map[string]interface{})["uri"].(string)
+		method = httpchk_params[0].(map[string]interface{})["method"].(string)
+	}
 
 	// Read values for forwardfor
-	forwardfor := d.Get("forwardfor").(*schema.Set).List()
-	enabled := forwardfor[0].(map[string]interface{})["enabled"].(bool)
+	forwardforItem := utils.GetFirstItemValue(d.Get, "forwardfor")
+	if forwardforItem != nil {
+		forwardfor := d.Get("forwardfor").(*schema.Set).List()
+		enabled = forwardfor[0].(map[string]interface{})["enabled"].(bool)
+		enabledStr = utils.BoolToStr(enabled)
+	}
 
 	payload := BackendPayload{
 		Name:               backendName,
@@ -182,15 +201,15 @@ func resourceHaproxyBackendCreate(d *schema.ResourceData, m interface{}) error {
 		TarpitTimeout:      d.Get("tarpit_timeout").(int),
 		CheckCache:         utils.BoolToStr(checkCache),
 		Balance: Balance{
-			Algorithm: algorithm,  // Access the nested attribute
+			Algorithm: algorithm, // Access the nested attribute
 		},
 		HttpchkParams: HttpchkParams{
-			Method: method,
+			Method:  method,
 			Uri:     uri,
 			Version: version,
 		},
 		Forwardfor: Forwardfor{
-			Enabled: utils.BoolToStr(enabled),
+			Enabled: enabledStr,
 		},
 	}
 
@@ -219,19 +238,38 @@ func resourceHaproxyBackendUpdate(d *schema.ResourceData, m interface{}) error {
 	backendName := d.Get("name").(string)
 	checkCache := d.Get("check_cache").(bool)
 
+	var (
+		algorithm  string
+		version    string
+		uri        string
+		method     string
+		enabled    bool
+		enabledStr string = "enabled"
+	)
+
 	// Read values for balance
-	balance := d.Get("balance").(*schema.Set).List()
-	algorithm := balance[0].(map[string]interface{})["algorithm"].(string)
+	balanceItem := utils.GetFirstItemValue(d.Get, "balance")
+	if balanceItem != nil {
+		balance := d.Get("balance").(*schema.Set).List()
+		algorithm = balance[0].(map[string]interface{})["algorithm"].(string)
+	}
 
 	// Read values for httpchk_params
-	httpchk_params := d.Get("httpchk_params").(*schema.Set).List()
-	version := httpchk_params[0].(map[string]interface{})["version"].(string)
-	uri := httpchk_params[0].(map[string]interface{})["uri"].(string)
-	method := httpchk_params[0].(map[string]interface{})["method"].(string)
+	httpchkItem := utils.GetFirstItemValue(d.Get, "httpchk_params")
+	if httpchkItem != nil {
+		httpchk_params := d.Get("httpchk_params").(*schema.Set).List()
+		version = httpchk_params[0].(map[string]interface{})["version"].(string)
+		uri = httpchk_params[0].(map[string]interface{})["uri"].(string)
+		method = httpchk_params[0].(map[string]interface{})["method"].(string)
+	}
 
 	// Read values for forwardfor
-	forwardfor := d.Get("forwardfor").(*schema.Set).List()
-	enabled := forwardfor[0].(map[string]interface{})["enabled"].(bool)
+	forwardforItem := utils.GetFirstItemValue(d.Get, "forwardfor")
+	if forwardforItem != nil {
+		forwardfor := d.Get("forwardfor").(*schema.Set).List()
+		enabled = forwardfor[0].(map[string]interface{})["enabled"].(bool)
+		enabledStr = utils.BoolToStr(enabled)
+	}
 
 	payload := BackendPayload{
 		Name:               backendName,
@@ -246,15 +284,15 @@ func resourceHaproxyBackendUpdate(d *schema.ResourceData, m interface{}) error {
 		TarpitTimeout:      d.Get("tarpit_timeout").(int),
 		CheckCache:         utils.BoolToStr(checkCache),
 		Balance: Balance{
-			Algorithm: algorithm,  // Access the nested attribute
+			Algorithm: algorithm, // Access the nested attribute
 		},
 		HttpchkParams: HttpchkParams{
-			Method: method,
+			Method:  method,
 			Uri:     uri,
 			Version: version,
 		},
 		Forwardfor: Forwardfor{
-			Enabled: utils.BoolToStr(enabled),
+			Enabled: enabledStr,
 		},
 	}
 

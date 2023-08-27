@@ -192,31 +192,46 @@ func resourceHaproxyFrontendCreate(d *schema.ResourceData, m interface{}) error 
 	httpslog := d.Get("httpslog").(bool)
 	httpUseProxyHeader := d.Get("http_use_proxy_header").(bool)
 
-	// Read the compression block
-	compression := d.Get("compression").(*schema.Set).List()
-	compressionData := compression[0].(map[string]interface{})
+	var (
+		compressionOffload    bool = false
+		forwardforEnabled     bool = false
+		forwardforExcept      string
+		forwardforHeader      string
+		forwardforIfnone      bool = false
+		compressionAlgorithms []string
+		compressionTypes      []string
+		enabledStr            string = "enabled"
+	)
 
-	compressionAlgorithmsRaw := compressionData["algorithms"].([]interface{})
-	var compressionAlgorithms []string
-	for _, algorithm := range compressionAlgorithmsRaw {
-		compressionAlgorithms = append(compressionAlgorithms, algorithm.(string))
+	compressionItem := utils.GetFirstItemValue(d.Get, "compression")
+	if compressionItem != nil {
+		// Read the compression block
+		compression := d.Get("compression").(*schema.Set).List()
+		compressionData := compression[0].(map[string]interface{})
+		compressionAlgorithmsRaw := compressionData["algorithms"].([]interface{})
+		for _, algorithm := range compressionAlgorithmsRaw {
+			compressionAlgorithms = append(compressionAlgorithms, algorithm.(string))
+		}
+
+		compressionOffload = compressionData["offload"].(bool)
+
+		// Corrected handling of the 'types' attribute
+		compressionTypesRaw := compressionData["types"].([]interface{})
+		for _, t := range compressionTypesRaw {
+			compressionTypes = append(compressionTypes, t.(string))
+		}
 	}
 
-	compressionOffload := compressionData["offload"].(bool)
-
-	// Corrected handling of the 'types' attribute
-	compressionTypesRaw := compressionData["types"].([]interface{})
-	var compressionTypes []string
-	for _, t := range compressionTypesRaw {
-		compressionTypes = append(compressionTypes, t.(string))
+	forwardforItem := utils.GetFirstItemValue(d.Get, "forwardfor")
+	if forwardforItem != nil {
+		//Read the forwardfor block
+		forwardfor := d.Get("forwardfor").(*schema.Set).List()
+		forwardforEnabled = forwardfor[0].(map[string]interface{})["enabled"].(bool)
+		forwardforExcept = forwardfor[0].(map[string]interface{})["except"].(string)
+		forwardforHeader = forwardfor[0].(map[string]interface{})["header"].(string)
+		forwardforIfnone = forwardfor[0].(map[string]interface{})["ifnone"].(bool)
+		enabledStr = utils.BoolToStr(forwardforEnabled)
 	}
-
-	//Read the forwardfor block
-	forwardfor := d.Get("forwardfor").(*schema.Set).List()
-	forwardforEnabled := forwardfor[0].(map[string]interface{})["enabled"].(bool)
-	forwardforExcept := forwardfor[0].(map[string]interface{})["except"].(string)
-	forwardforHeader := forwardfor[0].(map[string]interface{})["header"].(string)
-	forwardforIfnone := forwardfor[0].(map[string]interface{})["ifnone"].(bool)
 
 	payload := FrontendPayload{
 		Name:                     frontendName,
@@ -242,7 +257,7 @@ func resourceHaproxyFrontendCreate(d *schema.ResourceData, m interface{}) error 
 			Types:      compressionTypes,
 		},
 		Forwardfor: Forwardfor{
-			Enabled: utils.BoolToStr(forwardforEnabled),
+			Enabled: enabledStr,
 			Except:  forwardforExcept,
 			Header:  forwardforHeader,
 			Ifnone:  forwardforIfnone,
@@ -276,31 +291,46 @@ func resourceHaproxyFrontendUpdate(d *schema.ResourceData, m interface{}) error 
 	httpslog := d.Get("httpslog").(bool)
 	httpUseProxyHeader := d.Get("http_use_proxy_header").(bool)
 
-	// Read the compression block
-	compression := d.Get("compression").(*schema.Set).List()
-	compressionData := compression[0].(map[string]interface{})
+	var (
+		compressionOffload    bool = false
+		forwardforEnabled     bool = false
+		forwardforExcept      string
+		forwardforHeader      string
+		forwardforIfnone      bool = false
+		compressionAlgorithms []string
+		compressionTypes      []string
+		enabledStr            string = "enabled"
+	)
 
-	compressionAlgorithmsRaw := compressionData["algorithms"].([]interface{})
-	var compressionAlgorithms []string
-	for _, algorithm := range compressionAlgorithmsRaw {
-		compressionAlgorithms = append(compressionAlgorithms, algorithm.(string))
+	compressionItem := utils.GetFirstItemValue(d.Get, "compression")
+	if compressionItem != nil {
+		// Read the compression block
+		compression := d.Get("compression").(*schema.Set).List()
+		compressionData := compression[0].(map[string]interface{})
+		compressionAlgorithmsRaw := compressionData["algorithms"].([]interface{})
+		for _, algorithm := range compressionAlgorithmsRaw {
+			compressionAlgorithms = append(compressionAlgorithms, algorithm.(string))
+		}
+
+		compressionOffload = compressionData["offload"].(bool)
+
+		// Corrected handling of the 'types' attribute
+		compressionTypesRaw := compressionData["types"].([]interface{})
+		for _, t := range compressionTypesRaw {
+			compressionTypes = append(compressionTypes, t.(string))
+		}
 	}
 
-	compressionOffload := compressionData["offload"].(bool)
-
-	// Corrected handling of the 'types' attribute
-	compressionTypesRaw := compressionData["types"].([]interface{})
-	var compressionTypes []string
-	for _, t := range compressionTypesRaw {
-		compressionTypes = append(compressionTypes, t.(string))
+	forwardforItem := utils.GetFirstItemValue(d.Get, "forwardfor")
+	if forwardforItem != nil {
+		//Read the forwardfor block
+		forwardfor := d.Get("forwardfor").(*schema.Set).List()
+		forwardforEnabled = forwardfor[0].(map[string]interface{})["enabled"].(bool)
+		forwardforExcept = forwardfor[0].(map[string]interface{})["except"].(string)
+		forwardforHeader = forwardfor[0].(map[string]interface{})["header"].(string)
+		forwardforIfnone = forwardfor[0].(map[string]interface{})["ifnone"].(bool)
+		enabledStr = utils.BoolToStr(forwardforEnabled)
 	}
-
-	//Read the forwardfor block
-	forwardfor := d.Get("forwardfor").(*schema.Set).List()
-	forwardforEnabled := forwardfor[0].(map[string]interface{})["enabled"].(bool)
-	forwardforExcept := forwardfor[0].(map[string]interface{})["except"].(string)
-	forwardforHeader := forwardfor[0].(map[string]interface{})["header"].(string)
-	forwardforIfnone := forwardfor[0].(map[string]interface{})["ifnone"].(bool)
 
 	payload := FrontendPayload{
 		Name:                     frontendName,
@@ -326,7 +356,7 @@ func resourceHaproxyFrontendUpdate(d *schema.ResourceData, m interface{}) error 
 			Types:      compressionTypes,
 		},
 		Forwardfor: Forwardfor{
-			Enabled: utils.BoolToStr(forwardforEnabled),
+			Enabled: enabledStr,
 			Except:  forwardforExcept,
 			Header:  forwardforHeader,
 			Ifnone:  forwardforIfnone,
