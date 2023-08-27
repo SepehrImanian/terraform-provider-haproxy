@@ -8,6 +8,7 @@ import (
 	defaults "terraform-provider-haproxy/internal/defaults"
 	frontend "terraform-provider-haproxy/internal/frontend"
 	global "terraform-provider-haproxy/internal/global"
+	health "terraform-provider-haproxy/internal/health"
 	resolvers "terraform-provider-haproxy/internal/resolvers"
 	server "terraform-provider-haproxy/internal/server"
 	transaction "terraform-provider-haproxy/internal/transaction"
@@ -63,6 +64,7 @@ func Provider() *schema.Provider {
 			"haproxy_resolvers": resolvers.DataSourceHaproxyResolvers(),
 			"haproxy_cache":     cache.DataSourceHaproxyCache(),
 			"haproxy_global":    global.DataSourceHaproxyGlobal(),
+			"haproxy_health":    health.DataSourceHaproxyHealth(),
 		},
 
 		ResourcesMap: map[string]*schema.Resource{
@@ -127,6 +129,10 @@ func providerConfigure(data *schema.ResourceData) (interface{}, error) {
 	globalConfig := &global.ConfigGlobal{}
 	utils.SetConfigValues(globalConfig, commonConfig)
 
+	// Create config for health
+	healthConfig := &health.ConfigHealth{}
+	utils.SetConfigValues(healthConfig, commonConfig)
+
 	return map[string]interface{}{
 		"backend":     backendConfig,
 		"frontend":    frontendConfig,
@@ -138,5 +144,6 @@ func providerConfigure(data *schema.ResourceData) (interface{}, error) {
 		"resolvers":   resolversConfig,
 		"cache":       cacheConfig,
 		"global":      globalConfig,
+		"health":      healthConfig,
 	}, nil
 }
