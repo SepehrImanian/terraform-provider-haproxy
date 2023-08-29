@@ -1,10 +1,15 @@
 version: "3.9"
 services:
     haproxy:
-        image: haproxytech/haproxy-ubuntu:2.8
+        image: haproxytech/haproxy-debian:2.8
         container_name: haproxy
-#        volumes:
-#            - ./config/haproxy.cfg:/etc/haproxy/haproxy.cfg
-        #network_mode: host
+        volumes:
+            - ./config:/usr/local/etc/haproxy:rw
+        network_mode: host
         user: root
         restart: always
+        logging:
+          driver: json-file
+          options:
+            max-file: 3
+            max-size: 100m
