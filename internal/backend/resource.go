@@ -72,6 +72,7 @@ func ResourceHaproxyBackend() *schema.Resource {
 			"check_cache": {
 				Type:        schema.TypeBool,
 				Optional:    true,
+				Default:     false,
 				Description: "The check_cache of the backend.",
 			},
 			"balance": {
@@ -198,18 +199,34 @@ func resourceHaproxyBackendCreate(d *schema.ResourceData, m interface{}) error {
 		QueueTimeout:       d.Get("queue_timeout").(int),
 		TunnelTimeout:      d.Get("tunnel_timeout").(int),
 		TarpitTimeout:      d.Get("tarpit_timeout").(int),
-		CheckCache:         utils.BoolToStr(checkCache),
-		Balance: Balance{
-			Algorithm: algorithm, // Access the nested attribute
-		},
-		HttpchkParams: HttpchkParams{
+	}
+
+	// Check checkCache field
+	if checkCache {
+		payload.CheckCache = utils.BoolToStr(checkCache)
+	}
+
+	// Check if Balance data is available
+	if balanceItem != nil {
+		payload.Balance = Balance{
+			Algorithm: algorithm,
+		}
+	}
+
+	// Check if HttpchkParams data is available
+	if httpchkItem != nil {
+		payload.HttpchkParams = HttpchkParams{
 			Method:  method,
 			Uri:     uri,
 			Version: version,
-		},
-		Forwardfor: Forwardfor{
+		}
+	}
+
+	// Check if Forwardfor data is available
+	if forwardforItem != nil {
+		payload.Forwardfor = Forwardfor{
 			Enabled: enabledStr,
-		},
+		}
 	}
 
 	payloadJSON, err := utils.MarshalNonZeroFields(payload)
@@ -283,18 +300,34 @@ func resourceHaproxyBackendUpdate(d *schema.ResourceData, m interface{}) error {
 		QueueTimeout:       d.Get("queue_timeout").(int),
 		TunnelTimeout:      d.Get("tunnel_timeout").(int),
 		TarpitTimeout:      d.Get("tarpit_timeout").(int),
-		CheckCache:         utils.BoolToStr(checkCache),
-		Balance: Balance{
-			Algorithm: algorithm, // Access the nested attribute
-		},
-		HttpchkParams: HttpchkParams{
+	}
+
+	// Check checkCache field
+	if checkCache {
+		payload.CheckCache = utils.BoolToStr(checkCache)
+	}
+
+	// Check if Balance data is available
+	if balanceItem != nil {
+		payload.Balance = Balance{
+			Algorithm: algorithm,
+		}
+	}
+
+	// Check if HttpchkParams data is available
+	if httpchkItem != nil {
+		payload.HttpchkParams = HttpchkParams{
 			Method:  method,
 			Uri:     uri,
 			Version: version,
-		},
-		Forwardfor: Forwardfor{
+		}
+	}
+
+	// Check if Forwardfor data is available
+	if forwardforItem != nil {
+		payload.Forwardfor = Forwardfor{
 			Enabled: enabledStr,
-		},
+		}
 	}
 
 	payloadJSON, err := utils.MarshalNonZeroFields(payload)

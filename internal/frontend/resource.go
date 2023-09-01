@@ -233,34 +233,54 @@ func resourceHaproxyFrontendCreate(d *schema.ResourceData, m interface{}) error 
 	}
 
 	payload := FrontendPayload{
-		Name:                     frontendName,
-		DefaultBackend:           d.Get("backend").(string),
-		HttpConnectionMode:       d.Get("http_connection_mode").(string),
-		AcceptInvalidHttpRequest: utils.BoolToStr(acceptInvalidHttpRequest),
-		MaxConn:                  d.Get("maxconn").(int),
-		Mode:                     d.Get("mode").(string),
-		Backlog:                  d.Get("backlog").(int),
-		HttpKeepAliveTimeout:     d.Get("http_keep_alive_timeout").(int),
-		HttpRequestTimeout:       d.Get("http_request_timeout").(int),
-		HttpUseProxyHeader:       utils.BoolToStr(httpUseProxyHeader),
-		HttpLog:                  d.Get("httplog").(bool),
-		HttpsLog:                 utils.BoolToStr(httpslog),
-		ErrorLogFormat:           d.Get("error_log_format").(string),
-		LogFormat:                d.Get("log_format").(string),
-		LogFormatSd:              d.Get("log_format_sd").(string),
-		MonitorUri:               d.Get("monitor_uri").(string),
-		TcpLog:                   d.Get("tcplog").(bool),
-		Compression: Compression{
+		Name:                 frontendName,
+		DefaultBackend:       d.Get("backend").(string),
+		HttpConnectionMode:   d.Get("http_connection_mode").(string),
+		MaxConn:              d.Get("maxconn").(int),
+		Mode:                 d.Get("mode").(string),
+		Backlog:              d.Get("backlog").(int),
+		HttpKeepAliveTimeout: d.Get("http_keep_alive_timeout").(int),
+		HttpRequestTimeout:   d.Get("http_request_timeout").(int),
+		HttpLog:              d.Get("httplog").(bool),
+		ErrorLogFormat:       d.Get("error_log_format").(string),
+		LogFormat:            d.Get("log_format").(string),
+		LogFormatSd:          d.Get("log_format_sd").(string),
+		MonitorUri:           d.Get("monitor_uri").(string),
+		TcpLog:               d.Get("tcplog").(bool),
+	}
+
+	// Check httpslog is set
+	if httpslog {
+		payload.HttpsLog = utils.BoolToStr(httpslog)
+	}
+
+	// Check httpUseProxyHeader is set
+	if httpUseProxyHeader {
+		payload.HttpUseProxyHeader = utils.BoolToStr(httpUseProxyHeader)
+	}
+
+	// Check if AcceptInvalidHttpRequest is set
+	if acceptInvalidHttpRequest {
+		payload.AcceptInvalidHttpRequest = utils.BoolToStr(acceptInvalidHttpRequest)
+	}
+
+	// Check if compression is set
+	if compressionItem != nil {
+		payload.Compression = Compression{
 			Algorithms: compressionAlgorithms,
 			Offload:    compressionOffload,
 			Types:      compressionTypes,
-		},
-		Forwardfor: Forwardfor{
+		}
+	}
+
+	// Check if forwardfor is set
+	if forwardforItem != nil {
+		payload.Forwardfor = Forwardfor{
 			Enabled: enabledStr,
 			Except:  forwardforExcept,
 			Header:  forwardforHeader,
 			Ifnone:  forwardforIfnone,
-		},
+		}
 	}
 
 	payloadJSON, err := utils.MarshalNonZeroFields(payload)
@@ -332,34 +352,54 @@ func resourceHaproxyFrontendUpdate(d *schema.ResourceData, m interface{}) error 
 	}
 
 	payload := FrontendPayload{
-		Name:                     frontendName,
-		DefaultBackend:           d.Get("backend").(string),
-		HttpConnectionMode:       d.Get("http_connection_mode").(string),
-		AcceptInvalidHttpRequest: utils.BoolToStr(acceptInvalidHttpRequest),
-		MaxConn:                  d.Get("maxconn").(int),
-		Mode:                     d.Get("mode").(string),
-		Backlog:                  d.Get("backlog").(int),
-		HttpKeepAliveTimeout:     d.Get("http_keep_alive_timeout").(int),
-		HttpRequestTimeout:       d.Get("http_request_timeout").(int),
-		HttpUseProxyHeader:       utils.BoolToStr(httpUseProxyHeader),
-		HttpLog:                  d.Get("httplog").(bool),
-		HttpsLog:                 utils.BoolToStr(httpslog),
-		ErrorLogFormat:           d.Get("error_log_format").(string),
-		LogFormat:                d.Get("log_format").(string),
-		LogFormatSd:              d.Get("log_format_sd").(string),
-		MonitorUri:               d.Get("monitor_uri").(string),
-		TcpLog:                   d.Get("tcplog").(bool),
-		Compression: Compression{
+		Name:                 frontendName,
+		DefaultBackend:       d.Get("backend").(string),
+		HttpConnectionMode:   d.Get("http_connection_mode").(string),
+		MaxConn:              d.Get("maxconn").(int),
+		Mode:                 d.Get("mode").(string),
+		Backlog:              d.Get("backlog").(int),
+		HttpKeepAliveTimeout: d.Get("http_keep_alive_timeout").(int),
+		HttpRequestTimeout:   d.Get("http_request_timeout").(int),
+		HttpLog:              d.Get("httplog").(bool),
+		ErrorLogFormat:       d.Get("error_log_format").(string),
+		LogFormat:            d.Get("log_format").(string),
+		LogFormatSd:          d.Get("log_format_sd").(string),
+		MonitorUri:           d.Get("monitor_uri").(string),
+		TcpLog:               d.Get("tcplog").(bool),
+	}
+
+	// Check httpslog is set
+	if httpslog {
+		payload.HttpsLog = utils.BoolToStr(httpslog)
+	}
+
+	// Check httpUseProxyHeader is set
+	if httpUseProxyHeader {
+		payload.HttpUseProxyHeader = utils.BoolToStr(httpUseProxyHeader)
+	}
+
+	// Check if AcceptInvalidHttpRequest is set
+	if acceptInvalidHttpRequest {
+		payload.AcceptInvalidHttpRequest = utils.BoolToStr(acceptInvalidHttpRequest)
+	}
+
+	// Check if compression is set
+	if compressionItem != nil {
+		payload.Compression = Compression{
 			Algorithms: compressionAlgorithms,
 			Offload:    compressionOffload,
 			Types:      compressionTypes,
-		},
-		Forwardfor: Forwardfor{
+		}
+	}
+
+	// Check if forwardfor is set
+	if forwardforItem != nil {
+		payload.Forwardfor = Forwardfor{
 			Enabled: enabledStr,
 			Except:  forwardforExcept,
 			Header:  forwardforHeader,
 			Ifnone:  forwardforIfnone,
-		},
+		}
 	}
 
 	payloadJSON, err := utils.MarshalNonZeroFields(payload)
