@@ -125,15 +125,11 @@ func resourceHaproxyDefaultsCreate(d *schema.ResourceData, m interface{}) error 
 	defaultsName := d.Get("name").(string)
 	HTTPSLog := d.Get("httpslog").(bool)
 
-	// Convert bool to string
-	HTTPSLogStr := utils.BoolToStr(HTTPSLog)
-
 	payload := DefaultsPayload{
 		Name:                 defaultsName,
 		Mode:                 d.Get("mode").(string),
 		Backlog:              d.Get("backlog").(int),
 		HTTPLog:              d.Get("httplog").(bool),
-		HTTPSLog:             HTTPSLogStr,
 		TCPLog:               d.Get("tcplog").(bool),
 		Retries:              d.Get("retries").(int),
 		CheckTimeout:         d.Get("check_timeout").(int),
@@ -145,6 +141,11 @@ func resourceHaproxyDefaultsCreate(d *schema.ResourceData, m interface{}) error 
 		ServerTimeout:        d.Get("server_timeout").(int),
 		ServerFinTimeout:     d.Get("server_fin_timeout").(int),
 		MaxConn:              d.Get("maxconn").(int),
+	}
+
+	// Check HTTPSLog field
+	if HTTPSLog {
+		payload.HTTPSLog = utils.BoolToStr(HTTPSLog)
 	}
 
 	payloadJSON, err := utils.MarshalNonZeroFields(payload)
@@ -170,18 +171,13 @@ func resourceHaproxyDefaultsCreate(d *schema.ResourceData, m interface{}) error 
 
 func resourceHaproxyDefaultsUpdate(d *schema.ResourceData, m interface{}) error {
 	defaultsName := d.Get("name").(string)
-
 	HTTPSLog := d.Get("httpslog").(bool)
-
-	// Convert bool to string
-	HTTPSLogStr := utils.BoolToStr(HTTPSLog)
 
 	payload := DefaultsPayload{
 		Name:                 defaultsName,
 		Mode:                 d.Get("mode").(string),
 		Backlog:              d.Get("backlog").(int),
 		HTTPLog:              d.Get("httplog").(bool),
-		HTTPSLog:             HTTPSLogStr,
 		TCPLog:               d.Get("tcplog").(bool),
 		Retries:              d.Get("retries").(int),
 		CheckTimeout:         d.Get("check_timeout").(int),
@@ -193,6 +189,11 @@ func resourceHaproxyDefaultsUpdate(d *schema.ResourceData, m interface{}) error 
 		ServerTimeout:        d.Get("server_timeout").(int),
 		ServerFinTimeout:     d.Get("server_fin_timeout").(int),
 		MaxConn:              d.Get("maxconn").(int),
+	}
+
+	// Check HTTPSLog field
+	if HTTPSLog {
+		payload.HTTPSLog = utils.BoolToStr(HTTPSLog)
 	}
 
 	payloadJSON, err := utils.MarshalNonZeroFields(payload)

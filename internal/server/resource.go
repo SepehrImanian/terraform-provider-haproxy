@@ -102,14 +102,22 @@ func resourceHaproxyServerCreate(d *schema.ResourceData, m interface{}) error {
 	parentType := d.Get("parent_type").(string)
 
 	payload := ServerPayload{
-		Name:      serverName,
-		Address:   d.Get("address").(string),
-		Port:      d.Get("port").(int),
-		SendProxy: utils.BoolToStr(sendProxy),
-		Check:     utils.BoolToStr(check),
-		Inter:     d.Get("inter").(int),
-		Rise:      d.Get("rise").(int),
-		Fall:      d.Get("fall").(int),
+		Name:    serverName,
+		Address: d.Get("address").(string),
+		Port:    d.Get("port").(int),
+		Inter:   d.Get("inter").(int),
+		Rise:    d.Get("rise").(int),
+		Fall:    d.Get("fall").(int),
+	}
+
+	// Check sendProxy field
+	if sendProxy {
+		payload.SendProxy = utils.BoolToStr(sendProxy)
+	}
+
+	// Check check field
+	if check {
+		payload.Check = utils.BoolToStr(check)
 	}
 
 	payloadJSON, err := utils.MarshalNonZeroFields(payload)
@@ -141,14 +149,22 @@ func resourceHaproxyServerUpdate(d *schema.ResourceData, m interface{}) error {
 	parentType := d.Get("parent_type").(string)
 
 	payload := ServerPayload{
-		Name:      serverName,
-		Address:   d.Get("address").(string),
-		Port:      d.Get("port").(int),
-		SendProxy: utils.BoolToStr(sendProxy),
-		Check:     utils.BoolToStr(check),
-		Inter:     d.Get("inter").(int),
-		Rise:      d.Get("rise").(int),
-		Fall:      d.Get("fall").(int),
+		Name:    serverName,
+		Address: d.Get("address").(string),
+		Port:    d.Get("port").(int),
+		Inter:   d.Get("inter").(int),
+		Rise:    d.Get("rise").(int),
+		Fall:    d.Get("fall").(int),
+	}
+
+	// Check sendProxy field
+	if sendProxy {
+		payload.SendProxy = utils.BoolToStr(sendProxy)
+	}
+
+	// Check check field
+	if check {
+		payload.Check = utils.BoolToStr(check)
 	}
 
 	payloadJSON, err := utils.MarshalNonZeroFields(payload)

@@ -73,19 +73,14 @@ func resourceHaproxyCacheRead(d *schema.ResourceData, m interface{}) error {
 
 func resourceHaproxyCacheCreate(d *schema.ResourceData, m interface{}) error {
 	cacheName := d.Get("name").(string)
-	maxAge := d.Get("max_age").(int)
-	maxObjectSize := d.Get("max_object_size").(int)
-	maxSecondaryEntries := d.Get("max_secondary_entries").(int)
-	processVary := d.Get("process_vary").(bool)
-	totalMaxSize := d.Get("total_max_size").(int)
 
 	payload := CachePayload{
-		Name:                cacheName,
-		MaxAge:              maxAge,
-		MaxObjectSize:       maxObjectSize,
-		MaxSecondaryEntries: maxSecondaryEntries,
-		ProcessVary:         processVary,
-		TotalMaxSize:        totalMaxSize,
+		Name:                d.Get("name").(string),
+		MaxAge:              d.Get("max_age").(int),
+		MaxObjectSize:       d.Get("max_object_size").(int),
+		MaxSecondaryEntries: d.Get("max_secondary_entries").(int),
+		ProcessVary:         d.Get("process_vary").(bool),
+		TotalMaxSize:        d.Get("total_max_size").(int),
 	}
 
 	payloadJSON, err := utils.MarshalNonZeroFields(payload)
@@ -111,19 +106,14 @@ func resourceHaproxyCacheCreate(d *schema.ResourceData, m interface{}) error {
 
 func resourceHaproxyCacheUpdate(d *schema.ResourceData, m interface{}) error {
 	cacheName := d.Get("name").(string)
-	maxAge := d.Get("max_age").(int)
-	maxObjectSize := d.Get("max_object_size").(int)
-	maxSecondaryEntries := d.Get("max_secondary_entries").(int)
-	processVary := d.Get("process_vary").(bool)
-	totalMaxSize := d.Get("total_max_size").(int)
 
 	payload := CachePayload{
-		Name:                cacheName,
-		MaxAge:              maxAge,
-		MaxObjectSize:       maxObjectSize,
-		MaxSecondaryEntries: maxSecondaryEntries,
-		ProcessVary:         processVary,
-		TotalMaxSize:        totalMaxSize,
+		Name:                d.Get("name").(string),
+		MaxAge:              d.Get("max_age").(int),
+		MaxObjectSize:       d.Get("max_object_size").(int),
+		MaxSecondaryEntries: d.Get("max_secondary_entries").(int),
+		ProcessVary:         d.Get("process_vary").(bool),
+		TotalMaxSize:        d.Get("total_max_size").(int),
 	}
 
 	payloadJSON, err := utils.MarshalNonZeroFields(payload)
