@@ -7,29 +7,33 @@
 # }
 
 
-resource "haproxy_backend" "backend_test" {
-  name = "backend_test"
+resource "haproxy_global" "global" {
+  user                     = "haproxy"
+  group                    = "haproxy"
+  chroot                   = "/var/lib/haproxy"
+  daemon                   = true
+  master_worker            = true
+  maxcompcpuusage          = 0
+  maxpipes                 = 0
+  maxsslconn               = 0
+  maxconn                  = 2000
+  nbproc                   = 1 // just before version haproxy 2.5
+  nbthread                 = 1
+  pidfile                  = "/var/run/haproxy.pid"
+  ulimit_n                 = 2000
+  crt_base                 = "/etc/ssl/certs"
+  ca_base                  = "/etc/ssl/private"
+  stats_maxconn            = 100
+  stats_timeout            = 60
+  ssl_default_bind_ciphers = "ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256"
+  ssl_default_bind_options = "no-sslv3 no-tlsv10 no-tlsv11 no-tls-tickets"
+}
+
+resource "haproxy_backend" "backend_test_acl" {
+  name = "backend_test_acl"
   mode = "http"
+
   balance {
     algorithm = "roundrobin"
   }
 }
-
-resource "haproxy_frontend" "front_test" {
-  name                        = "front_test"
-  backend                     = "backend_test"
-  http_connection_mode        = "http-keep-alive"
-  accept_invalid_http_request = true
-  maxconn                     = 100
-  mode                        = "http"
-  backlog                     = 1000
-  http_keep_alive_timeout     = 10
-  http_request_timeout        = 10
-  http_use_proxy_header       = true
-  httplog                     = true
-  httpslog                    = true
-  tcplog                      = false
-
-  depends_on = [haproxy_backend.backend_test]
-}
-
