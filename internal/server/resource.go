@@ -1,7 +1,6 @@
 package server
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -113,7 +112,7 @@ func resourceHaproxyServerCreate(d *schema.ResourceData, m interface{}) error {
 		Fall:      d.Get("fall").(int),
 	}
 
-	payloadJSON, err := json.Marshal(payload)
+	payloadJSON, err := utils.MarshalNonZeroFields(payload)
 	if err != nil {
 		return err
 	}
@@ -152,7 +151,7 @@ func resourceHaproxyServerUpdate(d *schema.ResourceData, m interface{}) error {
 		Fall:      d.Get("fall").(int),
 	}
 
-	payloadJSON, err := json.Marshal(payload)
+	payloadJSON, err := utils.MarshalNonZeroFields(payload)
 	if err != nil {
 		return err
 	}

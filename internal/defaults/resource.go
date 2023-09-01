@@ -1,7 +1,6 @@
 package defaults
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"terraform-provider-haproxy/internal/transaction"
@@ -148,7 +147,7 @@ func resourceHaproxyDefaultsCreate(d *schema.ResourceData, m interface{}) error 
 		MaxConn:              d.Get("maxconn").(int),
 	}
 
-	payloadJSON, err := json.Marshal(payload)
+	payloadJSON, err := utils.MarshalNonZeroFields(payload)
 	if err != nil {
 		return err
 	}
@@ -196,7 +195,7 @@ func resourceHaproxyDefaultsUpdate(d *schema.ResourceData, m interface{}) error 
 		MaxConn:              d.Get("maxconn").(int),
 	}
 
-	payloadJSON, err := json.Marshal(payload)
+	payloadJSON, err := utils.MarshalNonZeroFields(payload)
 	if err != nil {
 		return err
 	}

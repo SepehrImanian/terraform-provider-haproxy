@@ -1,7 +1,6 @@
 package acl
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -31,7 +30,7 @@ func ResourceHaproxyAcl() *schema.Resource {
 			},
 			"index": {
 				Type:        schema.TypeInt,
-				Optional:    true,
+				Required:    true,
 				Description: "The index of the acl in the parent object starting at 0",
 			},
 			"name": {
@@ -46,8 +45,8 @@ func ResourceHaproxyAcl() *schema.Resource {
 				Description: "The criterion of the acl",
 			},
 			"value": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:        schema.TypeString,
+				Required:    true,
 				Description: "The value of the acl.",
 			},
 		},
@@ -88,7 +87,7 @@ func resourceHaproxyAclCreate(d *schema.ResourceData, m interface{}) error {
 		Value:     d.Get("value").(string),
 	}
 
-	payloadJSON, err := json.Marshal(payload)
+	payloadJSON, err := utils.MarshalNonZeroFields(payload)
 	if err != nil {
 		return err
 	}
@@ -122,7 +121,7 @@ func resourceHaproxyAclUpdate(d *schema.ResourceData, m interface{}) error {
 		Value:     d.Get("value").(string),
 	}
 
-	payloadJSON, err := json.Marshal(payload)
+	payloadJSON, err := utils.MarshalNonZeroFields(payload)
 	if err != nil {
 		return err
 	}

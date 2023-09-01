@@ -1,7 +1,6 @@
 package bind
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -105,7 +104,7 @@ func resourceHaproxyBindCreate(d *schema.ResourceData, m interface{}) error {
 		Mode:    d.Get("mode").(string),
 	}
 
-	payloadJSON, err := json.Marshal(payload)
+	payloadJSON, err := utils.MarshalNonZeroFields(payload)
 	if err != nil {
 		return err
 	}
@@ -141,7 +140,7 @@ func resourceHaproxyBindUpdate(d *schema.ResourceData, m interface{}) error {
 		Mode:    d.Get("mode").(string),
 	}
 
-	payloadJSON, err := json.Marshal(payload)
+	payloadJSON, err := utils.MarshalNonZeroFields(payload)
 	if err != nil {
 		return err
 	}

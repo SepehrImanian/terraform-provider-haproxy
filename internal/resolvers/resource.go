@@ -1,7 +1,6 @@
 package resolvers
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"terraform-provider-haproxy/internal/transaction"
@@ -114,7 +113,7 @@ func resourceHaproxyResolversCreate(d *schema.ResourceData, m interface{}) error
 		TimeoutRetry:        d.Get("timeout_retry").(int),
 	}
 
-	payloadJSON, err := json.Marshal(payload)
+	payloadJSON, err := utils.MarshalNonZeroFields(payload)
 	if err != nil {
 		return err
 	}
@@ -152,7 +151,7 @@ func resourceHaproxyResolversUpdate(d *schema.ResourceData, m interface{}) error
 		TimeoutRetry:        d.Get("timeout_retry").(int),
 	}
 
-	payloadJSON, err := json.Marshal(payload)
+	payloadJSON, err := utils.MarshalNonZeroFields(payload)
 	if err != nil {
 		return err
 	}

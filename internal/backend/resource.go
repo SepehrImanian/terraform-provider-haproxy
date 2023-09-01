@@ -1,7 +1,6 @@
 package backend
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -213,10 +212,12 @@ func resourceHaproxyBackendCreate(d *schema.ResourceData, m interface{}) error {
 		},
 	}
 
-	payloadJSON, err := json.Marshal(payload)
+	payloadJSON, err := utils.MarshalNonZeroFields(payload)
 	if err != nil {
 		return err
 	}
+
+	fmt.Println("payloadJSON", string(payloadJSON))
 
 	configMap := m.(map[string]interface{})
 	backendConfig := configMap["backend"].(*ConfigBackend)
@@ -296,10 +297,12 @@ func resourceHaproxyBackendUpdate(d *schema.ResourceData, m interface{}) error {
 		},
 	}
 
-	payloadJSON, err := json.Marshal(payload)
+	payloadJSON, err := utils.MarshalNonZeroFields(payload)
 	if err != nil {
 		return err
 	}
+
+	fmt.Println("payloadJSON", string(payloadJSON))
 
 	configMap := m.(map[string]interface{})
 	backendConfig := configMap["backend"].(*ConfigBackend)

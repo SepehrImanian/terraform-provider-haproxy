@@ -1,7 +1,6 @@
 package global
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"terraform-provider-haproxy/internal/transaction"
@@ -176,7 +175,7 @@ func resourceHaproxyGlobalUpdate(d *schema.ResourceData, m interface{}) error {
 		SslDefaultBindOptions: d.Get("ssl_default_bind_options").(string),
 	}
 
-	payloadJSON, err := json.Marshal(payload)
+	payloadJSON, err := utils.MarshalNonZeroFields(payload)
 	if err != nil {
 		return err
 	}

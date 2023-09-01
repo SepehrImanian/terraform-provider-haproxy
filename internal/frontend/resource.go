@@ -1,7 +1,6 @@
 package frontend
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"terraform-provider-haproxy/internal/transaction"
@@ -264,7 +263,7 @@ func resourceHaproxyFrontendCreate(d *schema.ResourceData, m interface{}) error 
 		},
 	}
 
-	payloadJSON, err := json.Marshal(payload)
+	payloadJSON, err := utils.MarshalNonZeroFields(payload)
 	if err != nil {
 		return err
 	}
@@ -363,7 +362,7 @@ func resourceHaproxyFrontendUpdate(d *schema.ResourceData, m interface{}) error 
 		},
 	}
 
-	payloadJSON, err := json.Marshal(payload)
+	payloadJSON, err := utils.MarshalNonZeroFields(payload)
 	if err != nil {
 		return err
 	}

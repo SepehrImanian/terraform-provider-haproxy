@@ -1,7 +1,6 @@
 package cache
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"terraform-provider-haproxy/internal/transaction"
@@ -89,7 +88,7 @@ func resourceHaproxyCacheCreate(d *schema.ResourceData, m interface{}) error {
 		TotalMaxSize:        totalMaxSize,
 	}
 
-	payloadJSON, err := json.Marshal(payload)
+	payloadJSON, err := utils.MarshalNonZeroFields(payload)
 	if err != nil {
 		return err
 	}
@@ -127,7 +126,7 @@ func resourceHaproxyCacheUpdate(d *schema.ResourceData, m interface{}) error {
 		TotalMaxSize:        totalMaxSize,
 	}
 
-	payloadJSON, err := json.Marshal(payload)
+	payloadJSON, err := utils.MarshalNonZeroFields(payload)
 	if err != nil {
 		return err
 	}
