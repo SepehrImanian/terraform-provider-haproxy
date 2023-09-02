@@ -9,6 +9,7 @@ import (
 	frontend "terraform-provider-haproxy/internal/frontend"
 	global "terraform-provider-haproxy/internal/global"
 	health "terraform-provider-haproxy/internal/health"
+	nameserver "terraform-provider-haproxy/internal/nameserver"
 	resolvers "terraform-provider-haproxy/internal/resolvers"
 	server "terraform-provider-haproxy/internal/server"
 	transaction "terraform-provider-haproxy/internal/transaction"
@@ -55,28 +56,30 @@ func Provider() *schema.Provider {
 		},
 
 		DataSourcesMap: map[string]*schema.Resource{
-			"haproxy_acl":       acl.DataSourceHaproxyAcl(),
-			"haproxy_defaults":  defaults.DataSourceHaproxyDefaults(),
-			"haproxy_frontend":  frontend.DataSourceHaproxyFrontend(),
-			"haproxy_backend":   backend.DataSourceHaproxyBackend(),
-			"haproxy_server":    server.DataSourceHaproxyServer(),
-			"haproxy_bind":      bind.DataSourceHaproxyBind(),
-			"haproxy_resolvers": resolvers.DataSourceHaproxyResolvers(),
-			"haproxy_cache":     cache.DataSourceHaproxyCache(),
-			"haproxy_global":    global.DataSourceHaproxyGlobal(),
-			"haproxy_health":    health.DataSourceHaproxyHealth(),
+			"haproxy_acl":        acl.DataSourceHaproxyAcl(),
+			"haproxy_defaults":   defaults.DataSourceHaproxyDefaults(),
+			"haproxy_frontend":   frontend.DataSourceHaproxyFrontend(),
+			"haproxy_backend":    backend.DataSourceHaproxyBackend(),
+			"haproxy_server":     server.DataSourceHaproxyServer(),
+			"haproxy_bind":       bind.DataSourceHaproxyBind(),
+			"haproxy_resolvers":  resolvers.DataSourceHaproxyResolvers(),
+			"haproxy_cache":      cache.DataSourceHaproxyCache(),
+			"haproxy_global":     global.DataSourceHaproxyGlobal(),
+			"haproxy_health":     health.DataSourceHaproxyHealth(),
+			"haproxy_nameserver": nameserver.DataSourceHaproxyNameserver(),
 		},
 
 		ResourcesMap: map[string]*schema.Resource{
-			"haproxy_acl":       acl.ResourceHaproxyAcl(),
-			"haproxy_defaults":  defaults.ResourceHaproxyDefaults(),
-			"haproxy_frontend":  frontend.ResourceHaproxyFrontend(),
-			"haproxy_backend":   backend.ResourceHaproxyBackend(),
-			"haproxy_server":    server.ResourceHaproxyServer(),
-			"haproxy_bind":      bind.ResourceHaproxyBind(),
-			"haproxy_resolvers": resolvers.ResourceHaproxyResolvers(),
-			"haproxy_cache":     cache.ResourceHaproxyCache(),
-			"haproxy_global":    global.ResourceHaproxyGlobal(),
+			"haproxy_acl":        acl.ResourceHaproxyAcl(),
+			"haproxy_defaults":   defaults.ResourceHaproxyDefaults(),
+			"haproxy_frontend":   frontend.ResourceHaproxyFrontend(),
+			"haproxy_backend":    backend.ResourceHaproxyBackend(),
+			"haproxy_server":     server.ResourceHaproxyServer(),
+			"haproxy_bind":       bind.ResourceHaproxyBind(),
+			"haproxy_resolvers":  resolvers.ResourceHaproxyResolvers(),
+			"haproxy_cache":      cache.ResourceHaproxyCache(),
+			"haproxy_global":     global.ResourceHaproxyGlobal(),
+			"haproxy_nameserver": nameserver.ResourceHaproxyNameserver(),
 		},
 		ConfigureFunc: providerConfigure,
 	}
@@ -133,6 +136,10 @@ func providerConfigure(data *schema.ResourceData) (interface{}, error) {
 	healthConfig := &health.ConfigHealth{}
 	utils.SetConfigValues(healthConfig, commonConfig)
 
+	// Create config for nameserver
+	nameserverConfig := &nameserver.ConfigNameserver{}
+	utils.SetConfigValues(nameserverConfig, commonConfig)
+
 	return map[string]interface{}{
 		"backend":     backendConfig,
 		"frontend":    frontendConfig,
@@ -145,5 +152,6 @@ func providerConfigure(data *schema.ResourceData) (interface{}, error) {
 		"cache":       cacheConfig,
 		"global":      globalConfig,
 		"health":      healthConfig,
+		"nameserver":  nameserverConfig,
 	}, nil
 }

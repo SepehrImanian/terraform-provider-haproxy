@@ -30,14 +30,11 @@ resource "haproxy_acl" "acl_test" {
 ### Required
 
 - `criterion` (String) The criterion of the acl
+- `index` (Number) The index of the acl in the parent object starting at 0
 - `name` (String) The name of the acl. It must be unique and cannot be changed.
 - `parent_name` (String) The name of the parent object
 - `parent_type` (String) The type of the parent object
 - `value` (String) The value of the acl.
-
-### Optional
-
-- `index` (Number) The index of the acl in the parent object starting at 0
 
 ### Read-Only
 

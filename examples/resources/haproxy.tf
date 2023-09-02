@@ -1,51 +1,29 @@
-resource "haproxy_backend" "backend_test_acl" {
-  name        = "backend_test_acl"
-  mode        = "http"
-  check_cache = true
-
-  balance {
-    algorithm = "roundrobin"
-  }
+resource "haproxy_resolvers" "resolvers_test" {
+  name                  = "resolvers_test"
+  accepted_payload_size = 8192
+  hold_nx               = 30
+  hold_other            = 30
+  hold_refused          = 30
+  hold_timeout          = 30
+  hold_valid            = 10
+  parse_resolv_conf     = true
+  resolve_retries       = 3
+  timeout_resolve       = 1
+  timeout_retry         = 1
 }
 
-
-resource "haproxy_frontend" "front_test" {
-  name    = "front_test"
-  backend = "backend_test_acl"
-  mode    = "http"
-
-  forwardfor {
-    enabled = true
-    header  = "X-Forwarded-For"
-    ifnone  = true
-  }
-
-  depends_on = [haproxy_backend.backend_test_acl]
+resource "haproxy_nameserver" "nameserver_1" {
+  name     = "nameserver_1"
+  resolver = haproxy_resolvers.resolvers_test.name
+  address  = "192.168.1.3"
+  port     = 53
 }
 
-resource "haproxy_server" "server_test_1" {
-  name        = "server_test_1"
-  port        = 8080
-  address     = "172.16.13.13"
-  parent_name = "backend_test_acl"
-  parent_type = "backend"
-  depends_on  = [haproxy_backend.backend_test_acl]
+data "haproxy_nameserver" "nameserver_1" {
+  name     = haproxy_nameserver.nameserver_1.name
+  resolver = haproxy_resolvers.resolvers_test.name
 }
 
-resource "haproxy_server" "server_test_2" {
-  name        = "server_test_2"
-  port        = 8080
-  address     = "172.16.13.14"
-  parent_name = "backend_test_acl"
-  parent_type = "backend"
-  depends_on  = [haproxy_backend.backend_test_acl]
-}
-
-resource "haproxy_server" "server_test_3" {
-  name        = "server_test_3"
-  port        = 8080
-  address     = "172.16.13.15"
-  parent_name = "backend_test_acl"
-  parent_type = "backend"
-  depends_on  = [haproxy_backend.backend_test_acl]
+output "nameserver_1" {
+  value = data.haproxy_nameserver.nameserver_1
 }
