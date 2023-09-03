@@ -13,6 +13,7 @@ import (
 	resolvers "terraform-provider-haproxy/internal/resolvers"
 	server "terraform-provider-haproxy/internal/server"
 	transaction "terraform-provider-haproxy/internal/transaction"
+	userlist "terraform-provider-haproxy/internal/userlist"
 	"terraform-provider-haproxy/internal/utils"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
@@ -67,6 +68,7 @@ func Provider() *schema.Provider {
 			"haproxy_global":     global.DataSourceHaproxyGlobal(),
 			"haproxy_health":     health.DataSourceHaproxyHealth(),
 			"haproxy_nameserver": nameserver.DataSourceHaproxyNameserver(),
+			"haproxy_userlist":   userlist.DataSourceHaproxyUserlist(),
 		},
 
 		ResourcesMap: map[string]*schema.Resource{
@@ -80,6 +82,7 @@ func Provider() *schema.Provider {
 			"haproxy_cache":      cache.ResourceHaproxyCache(),
 			"haproxy_global":     global.ResourceHaproxyGlobal(),
 			"haproxy_nameserver": nameserver.ResourceHaproxyNameserver(),
+			"haproxy_userlist":   userlist.ResourceHaproxyUserlist(),
 		},
 		ConfigureFunc: providerConfigure,
 	}
@@ -140,6 +143,10 @@ func providerConfigure(data *schema.ResourceData) (interface{}, error) {
 	nameserverConfig := &nameserver.ConfigNameserver{}
 	utils.SetConfigValues(nameserverConfig, commonConfig)
 
+	// Create config for userlist
+	userlistConfig := &userlist.ConfigUserlist{}
+	utils.SetConfigValues(userlistConfig, commonConfig)
+
 	return map[string]interface{}{
 		"backend":     backendConfig,
 		"frontend":    frontendConfig,
@@ -153,5 +160,6 @@ func providerConfigure(data *schema.ResourceData) (interface{}, error) {
 		"global":      globalConfig,
 		"health":      healthConfig,
 		"nameserver":  nameserverConfig,
+		"userlist":    userlistConfig,
 	}, nil
 }
