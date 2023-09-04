@@ -13,7 +13,7 @@ func ResourceHaproxyUserlist() *schema.Resource {
 	return &schema.Resource{
 		Create: resourceHaproxyUserlistCreate,
 		Read:   resourceHaproxyUserlistRead,
-		Update: resourceHaproxyUserlistUpdate,
+		Update: resourceHaproxyUserlistCreate,
 		Delete: resourceHaproxyUserlistDelete,
 
 		Schema: map[string]*schema.Schema{
@@ -67,42 +67,6 @@ func resourceHaproxyUserlistCreate(d *schema.ResourceData, m interface{}) error 
 
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(userlistName, "error creating Userlist configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
-	}
-
-	d.SetId(userlistName)
-	return nil
-}
-
-func resourceHaproxyUserlistUpdate(d *schema.ResourceData, m interface{}) error {
-	userlistName := d.Get("name").(string)
-
-	payload := UserlistPayload{
-		Name: userlistName,
-	}
-
-	payloadJSON, err := utils.MarshalNonZeroFields(payload)
-	if err != nil {
-		return err
-	}
-
-	configMap := m.(map[string]interface{})
-	UserlistConfig := configMap["userlist"].(*ConfigUserlist)
-	tranConfig := configMap["transaction"].(*transaction.ConfigTransaction)
-
-	resp, err := tranConfig.Transaction(func(transactionID string) (*http.Response, error) {
-		return UserlistConfig.DeleteUserlistConfiguration(userlistName, transactionID)
-	})
-
-	if resp.StatusCode != 200 && resp.StatusCode != 202 {
-		return utils.HandleError(userlistName, "error updating Userlist configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
-	}
-
-	resp, err = tranConfig.Transaction(func(transactionID string) (*http.Response, error) {
-		return UserlistConfig.AddUserlistConfiguration(payloadJSON, transactionID)
-	})
-
-	if resp.StatusCode != 200 && resp.StatusCode != 202 {
-		return utils.HandleError(userlistName, "error updating Userlist configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
 
 	d.SetId(userlistName)

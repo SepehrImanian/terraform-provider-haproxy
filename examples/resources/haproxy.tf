@@ -1,9 +1,9 @@
-resource "haproxy_userlist" "users" {
-  name = "userslist"
+resource "haproxy_userlist" "userslist2" {
+  name = "userslist2"
 }
 
 data "haproxy_userlist" "user1" {
-  name = haproxy_userlist.users.name
+  name = haproxy_userlist.userslist2.name
 }
 
 output "user1" {
