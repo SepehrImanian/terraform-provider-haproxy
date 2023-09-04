@@ -8,6 +8,7 @@ import (
 	defaults "terraform-provider-haproxy/internal/defaults"
 	frontend "terraform-provider-haproxy/internal/frontend"
 	global "terraform-provider-haproxy/internal/global"
+	group "terraform-provider-haproxy/internal/group"
 	health "terraform-provider-haproxy/internal/health"
 	nameserver "terraform-provider-haproxy/internal/nameserver"
 	resolvers "terraform-provider-haproxy/internal/resolvers"
@@ -71,6 +72,7 @@ func Provider() *schema.Provider {
 			"haproxy_nameserver": nameserver.DataSourceHaproxyNameserver(),
 			"haproxy_userlist":   userlist.DataSourceHaproxyUserlist(),
 			"haproxy_user":       user.DataSourceHaproxyUser(),
+			"haproxy_group":      group.DataSourceHaproxyGroup(),
 		},
 
 		ResourcesMap: map[string]*schema.Resource{
@@ -86,6 +88,7 @@ func Provider() *schema.Provider {
 			"haproxy_nameserver": nameserver.ResourceHaproxyNameserver(),
 			"haproxy_userlist":   userlist.ResourceHaproxyUserlist(),
 			"haproxy_user":       user.ResourceHaproxyUser(),
+			"haproxy_group":      group.ResourceHaproxyGroup(),
 		},
 		ConfigureFunc: providerConfigure,
 	}
@@ -154,6 +157,10 @@ func providerConfigure(data *schema.ResourceData) (interface{}, error) {
 	userConfig := &user.ConfigUser{}
 	utils.SetConfigValues(userConfig, commonConfig)
 
+	// Create config for group
+	groupConfig := &group.ConfigGroup{}
+	utils.SetConfigValues(groupConfig, commonConfig)
+
 	return map[string]interface{}{
 		"backend":     backendConfig,
 		"frontend":    frontendConfig,
@@ -169,5 +176,6 @@ func providerConfigure(data *schema.ResourceData) (interface{}, error) {
 		"nameserver":  nameserverConfig,
 		"userlist":    userlistConfig,
 		"user":        userConfig,
+		"group":       groupConfig,
 	}, nil
 }

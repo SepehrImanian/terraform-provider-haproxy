@@ -7,14 +7,21 @@ resource "haproxy_user" "sepehr" {
   userlist        = haproxy_userlist.userslist.name
   password        = "123456999"
   secure_password = true
-  depends_on      = [haproxy_userlist.userslist]
+  groups          = haproxy_group.something.name
+  depends_on      = [haproxy_userlist.userslist, haproxy_group.something]
 }
 
-data "haproxy_user" "sepehr" {
-  username = "sepehr"
-  userlist = haproxy_userlist.userslist.name
+resource "haproxy_group" "something" {
+  name       = "something"
+  userlist   = "userslist"
+  depends_on = [haproxy_userlist.userslist]
 }
 
-output "sepehr" {
-  value = data.haproxy_user.sepehr
+data "haproxy_group" "something_data" {
+  name     = haproxy_group.something.name
+  userlist = "userslist"
+}
+
+output "something" {
+  value = data.haproxy_group.something_data
 }
