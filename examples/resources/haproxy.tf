@@ -1,27 +1,26 @@
-resource "haproxy_userlist" "userslist" {
-  name = "userslist"
+resource "haproxy_backend" "backend_test" {
+  name = "backend_test"
+  mode = "http"
+
+  balance {
+    algorithm = "roundrobin"
+  }
 }
 
-resource "haproxy_user" "sepehr" {
-  username        = "sepehr"
-  userlist        = haproxy_userlist.userslist.name
-  password        = "123456999"
-  secure_password = true
-  groups          = haproxy_group.something.name
-  depends_on      = [haproxy_userlist.userslist, haproxy_group.something]
+resource "haproxy_server_template" "server_template_test" {
+  prefix       = "srv"
+  backend      = haproxy_backend.backend_test.name
+  fqdn         = "google.com"
+  port         = 80
+  num_or_range = "1-3"
 }
 
-resource "haproxy_group" "something" {
-  name       = "something"
-  userlist   = "userslist"
-  depends_on = [haproxy_userlist.userslist]
+data "haproxy_server_template" "server_template_test" {
+  backend    = haproxy_backend.backend_test.name
+  prefix     = "srv"
+  depends_on = [haproxy_server_template.server_template_test]
 }
 
-data "haproxy_group" "something_data" {
-  name     = haproxy_group.something.name
-  userlist = "userslist"
-}
-
-output "something" {
-  value = data.haproxy_group.something_data
+output "server_template_test" {
+  value = data.haproxy_server_template.server_template_test
 }
