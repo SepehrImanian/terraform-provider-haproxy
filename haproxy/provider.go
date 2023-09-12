@@ -6,6 +6,7 @@ import (
 	bind "terraform-provider-haproxy/internal/bind"
 	cache "terraform-provider-haproxy/internal/cache"
 	defaults "terraform-provider-haproxy/internal/defaults"
+	filter "terraform-provider-haproxy/internal/filter"
 	frontend "terraform-provider-haproxy/internal/frontend"
 	global "terraform-provider-haproxy/internal/global"
 	group "terraform-provider-haproxy/internal/group"
@@ -75,6 +76,7 @@ func Provider() *schema.Provider {
 			"haproxy_user":            user.DataSourceHaproxyUser(),
 			"haproxy_group":           group.DataSourceHaproxyGroup(),
 			"haproxy_server_template": ServerTemplate.DataSourceHaproxyServerTemplate(),
+			"haproxy_filter":          filter.DataSourceHaproxyFilter(),
 		},
 
 		ResourcesMap: map[string]*schema.Resource{
@@ -92,6 +94,7 @@ func Provider() *schema.Provider {
 			"haproxy_user":            user.ResourceHaproxyUser(),
 			"haproxy_group":           group.ResourceHaproxyGroup(),
 			"haproxy_server_template": ServerTemplate.ResourceHaproxyServerTemplate(),
+			"haproxy_filter":          filter.ResourceHaproxyFilter(),
 		},
 		ConfigureFunc: providerConfigure,
 	}
@@ -168,6 +171,10 @@ func providerConfigure(data *schema.ResourceData) (interface{}, error) {
 	serverTemplateConfig := &ServerTemplate.ConfigServerTemplate{}
 	utils.SetConfigValues(serverTemplateConfig, commonConfig)
 
+	// Create config for filter
+	filterConfig := &filter.ConfigFilter{}
+	utils.SetConfigValues(filterConfig, commonConfig)
+
 	return map[string]interface{}{
 		"backend":        backendConfig,
 		"frontend":       frontendConfig,
@@ -185,5 +192,6 @@ func providerConfigure(data *schema.ResourceData) (interface{}, error) {
 		"user":           userConfig,
 		"group":          groupConfig,
 		"ServerTemplate": serverTemplateConfig,
+		"filter":         filterConfig,
 	}, nil
 }
