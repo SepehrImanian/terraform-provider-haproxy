@@ -11,6 +11,7 @@ import (
 	global "terraform-provider-haproxy/internal/global"
 	group "terraform-provider-haproxy/internal/group"
 	health "terraform-provider-haproxy/internal/health"
+	httpcheck "terraform-provider-haproxy/internal/httpcheck"
 	nameserver "terraform-provider-haproxy/internal/nameserver"
 	resolvers "terraform-provider-haproxy/internal/resolvers"
 	server "terraform-provider-haproxy/internal/server"
@@ -77,6 +78,7 @@ func Provider() *schema.Provider {
 			"haproxy_group":           group.DataSourceHaproxyGroup(),
 			"haproxy_server_template": ServerTemplate.DataSourceHaproxyServerTemplate(),
 			"haproxy_filter":          filter.DataSourceHaproxyFilter(),
+			"haproxy_httpcheck":       httpcheck.DataSourceHaproxyHttpcheck(),
 		},
 
 		ResourcesMap: map[string]*schema.Resource{
@@ -95,6 +97,7 @@ func Provider() *schema.Provider {
 			"haproxy_group":           group.ResourceHaproxyGroup(),
 			"haproxy_server_template": ServerTemplate.ResourceHaproxyServerTemplate(),
 			"haproxy_filter":          filter.ResourceHaproxyFilter(),
+			"haproxy_httpcheck":       httpcheck.ResourceHaproxyHttpcheck(),
 		},
 		ConfigureFunc: providerConfigure,
 	}
@@ -175,6 +178,10 @@ func providerConfigure(data *schema.ResourceData) (interface{}, error) {
 	filterConfig := &filter.ConfigFilter{}
 	utils.SetConfigValues(filterConfig, commonConfig)
 
+	// Create config for httpcheck
+	httpcheckConfig := &httpcheck.ConfigHttpCheck{}
+	utils.SetConfigValues(httpcheckConfig, commonConfig)
+
 	return map[string]interface{}{
 		"backend":        backendConfig,
 		"frontend":       frontendConfig,
@@ -193,5 +200,6 @@ func providerConfigure(data *schema.ResourceData) (interface{}, error) {
 		"group":          groupConfig,
 		"ServerTemplate": serverTemplateConfig,
 		"filter":         filterConfig,
+		"httpcheck":      httpcheckConfig,
 	}, nil
 }
