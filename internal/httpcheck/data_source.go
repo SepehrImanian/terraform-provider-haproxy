@@ -32,7 +32,7 @@ func DataSourceHaproxyHttpcheck() *schema.Resource {
 			"type": {
 				Type:        schema.TypeString,
 				Required:    true,
-				Description: "The type of the check",
+				Description: "The type of the check, Allowed: comment ┃ connect ┃ disable-on-404 ┃ expect ┃ send ┃ send-state ┃ set-var ┃ set-var-fmt ┃ unset-var",
 			},
 		},
 	}

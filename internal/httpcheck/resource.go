@@ -36,7 +36,7 @@ func ResourceHaproxyHttpcheck() *schema.Resource {
 			"type": {
 				Type:        schema.TypeString,
 				Required:    true,
-				Description: "The type of the check",
+				Description: "The type of the check, Allowed: comment ┃ connect ┃ disable-on-404 ┃ expect ┃ send ┃ send-state ┃ set-var ┃ set-var-fmt ┃ unset-var",
 			},
 			"addr": {
 				Type:        schema.TypeString,
@@ -71,7 +71,7 @@ func ResourceHaproxyHttpcheck() *schema.Resource {
 			"error_status": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "The status to return on error",
+				Description: "The status to return on error, Allowed: L7OKC ┃ L7RSP ┃ L7STS ┃ L6RSP ┃ L4CON",
 			},
 			"exclamation_mark": {
 				Type:        schema.TypeBool,
@@ -79,7 +79,7 @@ func ResourceHaproxyHttpcheck() *schema.Resource {
 				Description: "Add an exclamation mark to the check",
 			},
 			"headers": {
-				Type:        schema.TypeList,
+				Type:        schema.TypeSet,
 				Optional:    true,
 				Description: "The headers to send",
 				Elem: &schema.Resource{
@@ -105,7 +105,7 @@ func ResourceHaproxyHttpcheck() *schema.Resource {
 			"match": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "The match to use",
+				Description: "The match to use, Allowed: status ┃ rstatus ┃ hdr ┃ fhdr ┃ string ┃ rstring",
 			},
 			"method": {
 				Type:        schema.TypeString,
@@ -120,7 +120,7 @@ func ResourceHaproxyHttpcheck() *schema.Resource {
 			"ok_status": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "The status to return on success",
+				Description: "The status to return on success, Allowed: L7OK ┃ L7OKC ┃ L6OK ┃ L4OK",
 			},
 			"on_error": {
 				Type:        schema.TypeString,
@@ -140,7 +140,7 @@ func ResourceHaproxyHttpcheck() *schema.Resource {
 			"port": {
 				Type:        schema.TypeInt,
 				Optional:    true,
-				Description: "The port to connect to",
+				Description: "The port to connect to, Constraints: Min 1 ┃ Max 65535",
 			},
 			"port_string": {
 				Type:        schema.TypeString,
@@ -280,7 +280,32 @@ func resourceHaproxyHttpCheckCreate(d *schema.ResourceData, m interface{}) error
 		ViaSocks4:       d.Get("via_socks4").(bool),
 	}
 
-	payloadJSON, err := utils.MarshalNonZeroFields(payload)
+	var headers []Headers
+
+	headersItem := utils.GetFirstItemValue(d.Get, "headers")
+	if headersItem != nil {
+		headerList := d.Get("headers").(*schema.Set).List()
+
+		for _, headerItem := range headerList {
+			headerData := headerItem.(map[string]interface{})
+			name := headerData["name"].(string)
+			fmt := headerData["fmt"].(string)
+
+			header := Headers{
+				Name: name,
+				Fmt:  fmt,
+			}
+
+			headers = append(headers, header)
+		}
+
+		fmt.Println("headers: ", headers)
+
+		payload.Headers = headers
+	}
+
+	excludeFields := []string{"index"}
+	payloadJSON, err := utils.MarshalExcludeFields(payload, excludeFields)
 	if err != nil {
 		return err
 	}
@@ -343,7 +368,30 @@ func resourceHaproxyHttpCheckUpdate(d *schema.ResourceData, m interface{}) error
 		ViaSocks4:       d.Get("via_socks4").(bool),
 	}
 
-	payloadJSON, err := utils.MarshalNonZeroFields(payload)
+	var headers []Headers
+
+	headersItem := utils.GetFirstItemValue(d.Get, "headers")
+	if headersItem != nil {
+		headerList := d.Get("headers").(*schema.Set).List()
+
+		for _, headerItem := range headerList {
+			headerData := headerItem.(map[string]interface{})
+			name := headerData["name"].(string)
+			fmt := headerData["fmt"].(string)
+
+			header := Headers{
+				Name: name,
+				Fmt:  fmt,
+			}
+
+			headers = append(headers, header)
+		}
+
+		payload.Headers = headers
+	}
+
+	excludeFields := []string{"index"}
+	payloadJSON, err := utils.MarshalExcludeFields(payload, excludeFields)
 	if err != nil {
 		return err
 	}
