@@ -53,6 +53,10 @@ func dataSourceHaproxyFilterRead(d *schema.ResourceData, m interface{}) error {
 		return FilterConfig.GetAFilterConfiguration(indexName, transactionID, parentName, parentType)
 	})
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(FilterName, "error reading Filter configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}

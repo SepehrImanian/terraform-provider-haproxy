@@ -8,7 +8,7 @@ import (
 
 // GetAGlobalConfiguration returns the configuration of a Global.
 func (c *ConfigGlobal) GetAGlobalConfiguration(TransactionID string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/global?transaction_id=%s", c.BaseURL, TransactionID)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/global?transaction_id=%s", c.BaseURL, c.APIVersion, TransactionID)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}
@@ -23,7 +23,7 @@ func (c *ConfigGlobal) GetAGlobalConfiguration(TransactionID string) (*http.Resp
 
 // UpdateGlobalConfiguration updates a Global configuration.
 func (c *ConfigGlobal) UpdateGlobalConfiguration(payload []byte, TransactionID string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/global?transaction_id=%s", c.BaseURL, TransactionID)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/global?transaction_id=%s", c.BaseURL, c.APIVersion, TransactionID)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}

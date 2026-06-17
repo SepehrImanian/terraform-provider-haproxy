@@ -2,10 +2,11 @@ package global
 
 // Config defines variable for haproxy configuration
 type ConfigGlobal struct {
-	Username string
-	Password string
-	BaseURL  string
-	SSL      bool
+	Username   string
+	Password   string
+	BaseURL    string
+	APIVersion string
+	SSL        bool
 }
 
 // GlobalPayload defines the payload for global configuration

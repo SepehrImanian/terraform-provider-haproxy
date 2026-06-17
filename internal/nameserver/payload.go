@@ -2,10 +2,11 @@ package nameserver
 
 // Config defines variable for haproxy configuration
 type ConfigNameserver struct {
-	Username string
-	Password string
-	BaseURL  string
-	SSL      bool
+	Username   string
+	Password   string
+	BaseURL    string
+	APIVersion string
+	SSL        bool
 }
 
 type NameserverPayload struct {

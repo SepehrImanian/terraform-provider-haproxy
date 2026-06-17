@@ -9,7 +9,7 @@ import (
 
 // GetAServerTemplatesConfiguration returns the configuration of a ServerTemplates.
 func (c *ConfigServerTemplate) GetAServerTemplatesConfiguration(ServerTemplatesName string, TransactionID string, BackendName string) (*http.Response, []byte, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/server_templates/%s?transaction_id=%s&backend=%s", c.BaseURL, ServerTemplatesName, TransactionID, BackendName)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/server_templates/%s?transaction_id=%s&backend=%s", c.BaseURL, c.APIVersion, ServerTemplatesName, TransactionID, BackendName)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}
@@ -30,7 +30,7 @@ func (c *ConfigServerTemplate) GetAServerTemplatesConfiguration(ServerTemplatesN
 
 // AddServerTemplatesConfiguration adds a ServerTemplates configuration.
 func (c *ConfigServerTemplate) AddServerTemplatesConfiguration(payload []byte, TransactionID string, BackendName string) (*http.Response, []byte, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/server_templates?transaction_id=%s&backend=%s", c.BaseURL, TransactionID, BackendName)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/server_templates?transaction_id=%s&backend=%s", c.BaseURL, c.APIVersion, TransactionID, BackendName)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}
@@ -52,7 +52,7 @@ func (c *ConfigServerTemplate) AddServerTemplatesConfiguration(payload []byte, T
 
 // DeleteServerTemplatesConfiguration deletes a ServerTemplates configuration.
 func (c *ConfigServerTemplate) DeleteServerTemplatesConfiguration(ServerTemplatesName string, TransactionID string, BackendName string) (*http.Response, []byte, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/server_templates/%s?transaction_id=%s&backend=%s", c.BaseURL, ServerTemplatesName, TransactionID, BackendName)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/server_templates/%s?transaction_id=%s&backend=%s", c.BaseURL, c.APIVersion, ServerTemplatesName, TransactionID, BackendName)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}
@@ -73,7 +73,7 @@ func (c *ConfigServerTemplate) DeleteServerTemplatesConfiguration(ServerTemplate
 
 // UpdateServerTemplatesConfiguration updates a ServerTemplates configuration.
 func (c *ConfigServerTemplate) UpdateServerTemplatesConfiguration(ServerTemplatesName string, payload []byte, TransactionID string, BackendName string) (*http.Response, []byte, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/server_templates/%s?transaction_id=%s&backend=%s", c.BaseURL, ServerTemplatesName, TransactionID, BackendName)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/server_templates/%s?transaction_id=%s&backend=%s", c.BaseURL, c.APIVersion, ServerTemplatesName, TransactionID, BackendName)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}

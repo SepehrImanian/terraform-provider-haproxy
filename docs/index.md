@@ -17,7 +17,7 @@ terraform {
   required_providers {
     haproxy = {
       source = "SepehrImanian/haproxy"
-      version = "0.0.7"
+      version = "0.0.8"
     }
   }
 }
@@ -40,4 +40,5 @@ provider "haproxy" {
 
 ### Optional
 
+- `api_version` (String) Haproxy Data Plane API version to use, "v2" or "v3" (default: v3)
 - `insecure` (Boolean) Disable SSL certificate verification (default: false)

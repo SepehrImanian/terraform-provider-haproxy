@@ -9,7 +9,7 @@ import (
 
 // GetABindConfiguration returns the configuration of a Bind.
 func (c *ConfigBind) GetABindConfiguration(BindName string, TransactionID string, parentName string, parentType string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/binds/%s?transaction_id=%s&parent_name=%s&parent_type=%s", c.BaseURL, BindName, TransactionID, parentName, parentType)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/binds/%s?transaction_id=%s&parent_name=%s&parent_type=%s", c.BaseURL, c.APIVersion, BindName, TransactionID, parentName, parentType)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}
@@ -30,7 +30,7 @@ func (c *ConfigBind) GetABindConfiguration(BindName string, TransactionID string
 
 // AddBindConfiguration adds a Bind configuration.
 func (c *ConfigBind) AddBindConfiguration(payload []byte, TransactionID string, parentName string, parentType string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/binds?transaction_id=%s&parent_name=%s&parent_type=%s", c.BaseURL, TransactionID, parentName, parentType)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/binds?transaction_id=%s&parent_name=%s&parent_type=%s", c.BaseURL, c.APIVersion, TransactionID, parentName, parentType)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}
@@ -52,7 +52,7 @@ func (c *ConfigBind) AddBindConfiguration(payload []byte, TransactionID string, 
 
 // UpdateBindConfiguration updates a Bind configuration.
 func (c *ConfigBind) UpdateBindConfiguration(BindName string, payload []byte, TransactionID string, parentName string, parentType string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/binds/%s?transaction_id=%s&parent_name=%s&parent_type=%s", c.BaseURL, BindName, TransactionID, parentName, parentType)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/binds/%s?transaction_id=%s&parent_name=%s&parent_type=%s", c.BaseURL, c.APIVersion, BindName, TransactionID, parentName, parentType)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}
@@ -67,7 +67,7 @@ func (c *ConfigBind) UpdateBindConfiguration(BindName string, payload []byte, Tr
 
 // DeleteBindConfiguration deletes a Bind configuration.
 func (c *ConfigBind) DeleteBindConfiguration(BindName string, TransactionID string, parentName string, parentType string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/binds/%s?transaction_id=%s&parent_name=%s&parent_type=%s", c.BaseURL, BindName, TransactionID, parentName, parentType)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/binds/%s?transaction_id=%s&parent_name=%s&parent_type=%s", c.BaseURL, c.APIVersion, BindName, TransactionID, parentName, parentType)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}

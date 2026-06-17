@@ -2,10 +2,11 @@ package user
 
 // Config defines variable for haproxy configuration
 type ConfigUser struct {
-	Username string
-	Password string
-	BaseURL  string
-	SSL      bool
+	Username   string
+	Password   string
+	BaseURL    string
+	APIVersion string
+	SSL        bool
 }
 
 type UserPayload struct {

@@ -60,6 +60,10 @@ func resourceHaproxyUserRead(d *schema.ResourceData, m interface{}) error {
 		return UserConfig.GetAUsersConfiguration(userName, transactionID, userlist)
 	})
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(userName, "error reading User configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
@@ -91,6 +95,10 @@ func resourceHaproxyUserCreate(d *schema.ResourceData, m interface{}) error {
 	resp, _, err := tranConfig.TransactionWithData(func(transactionID string) (*http.Response, []byte, error) {
 		return UserConfig.AddUsersConfiguration(payloadJSON, transactionID, userlist)
 	})
+
+	if err != nil {
+		return err
+	}
 
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(userName, "error creating User configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
@@ -124,6 +132,10 @@ func resourceHaproxyUserUpdate(d *schema.ResourceData, m interface{}) error {
 		return UserConfig.UpdateUsersConfiguration(userName, payloadJSON, transactionID, userlist)
 	})
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(userName, "error updating User configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
@@ -143,6 +155,10 @@ func resourceHaproxyUserDelete(d *schema.ResourceData, m interface{}) error {
 	resp, _, err := tranConfig.TransactionWithData(func(transactionID string) (*http.Response, []byte, error) {
 		return UserConfig.DeleteUsersConfiguration(userName, transactionID, userlist)
 	})
+
+	if err != nil {
+		return err
+	}
 
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(userName, "error deleting User configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))

@@ -2,10 +2,11 @@ package defaults
 
 // Config defines variable for haproxy configuration
 type ConfigDefaults struct {
-	Username string
-	Password string
-	BaseURL  string
-	SSL      bool
+	Username   string
+	Password   string
+	BaseURL    string
+	APIVersion string
+	SSL        bool
 }
 
 type DefaultsPayload struct {

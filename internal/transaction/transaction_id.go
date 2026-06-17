@@ -12,7 +12,7 @@ import (
 func (c *ConfigTransaction) createTransactionID(version int) (string, error) {
 	versionStr := strconv.Itoa(version)
 
-	url := fmt.Sprintf("%s/v2/services/haproxy/transactions?version=%s", c.BaseURL, versionStr)
+	url := fmt.Sprintf("%s/%s/services/haproxy/transactions?version=%s", c.BaseURL, c.APIVersion, versionStr)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}

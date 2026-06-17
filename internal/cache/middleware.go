@@ -9,7 +9,7 @@ import (
 
 // GetACacheConfiguration returns the configuration of a Cache.
 func (c *ConfigCache) GetACacheConfiguration(CacheName string, TransactionID string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/caches/%s?transaction_id=%s", c.BaseURL, CacheName, TransactionID)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/caches/%s?transaction_id=%s", c.BaseURL, c.APIVersion, CacheName, TransactionID)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}
@@ -32,7 +32,7 @@ func (c *ConfigCache) GetACacheConfiguration(CacheName string, TransactionID str
 
 // AddCacheConfiguration adds a Cache configuration.
 func (c *ConfigCache) AddCacheConfiguration(payload []byte, TransactionID string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/caches?transaction_id=%s", c.BaseURL, TransactionID)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/caches?transaction_id=%s", c.BaseURL, c.APIVersion, TransactionID)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}
@@ -54,7 +54,7 @@ func (c *ConfigCache) AddCacheConfiguration(payload []byte, TransactionID string
 
 // DeleteCacheConfiguration deletes a Cache configuration.
 func (c *ConfigCache) DeleteCacheConfiguration(CacheName string, TransactionID string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/caches/%s?transaction_id=%s", c.BaseURL, CacheName, TransactionID)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/caches/%s?transaction_id=%s", c.BaseURL, c.APIVersion, CacheName, TransactionID)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}
@@ -76,7 +76,7 @@ func (c *ConfigCache) DeleteCacheConfiguration(CacheName string, TransactionID s
 
 // UpdateCacheConfiguration updates a Cache configuration.
 func (c *ConfigCache) UpdateCacheConfiguration(CacheName string, payload []byte, TransactionID string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/caches/%s?transaction_id=%s", c.BaseURL, CacheName, TransactionID)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/caches/%s?transaction_id=%s", c.BaseURL, c.APIVersion, CacheName, TransactionID)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}

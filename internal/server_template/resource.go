@@ -59,6 +59,10 @@ func resourceHaproxyServerTemplateRead(d *schema.ResourceData, m interface{}) er
 		return ServerTemplateConfig.GetAServerTemplatesConfiguration(prefix, transactionID, backend)
 	})
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(prefix, "error reading ServerTemplate configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
@@ -90,6 +94,10 @@ func resourceHaproxyServerTemplateCreate(d *schema.ResourceData, m interface{}) 
 	resp, _, err := tranConfig.TransactionWithData(func(transactionID string) (*http.Response, []byte, error) {
 		return ServerTemplateConfig.AddServerTemplatesConfiguration(payloadJSON, transactionID, backend)
 	})
+
+	if err != nil {
+		return err
+	}
 
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(prefix, "error creating ServerTemplate configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
@@ -123,6 +131,10 @@ func resourceHaproxyServerTemplateUpdate(d *schema.ResourceData, m interface{}) 
 		return ServerTemplateConfig.UpdateServerTemplatesConfiguration(prefix, payloadJSON, transactionID, backend)
 	})
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(prefix, "error creating ServerTemplate configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
@@ -142,6 +154,10 @@ func resourceHaproxyServerTemplateDelete(d *schema.ResourceData, m interface{}) 
 	resp, _, err := tranConfig.TransactionWithData(func(transactionID string) (*http.Response, []byte, error) {
 		return ServerTemplateConfig.DeleteServerTemplatesConfiguration(prefix, transactionID, backend)
 	})
+
+	if err != nil {
+		return err
+	}
 
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(prefix, "error deleting ServerTemplate configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))

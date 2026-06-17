@@ -9,7 +9,7 @@ import (
 
 // GetAllBackendConfiguration returns the configuration of all backends.
 func (c *ConfigBackend) GetAllBackendConfiguration(TransactionID string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/backends?transaction_id=%s", c.BaseURL, TransactionID)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/backends?transaction_id=%s", c.BaseURL, c.APIVersion, TransactionID)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}
@@ -24,7 +24,7 @@ func (c *ConfigBackend) GetAllBackendConfiguration(TransactionID string) (*http.
 
 // GetABackendConfiguration returns the configuration of a backend.
 func (c *ConfigBackend) GetABackendConfiguration(backendName string, TransactionID string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/backends/%s?transaction_id=%s", c.BaseURL, backendName, TransactionID)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/backends/%s?transaction_id=%s", c.BaseURL, c.APIVersion, backendName, TransactionID)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}
@@ -39,7 +39,7 @@ func (c *ConfigBackend) GetABackendConfiguration(backendName string, Transaction
 
 // AddBackendConfiguration adds a backend configuration.
 func (c *ConfigBackend) AddBackendConfiguration(payload []byte, TransactionID string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/backends?transaction_id=%s", c.BaseURL, TransactionID)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/backends?transaction_id=%s", c.BaseURL, c.APIVersion, TransactionID)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}
@@ -65,7 +65,7 @@ func (c *ConfigBackend) AddBackendConfiguration(payload []byte, TransactionID st
 
 // DeleteBackendConfiguration deletes a backend configuration.
 func (c *ConfigBackend) DeleteBackendConfiguration(backendName string, TransactionID string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/backends/%s?transaction_id=%s", c.BaseURL, backendName, TransactionID)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/backends/%s?transaction_id=%s", c.BaseURL, c.APIVersion, backendName, TransactionID)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}
@@ -80,7 +80,7 @@ func (c *ConfigBackend) DeleteBackendConfiguration(backendName string, Transacti
 
 // UpdateBackendConfiguration updates a backend configuration.
 func (c *ConfigBackend) UpdateBackendConfiguration(backendName string, payload []byte, TransactionID string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/backends/%s?transaction_id=%s", c.BaseURL, backendName, TransactionID)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/backends/%s?transaction_id=%s", c.BaseURL, c.APIVersion, backendName, TransactionID)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}

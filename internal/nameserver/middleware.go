@@ -9,7 +9,7 @@ import (
 
 // GetANameserversConfiguration returns the configuration of a Nameservers.
 func (c *ConfigNameserver) GetANameserversConfiguration(NameserversName string, TransactionID string, ResolversName string) (*http.Response, []byte, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/nameservers/%s?transaction_id=%s&resolver=%s", c.BaseURL, NameserversName, TransactionID, ResolversName)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/nameservers/%s?transaction_id=%s&resolver=%s", c.BaseURL, c.APIVersion, NameserversName, TransactionID, ResolversName)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}
@@ -30,7 +30,7 @@ func (c *ConfigNameserver) GetANameserversConfiguration(NameserversName string, 
 
 // AddNameserversConfiguration adds a Nameservers configuration.
 func (c *ConfigNameserver) AddNameserversConfiguration(payload []byte, TransactionID string, ResolversName string) (*http.Response, []byte, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/nameservers?transaction_id=%s&resolver=%s", c.BaseURL, TransactionID, ResolversName)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/nameservers?transaction_id=%s&resolver=%s", c.BaseURL, c.APIVersion, TransactionID, ResolversName)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}
@@ -52,7 +52,7 @@ func (c *ConfigNameserver) AddNameserversConfiguration(payload []byte, Transacti
 
 // DeleteNameserversConfiguration deletes a Nameservers configuration.
 func (c *ConfigNameserver) DeleteNameserversConfiguration(NameserversName string, TransactionID string, ResolversName string) (*http.Response, []byte, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/nameservers/%s?transaction_id=%s&resolver=%s", c.BaseURL, NameserversName, TransactionID, ResolversName)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/nameservers/%s?transaction_id=%s&resolver=%s", c.BaseURL, c.APIVersion, NameserversName, TransactionID, ResolversName)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}
@@ -73,7 +73,7 @@ func (c *ConfigNameserver) DeleteNameserversConfiguration(NameserversName string
 
 // UpdateNameserversConfiguration updates a Nameservers configuration.
 func (c *ConfigNameserver) UpdateNameserversConfiguration(NameserversName string, payload []byte, TransactionID string, ResolversName string) (*http.Response, []byte, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/nameservers/%s?transaction_id=%s&resolver=%s", c.BaseURL, NameserversName, TransactionID, ResolversName)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/nameservers/%s?transaction_id=%s&resolver=%s", c.BaseURL, c.APIVersion, NameserversName, TransactionID, ResolversName)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}

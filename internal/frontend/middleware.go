@@ -9,7 +9,7 @@ import (
 
 // GetAFrontendConfiguration returns the configuration of a Frontend.
 func (c *ConfigFrontend) GetAFrontendConfiguration(FrontendName string, TransactionID string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/frontends/%s?transaction_id=%s", c.BaseURL, FrontendName, TransactionID)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/frontends/%s?transaction_id=%s", c.BaseURL, c.APIVersion, FrontendName, TransactionID)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}
@@ -24,7 +24,7 @@ func (c *ConfigFrontend) GetAFrontendConfiguration(FrontendName string, Transact
 
 // AddFrontendConfiguration adds a Frontend configuration.
 func (c *ConfigFrontend) AddFrontendConfiguration(payload []byte, TransactionID string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/frontends?transaction_id=%s", c.BaseURL, TransactionID)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/frontends?transaction_id=%s", c.BaseURL, c.APIVersion, TransactionID)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}
@@ -46,7 +46,7 @@ func (c *ConfigFrontend) AddFrontendConfiguration(payload []byte, TransactionID 
 
 // DeleteFrontendConfiguration deletes a Frontend configuration.
 func (c *ConfigFrontend) DeleteFrontendConfiguration(FrontendName string, TransactionID string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/frontends/%s?transaction_id=%s", c.BaseURL, FrontendName, TransactionID)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/frontends/%s?transaction_id=%s", c.BaseURL, c.APIVersion, FrontendName, TransactionID)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}
@@ -61,7 +61,7 @@ func (c *ConfigFrontend) DeleteFrontendConfiguration(FrontendName string, Transa
 
 // UpdateFrontendConfiguration updates a Frontend configuration.
 func (c *ConfigFrontend) UpdateFrontendConfiguration(FrontendName string, payload []byte, TransactionID string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/frontends/%s?transaction_id=%s", c.BaseURL, FrontendName, TransactionID)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/frontends/%s?transaction_id=%s", c.BaseURL, c.APIVersion, FrontendName, TransactionID)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}

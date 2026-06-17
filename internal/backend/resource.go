@@ -143,6 +143,10 @@ func resourceHaproxyBackendRead(d *schema.ResourceData, m interface{}) error {
 		return backendConfig.GetABackendConfiguration(backendName, transactionID)
 	})
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(backendName, "error reading Backend configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
@@ -243,6 +247,10 @@ func resourceHaproxyBackendCreate(d *schema.ResourceData, m interface{}) error {
 	resp, err := tranConfig.Transaction(func(transactionID string) (*http.Response, error) {
 		return backendConfig.AddBackendConfiguration(payloadJSON, transactionID)
 	})
+
+	if err != nil {
+		return err
+	}
 
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(backendName, "error creating Backend configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
@@ -345,6 +353,10 @@ func resourceHaproxyBackendUpdate(d *schema.ResourceData, m interface{}) error {
 		return backendConfig.UpdateBackendConfiguration(backendName, payloadJSON, transactionID)
 	})
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(backendName, "error updating Backend configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
@@ -363,6 +375,10 @@ func resourceHaproxyBackendDelete(d *schema.ResourceData, m interface{}) error {
 	resp, err := tranConfig.Transaction(func(transactionID string) (*http.Response, error) {
 		return backendConfig.DeleteBackendConfiguration(backendName, transactionID)
 	})
+
+	if err != nil {
+		return err
+	}
 
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(backendName, "error deleting Backend configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))

@@ -1,6 +1,8 @@
 package haproxy
 
 import (
+	"fmt"
+
 	acl "terraform-provider-haproxy/internal/acl"
 	backend "terraform-provider-haproxy/internal/backend"
 	bind "terraform-provider-haproxy/internal/bind"
@@ -59,6 +61,21 @@ func Provider() *schema.Provider {
 					"HAPROXY_INSECURE",
 				}, nil),
 			},
+			"api_version": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Haproxy Data Plane API version to use, \"v2\" or \"v3\" (default: v3)",
+				DefaultFunc: schema.MultiEnvDefaultFunc([]string{
+					"HAPROXY_API_VERSION",
+				}, "v3"),
+				ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
+					v := val.(string)
+					if v != "v2" && v != "v3" {
+						errs = append(errs, fmt.Errorf("%q must be either \"v2\" or \"v3\", got: %q", key, v))
+					}
+					return
+				},
+			},
 		},
 
 		DataSourcesMap: map[string]*schema.Resource{
@@ -105,9 +122,10 @@ func Provider() *schema.Provider {
 
 func providerConfigure(data *schema.ResourceData) (interface{}, error) {
 	commonConfig := utils.Configuration{
-		Username: data.Get("username").(string),
-		Password: data.Get("password").(string),
-		BaseURL:  data.Get("url").(string),
+		Username:   data.Get("username").(string),
+		Password:   data.Get("password").(string),
+		BaseURL:    data.Get("url").(string),
+		APIVersion: data.Get("api_version").(string),
 	}
 
 	// Create backend config for backend

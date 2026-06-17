@@ -8,7 +8,7 @@ import (
 
 // persistTransactionID to persist a transaction ID from memory into haproxy config file
 func (c *ConfigTransaction) commitTransactionID(TransactionID string) error {
-	url := fmt.Sprintf("%s/v2/services/haproxy/transactions/%s", c.BaseURL, TransactionID)
+	url := fmt.Sprintf("%s/%s/services/haproxy/transactions/%s", c.BaseURL, c.APIVersion, TransactionID)
 
 	fmt.Println("----------url----------", url)
 	headers := map[string]string{

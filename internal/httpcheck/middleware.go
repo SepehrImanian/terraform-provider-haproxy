@@ -9,7 +9,7 @@ import (
 
 // GetAHttpCheckConfiguration returns the configuration of a HttpCheck.
 func (c *ConfigHttpCheck) GetAHttpCheckConfiguration(HttpCheckIndexName int, TransactionID string, parentName string, parentType string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/http_checks/%d?transaction_id=%s&parent_name=%s&parent_type=%s", c.BaseURL, HttpCheckIndexName, TransactionID, parentName, parentType)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/http_checks/%d?transaction_id=%s&parent_name=%s&parent_type=%s", c.BaseURL, c.APIVersion, HttpCheckIndexName, TransactionID, parentName, parentType)
 	fmt.Println("**************** response ****************", url)
 	headers := map[string]string{
 		"Content-Type": "application/json",
@@ -26,7 +26,7 @@ func (c *ConfigHttpCheck) GetAHttpCheckConfiguration(HttpCheckIndexName int, Tra
 
 // AddHttpCheckConfiguration adds a HttpCheck configuration.
 func (c *ConfigHttpCheck) AddHttpCheckConfiguration(payload []byte, TransactionID string, parentName string, parentType string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/http_checks?transaction_id=%s&parent_name=%s&parent_type=%s", c.BaseURL, TransactionID, parentName, parentType)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/http_checks?transaction_id=%s&parent_name=%s&parent_type=%s", c.BaseURL, c.APIVersion, TransactionID, parentName, parentType)
 	fmt.Println("**************** response ****************", url)
 	headers := map[string]string{
 		"Content-Type": "application/json",
@@ -49,7 +49,7 @@ func (c *ConfigHttpCheck) AddHttpCheckConfiguration(payload []byte, TransactionI
 
 // UpdateHttpCheckConfiguration updates a HttpCheck configuration.
 func (c *ConfigHttpCheck) UpdateHttpCheckConfiguration(HttpCheckIndexName int, payload []byte, TransactionID string, parentName string, parentType string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/http_checks/%d?transaction_id=%s&parent_name=%s&parent_type=%s", c.BaseURL, HttpCheckIndexName, TransactionID, parentName, parentType)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/http_checks/%d?transaction_id=%s&parent_name=%s&parent_type=%s", c.BaseURL, c.APIVersion, HttpCheckIndexName, TransactionID, parentName, parentType)
 	fmt.Println("**************** response response  ****************", url)
 	headers := map[string]string{
 		"Content-Type": "application/json",
@@ -65,7 +65,7 @@ func (c *ConfigHttpCheck) UpdateHttpCheckConfiguration(HttpCheckIndexName int, p
 
 // DeleteHttpCheckConfiguration deletes a HttpCheck configuration.
 func (c *ConfigHttpCheck) DeleteHttpCheckConfiguration(HttpCheckIndexName int, TransactionID string, parentName string, parentType string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/http_checks/%d?transaction_id=%s&parent_name=%s&parent_type=%s", c.BaseURL, HttpCheckIndexName, TransactionID, parentName, parentType)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/http_checks/%d?transaction_id=%s&parent_name=%s&parent_type=%s", c.BaseURL, c.APIVersion, HttpCheckIndexName, TransactionID, parentName, parentType)
 	fmt.Println("**************** response response ****************", url)
 	headers := map[string]string{
 		"Content-Type": "application/json",

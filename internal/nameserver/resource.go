@@ -55,6 +55,10 @@ func resourceHaproxyNameserverRead(d *schema.ResourceData, m interface{}) error 
 		return NameserverConfig.GetANameserversConfiguration(nameserverName, transactionID, resolver)
 	})
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(nameserverName, "error reading Nameserver configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
@@ -85,6 +89,10 @@ func resourceHaproxyNameserverCreate(d *schema.ResourceData, m interface{}) erro
 	resp, _, err := tranConfig.TransactionWithData(func(transactionID string) (*http.Response, []byte, error) {
 		return NameserverConfig.AddNameserversConfiguration(payloadJSON, transactionID, resolver)
 	})
+
+	if err != nil {
+		return err
+	}
 
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(nameserverName, "error creating Nameserver configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
@@ -117,6 +125,10 @@ func resourceHaproxyNameserverUpdate(d *schema.ResourceData, m interface{}) erro
 		return NameserverConfig.UpdateNameserversConfiguration(NameserverName, payloadJSON, transactionID, resolver)
 	})
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(NameserverName, "error updating Nameserver configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
@@ -136,6 +148,10 @@ func resourceHaproxyNameserverDelete(d *schema.ResourceData, m interface{}) erro
 	resp, _, err := tranConfig.TransactionWithData(func(transactionID string) (*http.Response, []byte, error) {
 		return NameserverConfig.DeleteNameserversConfiguration(NameserverName, transactionID, resolver)
 	})
+
+	if err != nil {
+		return err
+	}
 
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(NameserverName, "error deleting Nameserver configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))

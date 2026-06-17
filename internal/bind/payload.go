@@ -2,10 +2,11 @@ package bind
 
 // Config defines variable for haproxy configuration
 type ConfigBind struct {
-	Username string
-	Password string
-	BaseURL  string
-	SSL      bool
+	Username   string
+	Password   string
+	BaseURL    string
+	APIVersion string
+	SSL        bool
 }
 
 type BindPayload struct {

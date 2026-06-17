@@ -2,10 +2,11 @@ package cache
 
 // Config defines variable for haproxy configuration
 type ConfigCache struct {
-	Username string
-	Password string
-	BaseURL  string
-	SSL      bool
+	Username   string
+	Password   string
+	BaseURL    string
+	APIVersion string
+	SSL        bool
 }
 
 type CachePayload struct {

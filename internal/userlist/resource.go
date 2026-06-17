@@ -37,6 +37,10 @@ func resourceHaproxyUserlistRead(d *schema.ResourceData, m interface{}) error {
 		return UserlistConfig.GetAUserlistConfiguration(userlistName, transactionID)
 	})
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(userlistName, "error reading Userlist configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
@@ -65,6 +69,10 @@ func resourceHaproxyUserlistCreate(d *schema.ResourceData, m interface{}) error 
 		return UserlistConfig.AddUserlistConfiguration(payloadJSON, transactionID)
 	})
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(userlistName, "error creating Userlist configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
@@ -83,6 +91,10 @@ func resourceHaproxyUserlistDelete(d *schema.ResourceData, m interface{}) error 
 	resp, err := tranConfig.Transaction(func(transactionID string) (*http.Response, error) {
 		return UserlistConfig.DeleteUserlistConfiguration(userlistName, transactionID)
 	})
+
+	if err != nil {
+		return err
+	}
 
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(userlistName, "error deleting Userlist configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
