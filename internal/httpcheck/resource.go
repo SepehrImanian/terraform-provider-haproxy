@@ -230,6 +230,10 @@ func resourceHaproxyHttpCheckRead(d *schema.ResourceData, m interface{}) error {
 		return HttpCheckConfig.GetAHttpCheckConfiguration(indexName, transactionID, parentName, parentType)
 	})
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(indexNameStr, "error reading HttpCheck configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
@@ -318,6 +322,10 @@ func resourceHaproxyHttpCheckCreate(d *schema.ResourceData, m interface{}) error
 		return HttpCheckConfig.AddHttpCheckConfiguration(payloadJSON, transactionID, parentName, parentType)
 	})
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(indexNameStr, "error creating HttpCheck configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
@@ -404,6 +412,10 @@ func resourceHaproxyHttpCheckUpdate(d *schema.ResourceData, m interface{}) error
 		return HttpCheckConfig.UpdateHttpCheckConfiguration(indexName, payloadJSON, transactionID, parentName, parentType)
 	})
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(indexNameStr, "error updating HttpCheck configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
@@ -425,6 +437,10 @@ func resourceHaproxyHttpCheckDelete(d *schema.ResourceData, m interface{}) error
 	resp, err := tranConfig.Transaction(func(transactionID string) (*http.Response, error) {
 		return HttpCheckConfig.DeleteHttpCheckConfiguration(indexName, transactionID, parentName, parentType)
 	})
+
+	if err != nil {
+		return err
+	}
 
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(indexNameStr, "error deleting HttpCheck configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))

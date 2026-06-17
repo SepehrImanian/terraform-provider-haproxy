@@ -9,7 +9,7 @@ import (
 
 // GetAResolversConfiguration returns the configuration of a Resolvers.
 func (c *ConfigResolvers) GetAResolversConfiguration(ResolversName string, TransactionID string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/resolvers/%s?transaction_id=%s", c.BaseURL, ResolversName, TransactionID)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/resolvers/%s?transaction_id=%s", c.BaseURL, c.APIVersion, ResolversName, TransactionID)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}
@@ -24,7 +24,7 @@ func (c *ConfigResolvers) GetAResolversConfiguration(ResolversName string, Trans
 
 // AddResolversConfiguration adds a Resolvers configuration.
 func (c *ConfigResolvers) AddResolversConfiguration(payload []byte, TransactionID string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/resolvers?transaction_id=%s", c.BaseURL, TransactionID)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/resolvers?transaction_id=%s", c.BaseURL, c.APIVersion, TransactionID)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}
@@ -46,7 +46,7 @@ func (c *ConfigResolvers) AddResolversConfiguration(payload []byte, TransactionI
 
 // DeleteResolversConfiguration deletes a Resolvers configuration.
 func (c *ConfigResolvers) DeleteResolversConfiguration(ResolversName string, TransactionID string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/resolvers/%s?transaction_id=%s", c.BaseURL, ResolversName, TransactionID)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/resolvers/%s?transaction_id=%s", c.BaseURL, c.APIVersion, ResolversName, TransactionID)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}
@@ -61,7 +61,7 @@ func (c *ConfigResolvers) DeleteResolversConfiguration(ResolversName string, Tra
 
 // UpdateResolversConfiguration updates a Resolvers configuration.
 func (c *ConfigResolvers) UpdateResolversConfiguration(ResolversName string, payload []byte, TransactionID string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/resolvers/%s?transaction_id=%s", c.BaseURL, ResolversName, TransactionID)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/resolvers/%s?transaction_id=%s", c.BaseURL, c.APIVersion, ResolversName, TransactionID)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}

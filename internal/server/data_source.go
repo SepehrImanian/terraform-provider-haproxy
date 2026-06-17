@@ -47,6 +47,10 @@ func DataSourceHaproxyServerRead(d *schema.ResourceData, m interface{}) error {
 		return serverConfig.GetAServerConfiguration(serverName, transactionID, parentName, parentType)
 	})
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(serverName, "error reading Server configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}

@@ -2,10 +2,11 @@ package filter
 
 // Config defines variable for haproxy configuration
 type ConfigFilter struct {
-	Username string
-	Password string
-	BaseURL  string
-	SSL      bool
+	Username   string
+	Password   string
+	BaseURL    string
+	APIVersion string
+	SSL        bool
 }
 
 type FilterPayload struct {

@@ -9,7 +9,7 @@ import (
 
 // GetAUserlistConfiguration returns the configuration of a Userlist.
 func (c *ConfigUserlist) GetAUserlistConfiguration(UserlistName string, TransactionID string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/userlists/%s?transaction_id=%s", c.BaseURL, UserlistName, TransactionID)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/userlists/%s?transaction_id=%s", c.BaseURL, c.APIVersion, UserlistName, TransactionID)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}
@@ -24,7 +24,7 @@ func (c *ConfigUserlist) GetAUserlistConfiguration(UserlistName string, Transact
 
 // AddUserlistConfiguration adds a Userlist configuration.
 func (c *ConfigUserlist) AddUserlistConfiguration(payload []byte, TransactionID string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/userlists?transaction_id=%s", c.BaseURL, TransactionID)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/userlists?transaction_id=%s", c.BaseURL, c.APIVersion, TransactionID)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}
@@ -46,7 +46,7 @@ func (c *ConfigUserlist) AddUserlistConfiguration(payload []byte, TransactionID 
 
 // DeleteUserlistConfiguration deletes a Userlist configuration.
 func (c *ConfigUserlist) DeleteUserlistConfiguration(UserlistName string, TransactionID string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/userlists/%s?transaction_id=%s", c.BaseURL, UserlistName, TransactionID)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/userlists/%s?transaction_id=%s", c.BaseURL, c.APIVersion, UserlistName, TransactionID)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}

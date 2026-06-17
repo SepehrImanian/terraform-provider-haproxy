@@ -9,7 +9,7 @@ import (
 
 // GetAUsersConfiguration returns the configuration of a Users.
 func (c *ConfigUser) GetAUsersConfiguration(UsersName string, TransactionID string, UserList string) (*http.Response, []byte, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/users/%s?transaction_id=%s&userlist=%s", c.BaseURL, UsersName, TransactionID, UserList)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/users/%s?transaction_id=%s&userlist=%s", c.BaseURL, c.APIVersion, UsersName, TransactionID, UserList)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}
@@ -30,7 +30,7 @@ func (c *ConfigUser) GetAUsersConfiguration(UsersName string, TransactionID stri
 
 // AddUsersConfiguration adds a Users configuration.
 func (c *ConfigUser) AddUsersConfiguration(payload []byte, TransactionID string, UserList string) (*http.Response, []byte, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/users?transaction_id=%s&userlist=%s", c.BaseURL, TransactionID, UserList)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/users?transaction_id=%s&userlist=%s", c.BaseURL, c.APIVersion, TransactionID, UserList)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}
@@ -52,7 +52,7 @@ func (c *ConfigUser) AddUsersConfiguration(payload []byte, TransactionID string,
 
 // DeleteUsersConfiguration deletes a Users configuration.
 func (c *ConfigUser) DeleteUsersConfiguration(UsersName string, TransactionID string, UserList string) (*http.Response, []byte, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/users/%s?transaction_id=%s&userlist=%s", c.BaseURL, UsersName, TransactionID, UserList)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/users/%s?transaction_id=%s&userlist=%s", c.BaseURL, c.APIVersion, UsersName, TransactionID, UserList)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}
@@ -73,7 +73,7 @@ func (c *ConfigUser) DeleteUsersConfiguration(UsersName string, TransactionID st
 
 // UpdateUsersConfiguration updates a Users configuration.
 func (c *ConfigUser) UpdateUsersConfiguration(UsersName string, payload []byte, TransactionID string, UserList string) (*http.Response, []byte, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/users/%s?transaction_id=%s&userlist=%s", c.BaseURL, UsersName, TransactionID, UserList)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/users/%s?transaction_id=%s&userlist=%s", c.BaseURL, c.APIVersion, UsersName, TransactionID, UserList)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}

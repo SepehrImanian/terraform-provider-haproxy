@@ -86,6 +86,10 @@ func resourceHaproxyServerRead(d *schema.ResourceData, m interface{}) error {
 		return serverConfig.GetAServerConfiguration(serverName, transactionID, parentName, parentType)
 	})
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(serverName, "error reading Server configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
@@ -132,6 +136,10 @@ func resourceHaproxyServerCreate(d *schema.ResourceData, m interface{}) error {
 	resp, err := tranConfig.Transaction(func(transactionID string) (*http.Response, error) {
 		return serverConfig.AddServerConfiguration(payloadJSON, transactionID, parentName, parentType)
 	})
+
+	if err != nil {
+		return err
+	}
 
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(serverName, "error creating Server configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
@@ -180,6 +188,10 @@ func resourceHaproxyServerUpdate(d *schema.ResourceData, m interface{}) error {
 		return serverConfig.UpdateServerConfiguration(serverName, payloadJSON, transactionID, parentName, parentType)
 	})
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(serverName, "error updating Server configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
@@ -200,6 +212,10 @@ func resourceHaproxyServerDelete(d *schema.ResourceData, m interface{}) error {
 	resp, err := tranConfig.Transaction(func(transactionID string) (*http.Response, error) {
 		return serverConfig.DeleteServerConfiguration(serverName, transactionID, parentName, parentType)
 	})
+
+	if err != nil {
+		return err
+	}
 
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(serverName, "error deleting Server configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))

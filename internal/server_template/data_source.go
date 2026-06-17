@@ -40,6 +40,10 @@ func dataSourceHaproxyServerTemplateRead(d *schema.ResourceData, m interface{}) 
 		return ServerTemplateConfig.GetAServerTemplatesConfiguration(prefix, transactionID, backend)
 	})
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(prefix, "error reading ServerTemplate configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}

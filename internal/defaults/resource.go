@@ -113,6 +113,10 @@ func resourceHaproxyDefaultsRead(d *schema.ResourceData, m interface{}) error {
 		return DefaultsConfig.GetADefaultsConfiguration(defaultsName, transactionID)
 	})
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(defaultsName, "error reading Defaults configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
@@ -160,6 +164,10 @@ func resourceHaproxyDefaultsCreate(d *schema.ResourceData, m interface{}) error 
 	resp, err := tranConfig.Transaction(func(transactionID string) (*http.Response, error) {
 		return DefaultsConfig.AddDefaultsConfiguration(payloadJSON, transactionID)
 	})
+
+	if err != nil {
+		return err
+	}
 
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(defaultsName, "error creating Defaults configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
@@ -209,6 +217,10 @@ func resourceHaproxyDefaultsUpdate(d *schema.ResourceData, m interface{}) error 
 		return DefaultsConfig.UpdateDefaultsConfiguration(defaultsName, payloadJSON, transactionID)
 	})
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(defaultsName, "error updating Defaults configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
@@ -227,6 +239,10 @@ func resourceHaproxyDefaultsDelete(d *schema.ResourceData, m interface{}) error 
 	resp, err := tranConfig.Transaction(func(transactionID string) (*http.Response, error) {
 		return DefaultsConfig.DeleteDefaultsConfiguration(defaultsName, transactionID)
 	})
+
+	if err != nil {
+		return err
+	}
 
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(defaultsName, "error deleting Defaults configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))

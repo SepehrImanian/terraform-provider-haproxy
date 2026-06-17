@@ -67,6 +67,10 @@ func resourceHaproxyAclRead(d *schema.ResourceData, m interface{}) error {
 		return AclConfig.GetAAclConfiguration(indexName, transactionID, parentName, parentType)
 	})
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(aclName, "error reading Acl configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
@@ -99,6 +103,10 @@ func resourceHaproxyAclCreate(d *schema.ResourceData, m interface{}) error {
 	resp, err := tranConfig.Transaction(func(transactionID string) (*http.Response, error) {
 		return AclConfig.AddAclConfiguration(payloadJSON, transactionID, parentName, parentType)
 	})
+
+	if err != nil {
+		return err
+	}
 
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(aclName, "error creating Acl configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
@@ -134,6 +142,10 @@ func resourceHaproxyAclUpdate(d *schema.ResourceData, m interface{}) error {
 		return AclConfig.UpdateAclConfiguration(indexName, payloadJSON, transactionID, parentName, parentType)
 	})
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(aclName, "error updating Acl configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
@@ -155,6 +167,10 @@ func resourceHaproxyAclDelete(d *schema.ResourceData, m interface{}) error {
 	resp, err := tranConfig.Transaction(func(transactionID string) (*http.Response, error) {
 		return AclConfig.DeleteAclConfiguration(indexName, transactionID, parentName, parentType)
 	})
+
+	if err != nil {
+		return err
+	}
 
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(aclName, "error deleting Acl configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))

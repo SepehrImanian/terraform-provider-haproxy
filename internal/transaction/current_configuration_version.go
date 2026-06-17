@@ -8,7 +8,7 @@ import (
 
 // getCurrentConfigurationVersion get current haproxy configuration version
 func (c *ConfigTransaction) getCurrentConfigurationVersion() (int, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/version", c.BaseURL)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/version", c.BaseURL, c.APIVersion)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}

@@ -41,6 +41,10 @@ func dataSourceHaproxyNameserverRead(d *schema.ResourceData, m interface{}) erro
 		return NameserverConfig.GetANameserversConfiguration(nameserverName, transactionID, resolver)
 	})
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(nameserverName, "error reading Nameserver configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}

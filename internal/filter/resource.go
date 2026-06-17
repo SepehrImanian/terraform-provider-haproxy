@@ -132,6 +132,10 @@ func resourceHaproxyFilterRead(d *schema.ResourceData, m interface{}) error {
 		return FilterConfig.GetAFilterConfiguration(indexName, transactionID, parentName, parentType)
 	})
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(FilterName, "error reading Filter configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
@@ -178,6 +182,10 @@ func resourceHaproxyFilterCreate(d *schema.ResourceData, m interface{}) error {
 	resp, err := tranConfig.Transaction(func(transactionID string) (*http.Response, error) {
 		return FilterConfig.AddFilterConfiguration(payloadJSON, transactionID, parentName, parentType)
 	})
+
+	if err != nil {
+		return err
+	}
 
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(FilterName, "error creating Filter configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
@@ -226,6 +234,10 @@ func resourceHaproxyFilterUpdate(d *schema.ResourceData, m interface{}) error {
 		return FilterConfig.UpdateFilterConfiguration(indexName, payloadJSON, transactionID, parentName, parentType)
 	})
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(FilterName, "error updating Filter configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
@@ -247,6 +259,10 @@ func resourceHaproxyFilterDelete(d *schema.ResourceData, m interface{}) error {
 	resp, err := tranConfig.Transaction(func(transactionID string) (*http.Response, error) {
 		return FilterConfig.DeleteFilterConfiguration(indexName, transactionID, parentName, parentType)
 	})
+
+	if err != nil {
+		return err
+	}
 
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(FilterName, "error deleting Filter configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))

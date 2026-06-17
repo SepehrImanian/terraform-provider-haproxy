@@ -9,7 +9,7 @@ import (
 
 // GetAFilterConfiguration returns the configuration of a Filter.
 func (c *ConfigFilter) GetAFilterConfiguration(FilterIndexName int, TransactionID string, parentName string, parentType string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/filters/%d?transaction_id=%s&parent_name=%s&parent_type=%s", c.BaseURL, FilterIndexName, TransactionID, parentName, parentType)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/filters/%d?transaction_id=%s&parent_name=%s&parent_type=%s", c.BaseURL, c.APIVersion, FilterIndexName, TransactionID, parentName, parentType)
 	fmt.Println("**************** response ****************", url)
 	headers := map[string]string{
 		"Content-Type": "application/json",
@@ -26,7 +26,7 @@ func (c *ConfigFilter) GetAFilterConfiguration(FilterIndexName int, TransactionI
 
 // AddFilterConfiguration adds a Filter configuration.
 func (c *ConfigFilter) AddFilterConfiguration(payload []byte, TransactionID string, parentName string, parentType string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/filters?transaction_id=%s&parent_name=%s&parent_type=%s", c.BaseURL, TransactionID, parentName, parentType)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/filters?transaction_id=%s&parent_name=%s&parent_type=%s", c.BaseURL, c.APIVersion, TransactionID, parentName, parentType)
 	fmt.Println("**************** response ****************", url)
 	headers := map[string]string{
 		"Content-Type": "application/json",
@@ -49,7 +49,7 @@ func (c *ConfigFilter) AddFilterConfiguration(payload []byte, TransactionID stri
 
 // UpdateFilterConfiguration updates a Filter configuration.
 func (c *ConfigFilter) UpdateFilterConfiguration(FilterIndexName int, payload []byte, TransactionID string, parentName string, parentType string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/filters/%d?transaction_id=%s&parent_name=%s&parent_type=%s", c.BaseURL, FilterIndexName, TransactionID, parentName, parentType)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/filters/%d?transaction_id=%s&parent_name=%s&parent_type=%s", c.BaseURL, c.APIVersion, FilterIndexName, TransactionID, parentName, parentType)
 	fmt.Println("**************** response response  ****************", url)
 	headers := map[string]string{
 		"Content-Type": "application/json",
@@ -65,7 +65,7 @@ func (c *ConfigFilter) UpdateFilterConfiguration(FilterIndexName int, payload []
 
 // DeleteFilterConfiguration deletes a Filter configuration.
 func (c *ConfigFilter) DeleteFilterConfiguration(FilterIndexName int, TransactionID string, parentName string, parentType string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/filters/%d?transaction_id=%s&parent_name=%s&parent_type=%s", c.BaseURL, FilterIndexName, TransactionID, parentName, parentType)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/filters/%d?transaction_id=%s&parent_name=%s&parent_type=%s", c.BaseURL, c.APIVersion, FilterIndexName, TransactionID, parentName, parentType)
 	fmt.Println("**************** response response ****************", url)
 	headers := map[string]string{
 		"Content-Type": "application/json",

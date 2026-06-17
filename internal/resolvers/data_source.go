@@ -34,6 +34,10 @@ func dataSourceHaproxyResolversRead(d *schema.ResourceData, m interface{}) error
 		return ResolversConfig.GetAResolversConfiguration(resolversName, transactionID)
 	})
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(resolversName, "error reading Resolvers configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}

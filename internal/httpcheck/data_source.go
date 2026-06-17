@@ -52,6 +52,10 @@ func dataSourceHaproxyHttpCheckRead(d *schema.ResourceData, m interface{}) error
 		return HttpCheckConfig.GetAHttpCheckConfiguration(indexName, transactionID, parentName, parentType)
 	})
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(indexNameStr, "error reading HttpCheck configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}

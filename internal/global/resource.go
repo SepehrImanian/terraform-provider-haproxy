@@ -135,6 +135,10 @@ func resourceHaproxyGlobalRead(d *schema.ResourceData, m interface{}) error {
 		return GlobalConfig.GetAGlobalConfiguration(transactionID)
 	})
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError("global", "error reading Global configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
@@ -187,6 +191,10 @@ func resourceHaproxyGlobalUpdate(d *schema.ResourceData, m interface{}) error {
 	resp, err := tranConfig.Transaction(func(transactionID string) (*http.Response, error) {
 		return GlobalConfig.UpdateGlobalConfiguration(payloadJSON, transactionID)
 	})
+
+	if err != nil {
+		return err
+	}
 
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError("global", "error updating Global configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))

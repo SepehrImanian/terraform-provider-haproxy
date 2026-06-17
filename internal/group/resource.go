@@ -50,6 +50,10 @@ func resourceHaproxyGroupRead(d *schema.ResourceData, m interface{}) error {
 		return GroupConfig.GetAGroupsConfiguration(groupName, transactionID, userlist)
 	})
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(groupName, "error reading Group configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
@@ -80,6 +84,10 @@ func resourceHaproxyGroupCreate(d *schema.ResourceData, m interface{}) error {
 	resp, _, err := tranConfig.TransactionWithData(func(transactionID string) (*http.Response, []byte, error) {
 		return GroupConfig.AddGroupsConfiguration(payloadJSON, transactionID, userlist)
 	})
+
+	if err != nil {
+		return err
+	}
 
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(groupName, "error creating Group configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
@@ -112,6 +120,10 @@ func resourceHaproxyGroupUpdate(d *schema.ResourceData, m interface{}) error {
 		return GroupConfig.AddGroupsConfiguration(payloadJSON, transactionID, userlist)
 	})
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(groupName, "error creating Group configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
@@ -131,6 +143,10 @@ func resourceHaproxyGroupDelete(d *schema.ResourceData, m interface{}) error {
 	resp, _, err := tranConfig.TransactionWithData(func(transactionID string) (*http.Response, []byte, error) {
 		return GroupConfig.DeleteGroupsConfiguration(groupName, transactionID, userlist)
 	})
+
+	if err != nil {
+		return err
+	}
 
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(groupName, "error deleting Group configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))

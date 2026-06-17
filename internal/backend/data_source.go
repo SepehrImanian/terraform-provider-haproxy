@@ -34,6 +34,10 @@ func dataSourceHaproxyABackendRead(d *schema.ResourceData, m interface{}) error 
 		return backendConfig.GetABackendConfiguration(backendName, transactionID)
 	})
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(backendName, "error reading Backend configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}

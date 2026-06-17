@@ -63,6 +63,10 @@ func resourceHaproxyCacheRead(d *schema.ResourceData, m interface{}) error {
 		return CacheConfig.GetACacheConfiguration(cacheName, transactionID)
 	})
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(cacheName, "error reading Cache configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
@@ -95,6 +99,10 @@ func resourceHaproxyCacheCreate(d *schema.ResourceData, m interface{}) error {
 	resp, err := tranConfig.Transaction(func(transactionID string) (*http.Response, error) {
 		return CacheConfig.AddCacheConfiguration(payloadJSON, transactionID)
 	})
+
+	if err != nil {
+		return err
+	}
 
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(cacheName, "error creating Cache configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
@@ -129,6 +137,10 @@ func resourceHaproxyCacheUpdate(d *schema.ResourceData, m interface{}) error {
 		return CacheConfig.UpdateCacheConfiguration(cacheName, payloadJSON, transactionID)
 	})
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(cacheName, "error updating Cache configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
@@ -147,6 +159,10 @@ func resourceHaproxyCacheDelete(d *schema.ResourceData, m interface{}) error {
 	resp, err := tranConfig.Transaction(func(transactionID string) (*http.Response, error) {
 		return CacheConfig.DeleteCacheConfiguration(cacheName, transactionID)
 	})
+
+	if err != nil {
+		return err
+	}
 
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(cacheName, "error deleting Cache configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))

@@ -9,7 +9,7 @@ import (
 
 // GetAAclConfiguration returns the configuration of a Acl.
 func (c *ConfigAcl) GetAAclConfiguration(AclIndexName int, TransactionID string, parentName string, parentType string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/acls/%d?transaction_id=%s&parent_name=%s&parent_type=%s", c.BaseURL, AclIndexName, TransactionID, parentName, parentType)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/acls/%d?transaction_id=%s&parent_name=%s&parent_type=%s", c.BaseURL, c.APIVersion, AclIndexName, TransactionID, parentName, parentType)
 	fmt.Println("**************** response ****************", url)
 	headers := map[string]string{
 		"Content-Type": "application/json",
@@ -26,7 +26,7 @@ func (c *ConfigAcl) GetAAclConfiguration(AclIndexName int, TransactionID string,
 
 // AddAclConfiguration adds a Acl configuration.
 func (c *ConfigAcl) AddAclConfiguration(payload []byte, TransactionID string, parentName string, parentType string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/acls?transaction_id=%s&parent_name=%s&parent_type=%s", c.BaseURL, TransactionID, parentName, parentType)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/acls?transaction_id=%s&parent_name=%s&parent_type=%s", c.BaseURL, c.APIVersion, TransactionID, parentName, parentType)
 	fmt.Println("**************** response ****************", url)
 	headers := map[string]string{
 		"Content-Type": "application/json",
@@ -49,7 +49,7 @@ func (c *ConfigAcl) AddAclConfiguration(payload []byte, TransactionID string, pa
 
 // UpdateAclConfiguration updates a Acl configuration.
 func (c *ConfigAcl) UpdateAclConfiguration(AclIndexName int, payload []byte, TransactionID string, parentName string, parentType string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/acls/%d?transaction_id=%s&parent_name=%s&parent_type=%s", c.BaseURL, AclIndexName, TransactionID, parentName, parentType)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/acls/%d?transaction_id=%s&parent_name=%s&parent_type=%s", c.BaseURL, c.APIVersion, AclIndexName, TransactionID, parentName, parentType)
 	fmt.Println("**************** response response  ****************", url)
 	headers := map[string]string{
 		"Content-Type": "application/json",
@@ -65,7 +65,7 @@ func (c *ConfigAcl) UpdateAclConfiguration(AclIndexName int, payload []byte, Tra
 
 // DeleteAclConfiguration deletes a Acl configuration.
 func (c *ConfigAcl) DeleteAclConfiguration(AclIndexName int, TransactionID string, parentName string, parentType string) (*http.Response, error) {
-	url := fmt.Sprintf("%s/v2/services/haproxy/configuration/acls/%d?transaction_id=%s&parent_name=%s&parent_type=%s", c.BaseURL, AclIndexName, TransactionID, parentName, parentType)
+	url := fmt.Sprintf("%s/%s/services/haproxy/configuration/acls/%d?transaction_id=%s&parent_name=%s&parent_type=%s", c.BaseURL, c.APIVersion, AclIndexName, TransactionID, parentName, parentType)
 	fmt.Println("**************** response response ****************", url)
 	headers := map[string]string{
 		"Content-Type": "application/json",

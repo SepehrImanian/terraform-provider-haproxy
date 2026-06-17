@@ -81,6 +81,10 @@ func resourceHaproxyBindRead(d *schema.ResourceData, m interface{}) error {
 		return BindConfig.GetABindConfiguration(bindName, transactionID, parentName, parentType)
 	})
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(bindName, "error reading Bind configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
@@ -116,6 +120,10 @@ func resourceHaproxyBindCreate(d *schema.ResourceData, m interface{}) error {
 	resp, err := tranConfig.Transaction(func(transactionID string) (*http.Response, error) {
 		return BindConfig.AddBindConfiguration(payloadJSON, transactionID, parentName, parentType)
 	})
+
+	if err != nil {
+		return err
+	}
 
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(bindName, "error creating Bind configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
@@ -153,6 +161,10 @@ func resourceHaproxyBindUpdate(d *schema.ResourceData, m interface{}) error {
 		return BindConfig.UpdateBindConfiguration(bindName, payloadJSON, transactionID, parentName, parentType)
 	})
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(bindName, "error updating Bind configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}
@@ -173,6 +185,10 @@ func resourceHaproxyBindDelete(d *schema.ResourceData, m interface{}) error {
 	resp, err := tranConfig.Transaction(func(transactionID string) (*http.Response, error) {
 		return BindConfig.DeleteBindConfiguration(bindName, transactionID, parentName, parentType)
 	})
+
+	if err != nil {
+		return err
+	}
 
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(bindName, "error deleting Bind configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))

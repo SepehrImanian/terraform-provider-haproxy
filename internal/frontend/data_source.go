@@ -34,6 +34,10 @@ func dataSourceHaproxyFrontendRead(d *schema.ResourceData, m interface{}) error 
 		return frontendConfig.GetAFrontendConfiguration(frontendName, transactionID)
 	})
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(frontendName, "error reading Frontend configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}

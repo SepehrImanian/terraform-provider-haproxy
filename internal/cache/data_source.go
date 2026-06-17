@@ -34,6 +34,10 @@ func dataSourceHaproxyCacheRead(d *schema.ResourceData, m interface{}) error {
 		return CacheConfig.GetACacheConfiguration(CacheName, transactionID)
 	})
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(CacheName, "error reading Cache configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}

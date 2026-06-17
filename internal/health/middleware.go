@@ -10,7 +10,7 @@ import (
 
 // GetAHealth returns haproxy Health.
 func (c *ConfigHealth) GetAHealth() (health bool, resp *http.Response, err error) {
-	url := fmt.Sprintf("%s/v2/health", c.BaseURL)
+	url := fmt.Sprintf("%s/%s/health", c.BaseURL, c.APIVersion)
 	headers := map[string]string{
 		"Content-Type": "application/json",
 	}

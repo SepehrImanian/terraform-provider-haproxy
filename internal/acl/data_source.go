@@ -53,6 +53,10 @@ func dataSourceHaproxyAclRead(d *schema.ResourceData, m interface{}) error {
 		return AclConfig.GetAAclConfiguration(indexName, transactionID, parentName, parentType)
 	})
 
+	if err != nil {
+		return err
+	}
+
 	if resp.StatusCode != 200 && resp.StatusCode != 202 {
 		return utils.HandleError(aclName, "error reading Acl configuration", fmt.Errorf("response status: %s , err: %s", resp.Status, err))
 	}

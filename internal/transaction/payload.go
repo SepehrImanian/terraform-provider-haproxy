@@ -6,10 +6,11 @@ import (
 
 // Config defines variable for haproxy configuration
 type ConfigTransaction struct {
-	Username string
-	Password string
-	BaseURL  string
-	SSL      bool
+	Username   string
+	Password   string
+	BaseURL    string
+	APIVersion string
+	SSL        bool
 }
 
 // TransactionResponse get response when Transaction create
