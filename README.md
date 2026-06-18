@@ -48,7 +48,7 @@ terraform {
   required_providers {
     haproxy = {
       source  = "SepehrImanian/haproxy"
-      version = "0.0.8"
+      version = "0.0.9"
     }
   }
 }
@@ -149,6 +149,18 @@ resource "haproxy_bind" "bind_test" {
   depends_on  = [haproxy_frontend.front_test]
 }
 
+resource "haproxy_bind" "bind_ssl_test" {
+  name            = "bind_ssl_test"
+  port            = 443
+  address         = "0.0.0.0"
+  parent_name     = "front_test"
+  parent_type     = "frontend"
+  ssl             = true
+  ssl_certificate = "/etc/haproxy/certs/example.com.pem"
+  verify          = "none"
+  depends_on      = [haproxy_frontend.front_test]
+}
+
 resource "haproxy_backend" "backend_test" {
   name                 = "backend_test"
   mode                 = "http"
@@ -185,6 +197,19 @@ resource "haproxy_server" "server_test" {
   inter       = 3
   rise        = 3
   fall        = 3
+  depends_on  = [haproxy_backend.backend_test]
+}
+
+resource "haproxy_server" "server_ssl_test" {
+  name        = "server_ssl_test"
+  port        = 443
+  address     = "172.16.13.16"
+  parent_name = "backend_test"
+  parent_type = "backend"
+  ssl         = true
+  check       = true
+  check_ssl   = true
+  verify      = "none"
   depends_on  = [haproxy_backend.backend_test]
 }
 ```
