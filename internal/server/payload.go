@@ -18,4 +18,7 @@ type ServerPayload struct {
 	Inter     int    `json:"inter"`
 	Rise      int    `json:"rise"`
 	Fall      int    `json:"fall"`
+	Ssl       string `json:"ssl"`
+	CheckSsl  string `json:"check_ssl"`
+	Verify    string `json:"verify"`
 }

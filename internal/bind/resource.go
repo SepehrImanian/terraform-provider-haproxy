@@ -64,6 +64,26 @@ func ResourceHaproxyBind() *schema.Resource {
 				Optional:    true,
 				Description: "The group of the bind",
 			},
+			"ssl": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "Enable SSL termination on the bind (equivalent to the `ssl` keyword on the HAProxy `bind` line).",
+			},
+			"ssl_certificate": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Path to the SSL certificate (or directory of certificates) to load, equivalent to the `crt` keyword on the HAProxy `bind` line.",
+			},
+			"ssl_cafile": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Path to the CA certificate file used to verify client certificates, equivalent to the `ca-file` keyword on the HAProxy `bind` line.",
+			},
+			"verify": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Client certificate verification mode: none, optional, or required.",
+			},
 		},
 	}
 }
@@ -99,13 +119,17 @@ func resourceHaproxyBindCreate(d *schema.ResourceData, m interface{}) error {
 	parentType := d.Get("parent_type").(string)
 
 	payload := BindPayload{
-		Name:    bindName,
-		Address: d.Get("address").(string),
-		Port:    d.Get("port").(int),
-		Maxconn: d.Get("maxconn").(int),
-		User:    d.Get("user").(string),
-		Group:   d.Get("group").(string),
-		Mode:    d.Get("mode").(string),
+		Name:           bindName,
+		Address:        d.Get("address").(string),
+		Port:           d.Get("port").(int),
+		Maxconn:        d.Get("maxconn").(int),
+		User:           d.Get("user").(string),
+		Group:          d.Get("group").(string),
+		Mode:           d.Get("mode").(string),
+		Ssl:            d.Get("ssl").(bool),
+		SslCertificate: d.Get("ssl_certificate").(string),
+		SslCafile:      d.Get("ssl_cafile").(string),
+		Verify:         d.Get("verify").(string),
 	}
 
 	payloadJSON, err := utils.MarshalNonZeroFields(payload)
@@ -139,13 +163,17 @@ func resourceHaproxyBindUpdate(d *schema.ResourceData, m interface{}) error {
 	parentType := d.Get("parent_type").(string)
 
 	payload := BindPayload{
-		Name:    bindName,
-		Address: d.Get("address").(string),
-		Port:    d.Get("port").(int),
-		Maxconn: d.Get("maxconn").(int),
-		User:    d.Get("user").(string),
-		Group:   d.Get("group").(string),
-		Mode:    d.Get("mode").(string),
+		Name:           bindName,
+		Address:        d.Get("address").(string),
+		Port:           d.Get("port").(int),
+		Maxconn:        d.Get("maxconn").(int),
+		User:           d.Get("user").(string),
+		Group:          d.Get("group").(string),
+		Mode:           d.Get("mode").(string),
+		Ssl:            d.Get("ssl").(bool),
+		SslCertificate: d.Get("ssl_certificate").(string),
+		SslCafile:      d.Get("ssl_cafile").(string),
+		Verify:         d.Get("verify").(string),
 	}
 
 	payloadJSON, err := utils.MarshalNonZeroFields(payload)

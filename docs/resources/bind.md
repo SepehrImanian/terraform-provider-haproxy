@@ -40,7 +40,11 @@ resource "haproxy_bind" "bind_test" {
 - `group` (String) The group of the bind
 - `maxconn` (Number) The max connections of the bind
 - `mode` (String) http, tcp
+- `ssl` (Boolean) Enable SSL termination on the bind (equivalent to the `ssl` keyword on the HAProxy `bind` line).
+- `ssl_cafile` (String) Path to the CA certificate file used to verify client certificates, equivalent to the `ca-file` keyword on the HAProxy `bind` line.
+- `ssl_certificate` (String) Path to the SSL certificate (or directory of certificates) to load, equivalent to the `crt` keyword on the HAProxy `bind` line.
 - `user` (String) The user of the bind
+- `verify` (String) Client certificate verification mode: none, optional, or required.
 
 ### Read-Only
 

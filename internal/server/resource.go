@@ -69,6 +69,21 @@ func ResourceHaproxyServer() *schema.Resource {
 				Optional:    true,
 				Description: "The fall value states that a server will be considered as failed after consecutive unsuccessful health checks.",
 			},
+			"ssl": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "Enable SSL when connecting to the server.",
+			},
+			"check_ssl": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "Enable SSL when performing health checks against the server.",
+			},
+			"verify": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Server certificate verification mode: none or required.",
+			},
 		},
 	}
 }
@@ -102,6 +117,8 @@ func resourceHaproxyServerCreate(d *schema.ResourceData, m interface{}) error {
 	serverName := d.Get("name").(string)
 	sendProxy := d.Get("send_proxy").(bool)
 	check := d.Get("check").(bool)
+	ssl := d.Get("ssl").(bool)
+	checkSsl := d.Get("check_ssl").(bool)
 	parentName := d.Get("parent_name").(string)
 	parentType := d.Get("parent_type").(string)
 
@@ -112,6 +129,7 @@ func resourceHaproxyServerCreate(d *schema.ResourceData, m interface{}) error {
 		Inter:   d.Get("inter").(int),
 		Rise:    d.Get("rise").(int),
 		Fall:    d.Get("fall").(int),
+		Verify:  d.Get("verify").(string),
 	}
 
 	// Check sendProxy field
@@ -122,6 +140,16 @@ func resourceHaproxyServerCreate(d *schema.ResourceData, m interface{}) error {
 	// Check check field
 	if check {
 		payload.Check = utils.BoolToStr(check)
+	}
+
+	// Check ssl field
+	if ssl {
+		payload.Ssl = utils.BoolToStr(ssl)
+	}
+
+	// Check checkSsl field
+	if checkSsl {
+		payload.CheckSsl = utils.BoolToStr(checkSsl)
 	}
 
 	payloadJSON, err := utils.MarshalNonZeroFields(payload)
@@ -153,6 +181,8 @@ func resourceHaproxyServerUpdate(d *schema.ResourceData, m interface{}) error {
 	serverName := d.Get("name").(string)
 	sendProxy := d.Get("send_proxy").(bool)
 	check := d.Get("check").(bool)
+	ssl := d.Get("ssl").(bool)
+	checkSsl := d.Get("check_ssl").(bool)
 	parentName := d.Get("parent_name").(string)
 	parentType := d.Get("parent_type").(string)
 
@@ -163,6 +193,7 @@ func resourceHaproxyServerUpdate(d *schema.ResourceData, m interface{}) error {
 		Inter:   d.Get("inter").(int),
 		Rise:    d.Get("rise").(int),
 		Fall:    d.Get("fall").(int),
+		Verify:  d.Get("verify").(string),
 	}
 
 	// Check sendProxy field
@@ -173,6 +204,16 @@ func resourceHaproxyServerUpdate(d *schema.ResourceData, m interface{}) error {
 	// Check check field
 	if check {
 		payload.Check = utils.BoolToStr(check)
+	}
+
+	// Check ssl field
+	if ssl {
+		payload.Ssl = utils.BoolToStr(ssl)
+	}
+
+	// Check checkSsl field
+	if checkSsl {
+		payload.CheckSsl = utils.BoolToStr(checkSsl)
 	}
 
 	payloadJSON, err := utils.MarshalNonZeroFields(payload)

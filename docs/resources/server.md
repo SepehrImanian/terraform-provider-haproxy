@@ -42,10 +42,13 @@ resource "haproxy_server" "server_test" {
 ### Optional
 
 - `check` (Boolean) To enable health check for the server.
+- `check_ssl` (Boolean) Enable SSL when performing health checks against the server.
 - `fall` (Number) The fall value states that a server will be considered as failed after consecutive unsuccessful health checks.
 - `inter` (Number) The inter value is the time interval in milliseconds between two consecutive health checks.
 - `rise` (Number) The rise value states that a server will be considered as operational after consecutive successful health checks.
 - `send_proxy` (Boolean) To send a Proxy Protocol header to the backend server,
+- `ssl` (Boolean) Enable SSL when connecting to the server.
+- `verify` (String) Server certificate verification mode: none or required.
 
 ### Read-Only
 
