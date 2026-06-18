@@ -1,7 +1,7 @@
-FROM golang:1.20.5-alpine3.18
+FROM golang:1.25.8-alpine
 
-WORKDIR /go/src/terraform-provider-boundary
+WORKDIR /go/src/terraform-provider-haproxy
 COPY . .
 
-RUN go get -d -v ./...
+RUN go mod download
 RUN go install -v ./...
